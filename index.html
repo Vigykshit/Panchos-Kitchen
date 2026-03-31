@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pancho's Kitchen – Tell Us About Your Pet</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FAF7F2;
+    --warm-white: #FFFDF9;
+    --bark: #3B2F1E;
+    --bark-mid: #5C4A35;
+    --sage: #7A9E7E;
+    --sage-light: #A8C5AB;
+    --terracotta: #C9714A;
+    --terracotta-light: #E8A98A;
+    --gold: #D4A847;
+    --gold-light: #F0CC7A;
+    --muted: #9B8E82;
+    --border: #E5DDD4;
+    --step-active: #3B2F1E;
+    --step-done: #7A9E7E;
+    --step-inactive: #C8BDB5;
+    --shadow-soft: 0 4px 32px rgba(59,47,30,0.10);
+    --shadow-card: 0 8px 48px rgba(59,47,30,0.14);
+    --radius: 20px;
+    --radius-pill: 100px;
+    --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  /* Background texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(212,168,71,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 85% 90%, rgba(122,158,126,0.08) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 40% at 50% 50%, rgba(201,113,74,0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ===== HEADER ===== */
+  .site-header {
+    width: 100%;
+    padding: 24px 40px 0;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .site-logo {
+    height: 90px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  /* ===== FUNNEL WRAPPER ===== */
+  .funnel-wrap {
+    width: 100%;
+    max-width: 620px;
+    margin: 28px auto 40px;
+    padding: 0 20px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ===== CARD ===== */
+  .card {
+    background: var(--warm-white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    border: 1px solid rgba(229,221,212,0.6);
+  }
+
+  .card-header {
+    padding: 36px 40px 24px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, #FFFDF9 0%, #FDF8F2 100%);
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--bark);
+    text-align: center;
+    margin-bottom: 4px;
+  }
+
+  .card-subtitle {
+    font-size: 14px;
+    color: var(--muted);
+    text-align: center;
+    font-weight: 400;
+  }
+
+  /* ===== PROGRESS ===== */
+  .progress-wrap {
+    padding: 24px 40px 0;
+  }
+
+  .steps-track {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 10px;
+  }
+
+  .step-seg {
+    flex: 1;
+    height: 4px;
+    border-radius: 10px;
+    background: var(--step-inactive);
+    transition: background var(--transition);
+    position: relative;
+    cursor: default;
+  }
+  .step-seg + .step-seg { margin-left: 4px; }
+  .step-seg.done { background: var(--step-done); }
+  .step-seg.active {
+    background: var(--step-active);
+  }
+  .step-seg.active::after {
+    content: '▼';
+    position: absolute;
+    bottom: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 8px;
+    color: var(--step-active);
+  }
+
+  .step-labels {
+    display: flex;
+    gap: 0;
+    margin-top: 22px;
+  }
+  .step-label {
+    flex: 1;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--step-inactive);
+    transition: color var(--transition);
+    line-height: 1.3;
+    padding: 0 2px;
+  }
+  .step-label.done { color: var(--step-done); }
+  .step-label.active { color: var(--step-active); font-weight: 600; }
+
+  .step-counter {
+    text-align: right;
+    font-size: 12px;
+    color: var(--muted);
+    padding: 10px 0 0;
+    font-weight: 500;
+  }
+
+  /* ===== FORM BODY ===== */
+  .card-body {
+    padding: 36px 40px 32px;
+    min-height: 300px;
+  }
+
+  /* ===== STEP TRANSITIONS ===== */
+  .step-screen {
+    display: none;
+    animation: slideIn 0.4s cubic-bezier(0.4,0,0.2,1) forwards;
+  }
+  .step-screen.active { display: block; }
+  .step-screen.exit {
+    display: block;
+    animation: slideOut 0.3s cubic-bezier(0.4,0,0.2,1) forwards;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(32px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slideOut {
+    from { opacity: 1; transform: translateX(0); }
+    to   { opacity: 0; transform: translateX(-32px); }
+  }
+  @keyframes slideInBack {
+    from { opacity: 0; transform: translateX(-32px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  .step-screen.back-in { animation: slideInBack 0.4s cubic-bezier(0.4,0,0.2,1) forwards; }
+
+  /* ===== QUESTION ===== */
+  .q-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--bark);
+    margin-bottom: 24px;
+    line-height: 1.35;
+  }
+  .q-label em {
+    color: var(--terracotta);
+    font-style: normal;
+  }
+
+  /* ===== TEXT INPUT ===== */
+  .text-input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 17px;
+    color: var(--bark);
+    background: #fff;
+    outline: none;
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+  .text-input::placeholder { color: var(--step-inactive); }
+  .text-input:focus {
+    border-color: var(--terracotta-light);
+    box-shadow: 0 0 0 4px rgba(201,113,74,0.10);
+  }
+
+  /* ===== IMAGE CHOICE BUTTONS (pet type) ===== */
+  .img-choices {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 8px;
+  }
+
+  .img-choice {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 20px 16px 18px;
+    border: 2.5px solid var(--border);
+    border-radius: 18px;
+    cursor: pointer;
+    transition: all var(--transition);
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+    min-height: 160px;
+    user-select: none;
+  }
+  .img-choice:hover {
+    border-color: var(--terracotta-light);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(201,113,74,0.14);
+  }
+  .img-choice.selected {
+    border-color: var(--terracotta);
+    background: linear-gradient(160deg, #fff8f5 0%, #fff 100%);
+    box-shadow: 0 8px 28px rgba(201,113,74,0.18);
+  }
+  .img-choice.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    width: 26px;
+    height: 26px;
+    background: var(--terracotta);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 26px;
+    text-align: center;
+  }
+  .img-choice-emoji {
+    font-size: 68px;
+    line-height: 1;
+    margin-bottom: 12px;
+    transition: transform 0.3s;
+  }
+  .img-choice:hover .img-choice-emoji { transform: scale(1.1); }
+  .img-choice.selected .img-choice-emoji { transform: scale(1.08); }
+  .img-choice-label {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--bark);
+  }
+
+  /* ===== OPTION BUTTONS ===== */
+  .option-grid {
+    display: grid;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .option-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .option-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .option-grid.cols-1 { grid-template-columns: 1fr; }
+
+  .opt-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 16px;
+    border: 2.5px solid var(--border);
+    border-radius: 14px;
+    background: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--bark-mid);
+    cursor: pointer;
+    transition: all var(--transition);
+    text-align: center;
+    user-select: none;
+    line-height: 1.3;
+  }
+  .opt-btn:hover {
+    border-color: var(--sage-light);
+    background: #f8fbf8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(122,158,126,0.12);
+  }
+  .opt-btn.selected {
+    border-color: var(--sage);
+    background: linear-gradient(135deg, #f2faf3 0%, #fff 100%);
+    color: var(--bark);
+    font-weight: 600;
+    box-shadow: 0 4px 20px rgba(122,158,126,0.18);
+  }
+  .opt-btn .opt-icon { font-size: 20px; }
+
+  /* ===== HIDDEN ZOHO FIELDS ===== */
+  .zoho-hidden { display: none !important; }
+
+  /* ===== FOOTER BUTTONS ===== */
+  .card-footer {
+    padding: 0 40px 36px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .btn-back {
+    padding: 14px 32px;
+    border-radius: var(--radius-pill);
+    border: 2px solid var(--border);
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--bark-mid);
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+  .btn-back:hover {
+    border-color: var(--bark-mid);
+    color: var(--bark);
+    background: rgba(59,47,30,0.04);
+  }
+
+  .btn-next {
+    padding: 14px 44px;
+    border-radius: var(--radius-pill);
+    border: none;
+    background: var(--bark);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: all var(--transition);
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.2px;
+  }
+  .btn-next::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 40%, rgba(255,255,255,0.12) 50%, transparent 60%);
+    transform: translateX(-100%);
+    transition: transform 0.5s;
+  }
+  .btn-next:hover::before { transform: translateX(100%); }
+  .btn-next:hover {
+    background: var(--bark-mid);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(59,47,30,0.22);
+  }
+  .btn-next:active { transform: translateY(0); }
+
+  .btn-submit {
+    padding: 14px 44px;
+    border-radius: var(--radius-pill);
+    border: none;
+    background: linear-gradient(135deg, var(--sage) 0%, #5a8c5e 100%);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: all var(--transition);
+    letter-spacing: 0.2px;
+  }
+  .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(122,158,126,0.35);
+  }
+
+  /* ===== REQUIRED NOTICE ===== */
+  .req-note {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .req-star { color: var(--terracotta); font-weight: 700; }
+
+  /* ===== SECTION SEPARATOR ===== */
+  .q-sep { margin-top: 32px; }
+
+  /* ===== RECOMMENDATION SCREEN ===== */
+  .rec-screen {
+    text-align: center;
+    padding: 8px 0;
+  }
+  .rec-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    color: var(--bark);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 16px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+  }
+  .rec-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--bark);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+  .rec-title .pet-name-display { color: var(--terracotta); }
+  .rec-sub {
+    font-size: 15px;
+    color: var(--bark-mid);
+    margin-bottom: 28px;
+    line-height: 1.55;
+  }
+  .rec-card {
+    background: linear-gradient(135deg, #f8fdf8 0%, #fff 100%);
+    border: 2px solid var(--sage-light);
+    border-radius: 16px;
+    padding: 22px 24px;
+    text-align: left;
+    margin-bottom: 28px;
+  }
+  .rec-card-title {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--sage);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .rec-items { list-style: none; }
+  .rec-items li {
+    font-size: 14px;
+    color: var(--bark-mid);
+    padding: 5px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+  }
+  .rec-items li::before { content: '🐾'; font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+  .rec-paw-divider { text-align: center; font-size: 22px; margin: 10px 0; opacity: 0.4; }
+
+  /* ===== SUCCESS SCREEN ===== */
+  .success-screen { text-align: center; padding: 16px 0; }
+  .success-icon { font-size: 72px; margin-bottom: 16px; animation: bounce 0.6s 0.2s both; }
+  @keyframes bounce {
+    0%   { transform: scale(0.5); opacity: 0; }
+    70%  { transform: scale(1.15); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .success-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    color: var(--bark);
+    margin-bottom: 10px;
+  }
+  .success-msg {
+    font-size: 15px;
+    color: var(--bark-mid);
+    line-height: 1.6;
+    max-width: 380px;
+    margin: 0 auto;
+  }
+
+  /* ===== ERROR ===== */
+  .field-error {
+    display: none;
+    font-size: 13px;
+    color: #d93025;
+    margin-top: 8px;
+    font-weight: 500;
+  }
+  .field-error.show { display: block; }
+
+  /* ===== MOBILE ===== */
+  @media (max-width: 520px) {
+    .site-header { padding: 18px 20px 0; }
+    .funnel-wrap { padding: 0 12px; margin-top: 20px; }
+    .card-header { padding: 28px 24px 20px; }
+    .card-title { font-size: 23px; }
+    .progress-wrap { padding: 20px 24px 0; }
+    .step-label { font-size: 8.5px; }
+    .card-body { padding: 28px 24px 24px; }
+    .card-footer { padding: 0 24px 28px; }
+    .q-label { font-size: 19px; }
+    .img-choices { gap: 12px; }
+    .img-choice { min-height: 130px; padding: 16px 12px 14px; }
+    .img-choice-emoji { font-size: 52px; }
+    .option-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .opt-btn { padding: 12px 8px; font-size: 13px; }
+    .btn-next, .btn-submit { padding: 13px 32px; font-size: 15px; }
+    .btn-back { padding: 13px 24px; font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <img src="https://i.ibb.co/rfsVGpHw/Logo-PAnchos-Natural.avif" 
+       alt="Pancho's Kitchen" 
+       class="site-logo">
+</header>
+
+<div class="funnel-wrap">
+  <div class="card">
+
+    <!-- CARD HEADER -->
+    <div class="card-header">
+      <h1 class="card-title">Tell us about your pet</h1>
+      <p class="card-subtitle">Personalised nutrition in just 60 seconds</p>
+    </div>
+
+    <!-- PROGRESS BAR -->
+    <div class="progress-wrap">
+      <div class="steps-track" id="stepsTrack">
+        <!-- generated by JS -->
+      </div>
+      <div class="step-labels" id="stepLabels"></div>
+      <div class="step-counter" id="stepCounter">1 / 7</div>
+    </div>
+
+    <!-- ZOHO FORM (hidden, submits data) -->
+    <form
+      action="https://forms.zohopublic.com/virtualoffice7719/form/UserInfo/formperma/tCXAWjOa6AvcpfJf-Ny5xZ9Wb5thbPz6O4FWOzAyEuM/htmlRecords/submit"
+      name="form"
+      id="zohoForm"
+      method="POST"
+      accept-charset="UTF-8"
+      enctype="multipart/form-data"
+    >
+      <input type="hidden" name="zf_referrer_name" value="">
+      <input type="hidden" name="zf_redirect_url" value="">
+      <input type="hidden" name="zc_gad" value="">
+      <!-- Hidden zoho fields populated by JS -->
+      <input type="hidden" name="SingleLine"  id="zf_pet_name">
+      <input type="hidden" name="Radio"       id="zf_pet_type">
+      <input type="hidden" name="Radio1"      id="zf_pet_age">
+      <input type="hidden" name="Radio2"      id="zf_pet_size">
+      <input type="hidden" name="Radio3"      id="zf_pet_activity">
+      <input type="hidden" name="Dropdown"    id="zf_feeding">
+      <input type="hidden" name="Dropdown1"   id="zf_allergies">
+      <input type="hidden" name="Dropdown2"   id="zf_concerns">
+      <input type="hidden" name="Dropdown3"   id="zf_interest">
+      <input type="hidden" name="Dropdown4"   id="zf_matters">
+      <input type="hidden" name="SingleLine1" id="zf_owner_name">
+      <input type="hidden" name="PhoneNumber_countrycode" id="zf_phone">
+      <input type="hidden" name="Email"       id="zf_email">
+      <input type="hidden" name="SingleLine2" id="zf_city">
+    </form>
+
+    <!-- STEP SCREENS -->
+    <div class="card-body" id="cardBody">
+
+      <!-- STEP 1: Pet Name + Pet Type -->
+      <div class="step-screen active" id="step-1">
+        <p class="q-label">What's your pet's name?</p>
+        <input type="text" class="text-input" id="petName" placeholder="e.g. Bruno, Luna…" autocomplete="off">
+        <div id="petNameErr" class="field-error">Please enter your pet's name.</div>
+
+        <div class="q-sep">
+          <p class="q-label">What type of pet do you have? <span class="req-star">*</span></p>
+          <div class="img-choices">
+            <div class="img-choice" data-group="petType" data-value="Dog" onclick="selectImgChoice(this)">
+              <div class="img-choice-emoji">🐕</div>
+              <div class="img-choice-label">Dog</div>
+            </div>
+            <div class="img-choice" data-group="petType" data-value="Cat" onclick="selectImgChoice(this)">
+              <div class="img-choice-emoji">🐈</div>
+              <div class="img-choice-label">Cat</div>
+            </div>
+          </div>
+          <div id="petTypeErr" class="field-error">Please select your pet type.</div>
+        </div>
+      </div>
+
+      <!-- STEP 2: Pet Age -->
+      <div class="step-screen" id="step-2">
+        <p class="q-label">How old is <em id="petNameAge">your pet</em>? <span class="req-star">*</span></p>
+        <div class="option-grid cols-3">
+          <button type="button" class="opt-btn" data-group="petAge" data-value="Puppy / Kitten" onclick="selectOpt(this)">
+            <span class="opt-icon">🍼</span> Puppy /<br>Kitten
+          </button>
+          <button type="button" class="opt-btn" data-group="petAge" data-value="Adult" onclick="selectOpt(this)">
+            <span class="opt-icon">🐾</span> Adult
+          </button>
+          <button type="button" class="opt-btn" data-group="petAge" data-value="Senior" onclick="selectOpt(this)">
+            <span class="opt-icon">🌿</span> Senior
+          </button>
+        </div>
+        <div id="petAgeErr" class="field-error">Please select your pet's age.</div>
+      </div>
+
+      <!-- STEP 3: Pet Size -->
+      <div class="step-screen" id="step-3">
+        <p class="q-label">What's <em id="petNameSize">your pet</em>'s size? <span class="req-star">*</span></p>
+        <div class="option-grid cols-3">
+          <button type="button" class="opt-btn" data-group="petSize" data-value="Small" onclick="selectOpt(this)">
+            <span class="opt-icon">🐇</span> Small
+          </button>
+          <button type="button" class="opt-btn" data-group="petSize" data-value="Medium" onclick="selectOpt(this)">
+            <span class="opt-icon">🐩</span> Medium
+          </button>
+          <button type="button" class="opt-btn" data-group="petSize" data-value="Large" onclick="selectOpt(this)">
+            <span class="opt-icon">🦴</span> Large
+          </button>
+        </div>
+        <div id="petSizeErr" class="field-error">Please select your pet's size.</div>
+      </div>
+
+      <!-- STEP 4: Activity Level -->
+      <div class="step-screen" id="step-4">
+        <p class="q-label">How active is <em id="petNameAct">your pet</em>? <span class="req-star">*</span></p>
+        <div class="option-grid cols-3">
+          <button type="button" class="opt-btn" data-group="petActivity" data-value="Low" onclick="selectOpt(this)">
+            <span class="opt-icon">🛋️</span> Low
+          </button>
+          <button type="button" class="opt-btn" data-group="petActivity" data-value="Moderate" onclick="selectOpt(this)">
+            <span class="opt-icon">🚶</span> Moderate
+          </button>
+          <button type="button" class="opt-btn" data-group="petActivity" data-value="High" onclick="selectOpt(this)">
+            <span class="opt-icon">⚡</span> High
+          </button>
+        </div>
+        <div id="petActivityErr" class="field-error">Please select activity level.</div>
+      </div>
+
+      <!-- STEP 5: Feeding Style -->
+      <div class="step-screen" id="step-5">
+        <p class="q-label">What's <em id="petNameFeed">your pet</em>'s current feeding style? <span class="req-star">*</span></p>
+        <div class="option-grid cols-1">
+          <button type="button" class="opt-btn" data-group="feedingStyle" data-value="Homemade food" onclick="selectOpt(this)">
+            <span class="opt-icon">🍲</span> Homemade food
+          </button>
+          <button type="button" class="opt-btn" data-group="feedingStyle" data-value="Dry food (kibble)" onclick="selectOpt(this)">
+            <span class="opt-icon">🥣</span> Dry food (kibble)
+          </button>
+          <button type="button" class="opt-btn" data-group="feedingStyle" data-value="Mixed" onclick="selectOpt(this)">
+            <span class="opt-icon">🍽️</span> Mixed
+          </button>
+          <button type="button" class="opt-btn" data-group="feedingStyle" data-value="Not consistent" onclick="selectOpt(this)">
+            <span class="opt-icon">🔀</span> Not consistent
+          </button>
+        </div>
+        <div id="feedingErr" class="field-error">Please select a feeding style.</div>
+      </div>
+
+      <!-- STEP 6: Allergies + Concerns -->
+      <div class="step-screen" id="step-6">
+        <p class="q-label">Does <em id="petNameAllergy">your pet</em> have any allergies?</p>
+        <div class="option-grid cols-2">
+          <button type="button" class="opt-btn" data-group="allergies" data-value="No allergies" onclick="selectOpt(this)">
+            <span class="opt-icon">✅</span> No allergies
+          </button>
+          <button type="button" class="opt-btn" data-group="allergies" data-value="Chicken" onclick="selectOpt(this)">
+            <span class="opt-icon">🍗</span> Chicken
+          </button>
+          <button type="button" class="opt-btn" data-group="allergies" data-value="Beef" onclick="selectOpt(this)">
+            <span class="opt-icon">🥩</span> Beef
+          </button>
+          <button type="button" class="opt-btn" data-group="allergies" data-value="Dairy" onclick="selectOpt(this)">
+            <span class="opt-icon">🥛</span> Dairy
+          </button>
+          <button type="button" class="opt-btn" data-group="allergies" data-value="Other" onclick="selectOpt(this)" style="grid-column: span 2;">
+            <span class="opt-icon">❓</span> Other
+          </button>
+        </div>
+
+        <div class="q-sep">
+          <p class="q-label">What are your main concerns?</p>
+          <div class="option-grid cols-2">
+            <button type="button" class="opt-btn" data-group="concerns" data-value="Weight management" onclick="selectOpt(this)">
+              <span class="opt-icon">⚖️</span> Weight management
+            </button>
+            <button type="button" class="opt-btn" data-group="concerns" data-value="Low energy" onclick="selectOpt(this)">
+              <span class="opt-icon">🔋</span> Low energy
+            </button>
+            <button type="button" class="opt-btn" data-group="concerns" data-value="Digestion issues" onclick="selectOpt(this)">
+              <span class="opt-icon">🌿</span> Digestion issues
+            </button>
+            <button type="button" class="opt-btn" data-group="concerns" data-value="General health" onclick="selectOpt(this)">
+              <span class="opt-icon">💚</span> General health
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 7: Intent & Buying Psychology -->
+      <div class="step-screen" id="step-7">
+        <p class="q-label">Why are you interested in Pancho's Kitchen?</p>
+        <div class="option-grid cols-2">
+          <button type="button" class="opt-btn" data-group="interest" data-value="Healthier food" onclick="selectOpt(this)">
+            <span class="opt-icon">🥗</span> Healthier food
+          </button>
+          <button type="button" class="opt-btn" data-group="interest" data-value="Better ingredients" onclick="selectOpt(this)">
+            <span class="opt-icon">🌱</span> Better ingredients
+          </button>
+          <button type="button" class="opt-btn" data-group="interest" data-value="Vet recommendation" onclick="selectOpt(this)">
+            <span class="opt-icon">🩺</span> Vet recommendation
+          </button>
+          <button type="button" class="opt-btn" data-group="interest" data-value="Convenience" onclick="selectOpt(this)">
+            <span class="opt-icon">📦</span> Convenience
+          </button>
+        </div>
+
+        <div class="q-sep">
+          <p class="q-label">What matters most to you?</p>
+          <div class="option-grid cols-2">
+            <button type="button" class="opt-btn" data-group="matters" data-value="Quality" onclick="selectOpt(this)">
+              <span class="opt-icon">⭐</span> Quality
+            </button>
+            <button type="button" class="opt-btn" data-group="matters" data-value="Price" onclick="selectOpt(this)">
+              <span class="opt-icon">💰</span> Price
+            </button>
+            <button type="button" class="opt-btn" data-group="matters" data-value="Convenience" onclick="selectOpt(this)">
+              <span class="opt-icon">⚡</span> Convenience
+            </button>
+            <button type="button" class="opt-btn" data-group="matters" data-value="Nutrition" onclick="selectOpt(this)">
+              <span class="opt-icon">💚</span> Nutrition
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 8: Contact Details -->
+      <div class="step-screen" id="step-8">
+        <p class="q-label">Almost there! Your personalised meal plan is ready 🎉</p>
+        <p style="font-size:14px; color:var(--muted); margin-bottom:24px; line-height:1.6;">Enter your details to unlock <strong style="color:var(--terracotta);">your pet's custom nutrition plan</strong> — we'll send it straight to you.</p>
+
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div>
+            <label style="font-size:13px; font-weight:600; color:var(--bark-mid); display:block; margin-bottom:6px;">Your Name <span class="req-star">*</span></label>
+            <input type="text" class="text-input" id="ownerName" placeholder="Your full name" autocomplete="name">
+            <div id="ownerNameErr" class="field-error">Please enter your name.</div>
+          </div>
+          <div>
+            <label style="font-size:13px; font-weight:600; color:var(--bark-mid); display:block; margin-bottom:6px;">WhatsApp Number <span class="req-star">*</span></label>
+            <input type="tel" class="text-input" id="phone" placeholder="+91 98765 43210" autocomplete="tel">
+            <div id="phoneErr" class="field-error">Please enter a valid phone number.</div>
+          </div>
+          <div>
+            <label style="font-size:13px; font-weight:600; color:var(--bark-mid); display:block; margin-bottom:6px;">Email <span class="req-star">*</span></label>
+            <input type="email" class="text-input" id="email" placeholder="you@example.com" autocomplete="email">
+            <div id="emailErr" class="field-error">Please enter a valid email.</div>
+          </div>
+          <div>
+            <label style="font-size:13px; font-weight:600; color:var(--bark-mid); display:block; margin-bottom:6px;">City</label>
+            <input type="text" class="text-input" id="city" placeholder="e.g. Mumbai" autocomplete="address-level2">
+          </div>
+        </div>
+      </div>
+
+      <!-- RECOMMENDATION SCREEN (step 9, pre-submit) -->
+      <div class="step-screen" id="step-9">
+        <div class="rec-screen">
+          <div class="rec-badge">✨ Your Personalised Plan</div>
+          <h2 class="rec-title">We've built <span class="pet-name-display" id="recPetName">your pet</span>'s meal plan!</h2>
+          <p class="rec-sub" id="recSub">Based on your answers, here's what we recommend for a healthier, happier pet.</p>
+
+          <div class="rec-card">
+            <div class="rec-card-title">🥗 Recommended for <span id="recPetNameCard">your pet</span></div>
+            <ul class="rec-items" id="recItems">
+              <li>High-protein, balanced fresh meals</li>
+              <li>Age-appropriate portion sizes</li>
+              <li>Natural ingredients, no preservatives</li>
+            </ul>
+          </div>
+
+          <p style="font-size:13px; color:var(--muted); margin-bottom: 8px;">Ready to get started? Hit Submit to receive your plan!</p>
+        </div>
+      </div>
+
+      <!-- SUCCESS SCREEN -->
+      <div class="step-screen" id="step-success">
+        <div class="success-screen">
+          <div class="success-icon">🎉</div>
+          <h2 class="success-title">You're all set!</h2>
+          <p class="success-msg">
+            We've received <strong id="successPetName">your pet</strong>'s profile and will send your personalised meal plan via WhatsApp and email shortly.<br><br>
+            <strong style="color:var(--terracotta);">Pancho's Kitchen</strong> is crafting something special! 🐾
+          </p>
+        </div>
+      </div>
+
+    </div><!-- /card-body -->
+
+    <!-- FOOTER BUTTONS -->
+    <div class="card-footer" id="cardFooter">
+      <button class="btn-back" id="btnBack" style="display:none" onclick="goBack()">← Back</button>
+      <button class="btn-next" id="btnNext" onclick="goNext()">Next →</button>
+      <button class="btn-submit" id="btnSubmit" style="display:none" onclick="submitForm()">Get My Meal Plan 🐾</button>
+    </div>
+
+  </div><!-- /card -->
+</div><!-- /funnel-wrap -->
+
+<script>
+  // ===== STATE =====
+  const state = {
+    currentStep: 1,
+    totalSteps: 8,
+    petName: '',
+    petType: '',
+    petAge: '',
+    petSize: '',
+    petActivity: '',
+    feedingStyle: '',
+    allergies: '',
+    concerns: '',
+    interest: '',
+    matters: '',
+    ownerName: '',
+    phone: '',
+    email: '',
+    city: ''
+  };
+
+  const stepMeta = [
+    { label: 'Pet Details' },
+    { label: 'Age' },
+    { label: 'Size' },
+    { label: 'Lifestyle' },
+    { label: 'Feeding' },
+    { label: 'Health' },
+    { label: 'Intent' },
+    { label: 'Your Details' },
+  ];
+
+  // ===== INIT PROGRESS =====
+  function buildProgress() {
+    const track = document.getElementById('stepsTrack');
+    const labels = document.getElementById('stepLabels');
+    track.innerHTML = '';
+    labels.innerHTML = '';
+    for (let i = 1; i <= state.totalSteps; i++) {
+      const seg = document.createElement('div');
+      seg.className = 'step-seg' + (i < state.currentStep ? ' done' : i === state.currentStep ? ' active' : '');
+      track.appendChild(seg);
+      if (i < state.totalSteps) {
+        const sp = document.createElement('div');
+        sp.style.width = '4px';
+        track.appendChild(sp);
+      }
+      const lbl = document.createElement('div');
+      lbl.className = 'step-label' + (i < state.currentStep ? ' done' : i === state.currentStep ? ' active' : '');
+      lbl.textContent = stepMeta[i-1].label;
+      labels.appendChild(lbl);
+    }
+    document.getElementById('stepCounter').textContent = state.currentStep + ' / ' + state.totalSteps;
+  }
+
+  // ===== SELECTIONS =====
+  function selectImgChoice(el) {
+    const group = el.dataset.group;
+    document.querySelectorAll(`.img-choice[data-group="${group}"]`).forEach(e => e.classList.remove('selected'));
+    el.classList.add('selected');
+    if (group === 'petType') state.petType = el.dataset.value;
+    hideErr('petTypeErr');
+  }
+
+  function selectOpt(el) {
+    const group = el.dataset.group;
+    document.querySelectorAll(`.opt-btn[data-group="${group}"]`).forEach(e => e.classList.remove('selected'));
+    el.classList.add('selected');
+    const val = el.dataset.value;
+    if (group === 'petAge') { state.petAge = val; hideErr('petAgeErr'); }
+    if (group === 'petSize') { state.petSize = val; hideErr('petSizeErr'); }
+    if (group === 'petActivity') { state.petActivity = val; hideErr('petActivityErr'); }
+    if (group === 'feedingStyle') { state.feedingStyle = val; hideErr('feedingErr'); }
+    if (group === 'allergies') state.allergies = val;
+    if (group === 'concerns') state.concerns = val;
+    if (group === 'interest') state.interest = val;
+    if (group === 'matters') state.matters = val;
+  }
+
+  function hideErr(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('show');
+  }
+  function showErr(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('show');
+  }
+
+  // ===== VALIDATION =====
+  function validateStep(step) {
+    if (step === 1) {
+      let ok = true;
+      if (!document.getElementById('petName').value.trim()) { showErr('petNameErr'); ok = false; }
+      if (!state.petType) { showErr('petTypeErr'); ok = false; }
+      return ok;
+    }
+    if (step === 2) { if (!state.petAge) { showErr('petAgeErr'); return false; } return true; }
+    if (step === 3) { if (!state.petSize) { showErr('petSizeErr'); return false; } return true; }
+    if (step === 4) { if (!state.petActivity) { showErr('petActivityErr'); return false; } return true; }
+    if (step === 5) { if (!state.feedingStyle) { showErr('feedingErr'); return false; } return true; }
+    if (step === 6) { return true; }
+    if (step === 7) { return true; }
+    if (step === 8) {
+      let ok = true;
+      const name = document.getElementById('ownerName').value.trim();
+      const ph = document.getElementById('phone').value.trim();
+      const em = document.getElementById('email').value.trim();
+      if (!name) { showErr('ownerNameErr'); ok = false; }
+      if (!ph) { showErr('phoneErr'); ok = false; }
+      const emailRe = /^[\w\-.+&'/]*@([a-zA-Z0-9][a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}$/;
+      if (!em || !emailRe.test(em)) { showErr('emailErr'); ok = false; }
+      return ok;
+    }
+    return true;
+  }
+
+  // ===== NAVIGATION =====
+  function updatePetNameRefs() {
+    const n = state.petName || 'your pet';
+    ['petNameAge','petNameSize','petNameAct','petNameFeed','petNameAllergy'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = n;
+    });
+  }
+
+  function goNext() {
+    const cur = state.currentStep;
+    if (!validateStep(cur)) return;
+
+    // Collect values on advance
+    if (cur === 1) {
+      state.petName = document.getElementById('petName').value.trim();
+      updatePetNameRefs();
+    }
+    if (cur === 8) {
+      state.ownerName = document.getElementById('ownerName').value.trim();
+      state.phone = document.getElementById('phone').value.trim();
+      state.email = document.getElementById('email').value.trim();
+      state.city = document.getElementById('city').value.trim();
+      // Show recommendation screen
+      showRecommendation();
+      transitionTo('step-' + cur, 'step-9');
+      document.getElementById('btnNext').style.display = 'none';
+      document.getElementById('btnBack').style.display = 'block';
+      document.getElementById('btnSubmit').style.display = 'block';
+      document.getElementById('stepCounter').textContent = '';
+      return;
+    }
+
+    state.currentStep = cur + 1;
+    transitionTo('step-' + cur, 'step-' + state.currentStep);
+    buildProgress();
+    updateFooterButtons();
+  }
+
+  function goBack() {
+    if (state.currentStep === 1) return;
+
+    // If on rec screen
+    const recScreen = document.getElementById('step-9');
+    if (recScreen.classList.contains('active')) {
+      transitionTo('step-9', 'step-8', true);
+      state.currentStep = 8;
+      buildProgress();
+      document.getElementById('btnNext').style.display = 'block';
+      document.getElementById('btnSubmit').style.display = 'none';
+      return;
+    }
+
+    const prev = state.currentStep - 1;
+    transitionTo('step-' + state.currentStep, 'step-' + prev, true);
+    state.currentStep = prev;
+    buildProgress();
+    updateFooterButtons();
+  }
+
+  function updateFooterButtons() {
+    document.getElementById('btnBack').style.display = state.currentStep > 1 ? 'block' : 'none';
+    document.getElementById('btnNext').style.display = 'block';
+    document.getElementById('btnSubmit').style.display = 'none';
+  }
+
+  function transitionTo(fromId, toId, back = false) {
+    const fromEl = document.getElementById(fromId);
+    const toEl = document.getElementById(toId);
+    fromEl.classList.add('exit');
+    setTimeout(() => {
+      fromEl.classList.remove('active', 'exit');
+      toEl.classList.add('active');
+      if (back) toEl.classList.add('back-in');
+      else toEl.classList.remove('back-in');
+      setTimeout(() => toEl.classList.remove('back-in'), 400);
+    }, 300);
+  }
+
+  // ===== RECOMMENDATION =====
+  function showRecommendation() {
+    const n = state.petName || 'your pet';
+    document.getElementById('recPetName').textContent = n;
+    document.getElementById('recPetNameCard').textContent = n;
+
+    const items = [];
+    // Based on type
+    if (state.petType === 'Dog') items.push('Fresh chicken or lamb — high in protein for dogs');
+    else if (state.petType === 'Cat') items.push('Tuna & chicken blend — perfect for feline nutrition');
+    // Based on age
+    if (state.petAge === 'Puppy / Kitten') items.push('Puppy/kitten formula with DHA for brain development');
+    else if (state.petAge === 'Senior') items.push('Joint-support formula with omega-3 & glucosamine');
+    else items.push('Balanced adult formula with natural vitamins');
+    // Based on activity
+    if (state.petActivity === 'High') items.push('High-calorie, high-protein portions for active pets');
+    else if (state.petActivity === 'Low') items.push('Lean, low-calorie meals to maintain healthy weight');
+    else items.push('Moderate-calorie balanced daily portions');
+    // Based on allergies
+    if (state.allergies && state.allergies !== 'No allergies' && state.allergies !== '-Select-')
+      items.push(`Allergen-free: no ${state.allergies.toLowerCase()} in any ingredient`);
+    // Based on concerns
+    if (state.concerns === 'Weight management') items.push('Portion-controlled, fibre-rich recipes');
+    else if (state.concerns === 'Digestion issues') items.push('Probiotic-enriched meals for better gut health');
+    else if (state.concerns === 'Low energy') items.push('Iron & B-vitamin boost for sustained energy');
+
+    const ul = document.getElementById('recItems');
+    ul.innerHTML = items.slice(0,5).map(i => `<li>${i}</li>`).join('');
+
+    document.getElementById('recSub').textContent =
+      `Based on ${n}'s profile — ${state.petType || 'pet'}, ${state.petAge || 'adult'}, ${state.petSize || 'medium'} size — here's what we recommend.`;
+    document.getElementById('successPetName').textContent = n + "'s profile";
+  }
+
+  // ===== SUBMIT =====
+  function submitForm() {
+    // Populate hidden Zoho fields
+    document.getElementById('zf_pet_name').value = state.petName;
+    document.getElementById('zf_pet_type').value = state.petType;
+    document.getElementById('zf_pet_age').value = state.petAge;
+    document.getElementById('zf_pet_size').value = state.petSize;
+    document.getElementById('zf_pet_activity').value = state.petActivity;
+    document.getElementById('zf_feeding').value = state.feedingStyle;
+    document.getElementById('zf_allergies').value = state.allergies || '-Select-';
+    document.getElementById('zf_concerns').value = state.concerns || '-Select-';
+    document.getElementById('zf_interest').value = state.interest || '-Select-';
+    document.getElementById('zf_matters').value = state.matters || '-Select-';
+    document.getElementById('zf_owner_name').value = state.ownerName;
+    document.getElementById('zf_phone').value = state.phone;
+    document.getElementById('zf_email').value = state.email;
+    document.getElementById('zf_city').value = state.city;
+
+    // Show success screen immediately
+    transitionTo('step-9', 'step-success');
+    document.getElementById('btnBack').style.display = 'none';
+    document.getElementById('btnSubmit').style.display = 'none';
+    document.getElementById('stepCounter').textContent = '🎉';
+
+    // Submit to Zoho in background
+    const form = document.getElementById('zohoForm');
+    const formData = new FormData(form);
+    fetch(form.action, { method: 'POST', body: formData, mode: 'no-cors' })
+      .catch(() => {}); // silent fail — Zoho redirect won't matter
+  }
+
+  // ===== INIT =====
+  buildProgress();
+  updateFooterButtons();
+</script>
+</body>
+</html>
