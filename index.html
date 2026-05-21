@@ -228,6 +228,7 @@
     box-shadow: 0 0 0 4px rgba(201,113,74,0.10);
   }
 
+  /* ===== PET TYPE IMAGE CHOICES ===== */
   .img-choices {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -279,14 +280,33 @@
     line-height: 26px;
     text-align: center;
   }
-  .img-choice-emoji {
+
+  /* Pet headshot image inside img-choice */
+  .pet-headshot {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 12px;
+    transition: transform 0.3s;
+    box-shadow: 0 4px 16px rgba(59,47,30,0.12);
+    border: 3px solid var(--border);
+  }
+  .img-choice:hover .pet-headshot { transform: scale(1.08); }
+  .img-choice.selected .pet-headshot {
+    transform: scale(1.06);
+    border-color: var(--terracotta-light);
+  }
+  .pet-headshot-fallback {
     font-size: 68px;
     line-height: 1;
     margin-bottom: 12px;
     transition: transform 0.3s;
+    display: none; /* shown via onerror */
   }
-  .img-choice:hover .img-choice-emoji { transform: scale(1.1); }
-  .img-choice.selected .img-choice-emoji { transform: scale(1.08); }
+  .img-choice:hover .pet-headshot-fallback { transform: scale(1.1); }
+  .img-choice.selected .pet-headshot-fallback { transform: scale(1.08); }
+
   .img-choice-label {
     font-size: 17px;
     font-weight: 600;
@@ -335,6 +355,89 @@
     box-shadow: 0 4px 20px rgba(122,158,126,0.18);
   }
   .opt-btn .opt-icon { font-size: 20px; }
+
+  /* ===== MULTI-SELECT HINT ===== */
+  .multi-hint {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .multi-hint::before { content: '☑'; font-size: 14px; color: var(--sage); }
+
+  /* ===== RANKING CARDS ===== */
+  .rank-hint {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .rank-hint::before { content: '🏅'; font-size: 13px; }
+
+  .rank-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 20px 12px 16px;
+    border: 2.5px solid var(--border);
+    border-radius: 14px;
+    background: #fff;
+    cursor: pointer;
+    transition: all var(--transition);
+    position: relative;
+    user-select: none;
+    min-height: 88px;
+  }
+  .rank-card:hover {
+    border-color: var(--gold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(212,168,71,0.15);
+  }
+  .rank-card.ranked {
+    background: linear-gradient(135deg, #fffbf0 0%, #fff 100%);
+  }
+  .rank-card.ranked-1 { border-color: var(--gold); }
+  .rank-card.ranked-2 { border-color: var(--sage); }
+  .rank-card.ranked-3 { border-color: var(--terracotta-light); }
+  .rank-card.ranked-4 { border-color: var(--muted); }
+
+  .rank-badge {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--border);
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: all 0.25s ease;
+  }
+  .rank-badge.r1 { background: var(--gold); color: var(--bark); box-shadow: 0 2px 8px rgba(212,168,71,0.4); }
+  .rank-badge.r2 { background: var(--sage); color: #fff; box-shadow: 0 2px 8px rgba(122,158,126,0.4); }
+  .rank-badge.r3 { background: var(--terracotta); color: #fff; box-shadow: 0 2px 8px rgba(201,113,74,0.35); }
+  .rank-badge.r4 { background: var(--muted); color: #fff; }
+
+  .rank-icon { font-size: 22px; }
+  .rank-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--bark-mid);
+    text-align: center;
+    line-height: 1.3;
+  }
+  .rank-card.ranked .rank-label { color: var(--bark); font-weight: 600; }
 
   /* ===== WEIGHT SLIDER SECTION ===== */
   .weight-sliders-wrap {
@@ -448,21 +551,9 @@
     margin-top: 20px;
     transition: all 0.4s;
   }
-  .goal-lose {
-    background: rgba(201,113,74,0.12);
-    color: var(--terracotta);
-    border: 1.5px solid rgba(201,113,74,0.3);
-  }
-  .goal-gain {
-    background: rgba(122,158,126,0.12);
-    color: #4a8a50;
-    border: 1.5px solid rgba(122,158,126,0.35);
-  }
-  .goal-maintain {
-    background: rgba(212,168,71,0.12);
-    color: #8a6b10;
-    border: 1.5px solid rgba(212,168,71,0.3);
-  }
+  .goal-lose { background: rgba(201,113,74,0.12); color: var(--terracotta); border: 1.5px solid rgba(201,113,74,0.3); }
+  .goal-gain { background: rgba(122,158,126,0.12); color: #4a8a50; border: 1.5px solid rgba(122,158,126,0.35); }
+  .goal-maintain { background: rgba(212,168,71,0.12); color: #8a6b10; border: 1.5px solid rgba(212,168,71,0.3); }
 
   .weight-comparison-bar {
     margin-top: 22px;
@@ -471,56 +562,20 @@
     padding: 14px 16px;
     border: 1px solid var(--border);
   }
-  .wcb-label {
-    font-size: 12px;
-    color: var(--muted);
-    font-weight: 500;
-    margin-bottom: 10px;
-  }
+  .wcb-label { font-size: 12px; color: var(--muted); font-weight: 500; margin-bottom: 10px; }
   .wcb-track {
-    position: relative;
-    height: 10px;
-    background: var(--border);
-    border-radius: 10px;
-    overflow: visible;
-    margin-bottom: 8px;
+    position: relative; height: 10px; background: var(--border);
+    border-radius: 10px; overflow: visible; margin-bottom: 8px;
   }
   .wcb-fill-current {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    background: var(--terracotta-light);
-    border-radius: 10px;
+    position: absolute; left: 0; top: 0; height: 100%;
+    background: var(--terracotta-light); border-radius: 10px;
     transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
   }
   .wcb-fill-ideal {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    background: var(--sage);
-    border-radius: 10px;
-    opacity: 0.7;
+    position: absolute; left: 0; top: 0; height: 100%;
+    background: var(--sage); border-radius: 10px; opacity: 0.7;
     transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
-  }
-  .wcb-legend {
-    display: flex;
-    gap: 16px;
-    margin-top: 8px;
-  }
-  .wcb-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 5px;
-    vertical-align: middle;
-  }
-  .wcb-legend-item {
-    font-size: 12px;
-    color: var(--bark-mid);
-    font-weight: 500;
   }
 
   .zoho-hidden { display: none !important; }
@@ -567,8 +622,7 @@
   }
   .btn-next::before {
     content: '';
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     background: linear-gradient(120deg, transparent 40%, rgba(255,255,255,0.12) 50%, transparent 60%);
     transform: translateX(-100%);
     transition: transform 0.5s;
@@ -599,72 +653,40 @@
     box-shadow: 0 8px 24px rgba(122,158,126,0.35);
   }
 
-  .req-note {
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 20px;
-  }
+  .req-note { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
   .req-star { color: var(--terracotta); font-weight: 700; }
-
   .q-sep { margin-top: 32px; }
 
   .rec-screen { text-align: center; padding: 8px 0; }
   .rec-badge {
     display: inline-block;
     background: linear-gradient(135deg, var(--gold-light), var(--gold));
-    color: var(--bark);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 5px 16px;
-    border-radius: 100px;
-    margin-bottom: 20px;
+    color: var(--bark); font-size: 11px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 5px 16px; border-radius: 100px; margin-bottom: 20px;
   }
   .rec-title {
     font-family: 'Playfair Display', serif;
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--bark);
-    margin-bottom: 10px;
-    line-height: 1.3;
+    font-size: 26px; font-weight: 700; color: var(--bark);
+    margin-bottom: 10px; line-height: 1.3;
   }
   .rec-title .pet-name-display { color: var(--terracotta); }
-  .rec-sub {
-    font-size: 15px;
-    color: var(--bark-mid);
-    margin-bottom: 28px;
-    line-height: 1.55;
-  }
+  .rec-sub { font-size: 15px; color: var(--bark-mid); margin-bottom: 28px; line-height: 1.55; }
   .rec-card {
     background: linear-gradient(135deg, #f8fdf8 0%, #fff 100%);
     border: 2px solid var(--sage-light);
-    border-radius: 16px;
-    padding: 22px 24px;
-    text-align: left;
-    margin-bottom: 28px;
+    border-radius: 16px; padding: 22px 24px; text-align: left; margin-bottom: 28px;
   }
   .rec-card-title {
-    font-weight: 700;
-    font-size: 15px;
-    color: var(--sage);
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    font-weight: 700; font-size: 15px; color: var(--sage);
+    margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
   }
   .rec-items { list-style: none; }
   .rec-items li {
-    font-size: 14px;
-    color: var(--bark-mid);
-    padding: 5px 0;
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    line-height: 1.5;
+    font-size: 14px; color: var(--bark-mid); padding: 5px 0;
+    display: flex; align-items: flex-start; gap: 10px; line-height: 1.5;
   }
   .rec-items li::before { content: '🐾'; font-size: 13px; flex-shrink: 0; margin-top: 1px; }
-  .rec-paw-divider { text-align: center; font-size: 22px; margin: 10px 0; opacity: 0.4; }
 
   .success-screen { text-align: center; padding: 16px 0; }
   .success-icon { font-size: 72px; margin-bottom: 16px; animation: bounce 0.6s 0.2s both; }
@@ -673,27 +695,10 @@
     70%  { transform: scale(1.15); }
     100% { transform: scale(1); opacity: 1; }
   }
-  .success-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 26px;
-    color: var(--bark);
-    margin-bottom: 10px;
-  }
-  .success-msg {
-    font-size: 15px;
-    color: var(--bark-mid);
-    line-height: 1.6;
-    max-width: 380px;
-    margin: 0 auto;
-  }
+  .success-title { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--bark); margin-bottom: 10px; }
+  .success-msg { font-size: 15px; color: var(--bark-mid); line-height: 1.6; max-width: 380px; margin: 0 auto; }
 
-  .field-error {
-    display: none;
-    font-size: 13px;
-    color: #d93025;
-    margin-top: 8px;
-    font-weight: 500;
-  }
+  .field-error { display: none; font-size: 13px; color: #d93025; margin-top: 8px; font-weight: 500; }
   .field-error.show { display: block; }
 
   @media (max-width: 520px) {
@@ -708,9 +713,11 @@
     .q-label { font-size: 19px; }
     .img-choices { gap: 12px; }
     .img-choice { min-height: 130px; padding: 16px 12px 14px; }
-    .img-choice-emoji { font-size: 52px; }
+    .pet-headshot { width: 72px; height: 72px; }
     .option-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
     .opt-btn { padding: 12px 8px; font-size: 13px; }
+    .rank-card { padding: 16px 8px 12px; }
+    .rank-label { font-size: 12px; }
     .btn-next, .btn-submit { padding: 13px 32px; font-size: 15px; }
     .btn-back { padding: 13px 24px; font-size: 15px; }
     .weight-slider-block { padding: 18px 16px 16px; }
@@ -721,8 +728,8 @@
 <body>
 
 <header class="site-header">
-  <img src="https://i.ibb.co/rfsVGpHw/Logo-PAnchos-Natural.avif" 
-       alt="Pancho's Kitchen" 
+  <img src="https://i.ibb.co/rfsVGpHw/Logo-PAnchos-Natural.avif"
+       alt="Pancho's Kitchen"
        class="site-logo">
 </header>
 
@@ -780,14 +787,31 @@
         <div class="q-sep">
           <p class="q-label">¿Qué tipo de mascota tienes? <span class="req-star">*</span></p>
           <div class="img-choices">
+
+            <!-- CHANGE 6: Pet headshot with emoji fallback — replace URL_PERRO_HEADSHOT with real URL -->
             <div class="img-choice" data-group="petType" data-value="Dog" onclick="selectImgChoice(this)">
-              <div class="img-choice-emoji">🐕</div>
+              <img
+                src="URL_PERRO_HEADSHOT"
+                alt="Perro"
+                class="pet-headshot"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+              >
+              <span class="pet-headshot-fallback">🐕</span>
               <div class="img-choice-label">Perro</div>
             </div>
+
+            <!-- CHANGE 6: Pet headshot with emoji fallback — replace URL_GATO_HEADSHOT with real URL -->
             <div class="img-choice" data-group="petType" data-value="Cat" onclick="selectImgChoice(this)">
-              <div class="img-choice-emoji">🐈</div>
+              <img
+                src="URL_GATO_HEADSHOT"
+                alt="Gato"
+                class="pet-headshot"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+              >
+              <span class="pet-headshot-fallback">🐈</span>
               <div class="img-choice-label">Gato</div>
             </div>
+
           </div>
           <div id="petTypeErr" class="field-error">Por favor, selecciona el tipo de mascota.</div>
         </div>
@@ -815,8 +839,6 @@
         <p class="q-label">¿Cuánto pesa <em id="petNameSize">tu mascota</em>? <span class="req-star">*</span></p>
 
         <div class="weight-sliders-wrap">
-
-          <!-- Slider: Peso Actual -->
           <div class="weight-slider-block">
             <div class="slider-block-header">
               <div class="slider-block-title">
@@ -824,13 +846,8 @@
               </div>
               <div class="slider-value-pill" id="currentWeightDisplay">5 kg</div>
             </div>
-            <input
-              type="range"
-              class="weight-range-input"
-              id="currentWeightSlider"
-              min="1" max="60" step="1" value="5"
-              oninput="onWeightChange()"
-            >
+            <input type="range" class="weight-range-input" id="currentWeightSlider"
+              min="1" max="60" step="1" value="5" oninput="onWeightChange()">
             <div class="slider-ticks">
               <span class="slider-tick">1 kg</span>
               <span class="slider-tick">15 kg</span>
@@ -840,7 +857,6 @@
             </div>
           </div>
 
-          <!-- Slider: Peso Ideal -->
           <div class="weight-slider-block">
             <div class="slider-block-header">
               <div class="slider-block-title">
@@ -848,14 +864,9 @@
               </div>
               <div class="slider-value-pill" id="idealWeightDisplay" style="background: var(--sage);">5 kg</div>
             </div>
-            <input
-              type="range"
-              class="weight-range-input"
-              id="idealWeightSlider"
-              min="1" max="60" step="1" value="5"
-              style="accent-color: var(--sage);"
-              oninput="onWeightChange()"
-            >
+            <input type="range" class="weight-range-input" id="idealWeightSlider"
+              min="1" max="60" step="1" value="5" style="accent-color: var(--sage);"
+              oninput="onWeightChange()">
             <div class="slider-ticks">
               <span class="slider-tick">1 kg</span>
               <span class="slider-tick">15 kg</span>
@@ -864,10 +875,8 @@
               <span class="slider-tick">60 kg</span>
             </div>
           </div>
-
         </div>
 
-        <!-- Visual comparison -->
         <div class="weight-comparison-bar" id="weightCompBar">
           <div class="wcb-label">Comparación de pesos</div>
           <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
@@ -916,8 +925,11 @@
           <button type="button" class="opt-btn" data-group="feedingStyle" data-value="Homemade food" onclick="selectOpt(this)">
             <span class="opt-icon">🍲</span> Comida casera
           </button>
+          <button type="button" class="opt-btn" data-group="feedingStyle" data-value="Natural food" onclick="selectOpt(this)">
+            <span class="opt-icon">🌿</span> Comida Natural
+          </button>
           <button type="button" class="opt-btn" data-group="feedingStyle" data-value="Dry food (kibble)" onclick="selectOpt(this)">
-            <span class="opt-icon">🥣</span> Croquetas / pienso seco
+            <span class="opt-icon">🥣</span> Concentrado para perro / Concentrado para gato
           </button>
           <button type="button" class="opt-btn" data-group="feedingStyle" data-value="Mixed" onclick="selectOpt(this)">
             <span class="opt-icon">🍽️</span> Mixto
@@ -942,16 +954,19 @@
           <button type="button" class="opt-btn" data-group="allergies" data-value="Beef" onclick="selectOpt(this)">
             <span class="opt-icon">🥩</span> Res
           </button>
-          <button type="button" class="opt-btn" data-group="allergies" data-value="Dairy" onclick="selectOpt(this)">
-            <span class="opt-icon">🥛</span> Lácteos
+          <!-- CHANGE 1: data-value fixed from "Dairy" → "Grain", label was already "Granos" ✓ -->
+          <button type="button" class="opt-btn" data-group="allergies" data-value="Grain" onclick="selectOpt(this)">
+            <span class="opt-icon">🌾</span> Granos
           </button>
           <button type="button" class="opt-btn" data-group="allergies" data-value="Other" onclick="selectOpt(this)" style="grid-column: span 2;">
             <span class="opt-icon">❓</span> Otro
           </button>
         </div>
 
+        <!-- CHANGE 2: Preocupaciones is now multi-select -->
         <div class="q-sep">
           <p class="q-label">¿Cuáles son tus principales preocupaciones?</p>
+          <p class="multi-hint">Puedes seleccionar varias opciones</p>
           <div class="option-grid cols-2">
             <button type="button" class="opt-btn" data-group="concerns" data-value="Weight management" onclick="selectOpt(this)">
               <span class="opt-icon">⚖️</span> Control de peso
@@ -971,7 +986,9 @@
 
       <!-- PASO 7: Intención y motivación de compra -->
       <div class="step-screen" id="step-7">
+        <!-- CHANGE 2: Interest is now multi-select -->
         <p class="q-label">¿Por qué te interesa Pancho's Kitchen?</p>
+        <p class="multi-hint">Puedes seleccionar varias opciones</p>
         <div class="option-grid cols-2">
           <button type="button" class="opt-btn" data-group="interest" data-value="Healthier food" onclick="selectOpt(this)">
             <span class="opt-icon">🥗</span> Alimentación más sana
@@ -982,26 +999,38 @@
           <button type="button" class="opt-btn" data-group="interest" data-value="Vet recommendation" onclick="selectOpt(this)">
             <span class="opt-icon">🩺</span> Recomendación del veterinario
           </button>
+          <!-- CHANGE 3: "Comodidad" → "Practicidad" — already done ✓ -->
           <button type="button" class="opt-btn" data-group="interest" data-value="Convenience" onclick="selectOpt(this)">
-            <span class="opt-icon">📦</span> Comodidad
+            <span class="opt-icon">📦</span> Practicidad
           </button>
         </div>
 
+        <!-- CHANGE 5: "Lo más importante" → 1–4 ranking cards -->
         <div class="q-sep">
           <p class="q-label">¿Qué es lo más importante para ti?</p>
-          <div class="option-grid cols-2">
-            <button type="button" class="opt-btn" data-group="matters" data-value="Quality" onclick="selectOpt(this)">
-              <span class="opt-icon">⭐</span> Calidad
-            </button>
-            <button type="button" class="opt-btn" data-group="matters" data-value="Price" onclick="selectOpt(this)">
-              <span class="opt-icon">💰</span> Precio
-            </button>
-            <button type="button" class="opt-btn" data-group="matters" data-value="Convenience" onclick="selectOpt(this)">
-              <span class="opt-icon">⚡</span> Comodidad
-            </button>
-            <button type="button" class="opt-btn" data-group="matters" data-value="Nutrition" onclick="selectOpt(this)">
-              <span class="opt-icon">💚</span> Nutrición
-            </button>
+          <p class="rank-hint">Toca cada opción para asignarle un lugar (1 = más importante)</p>
+          <div class="option-grid cols-2" id="mattersRanking">
+            <div class="rank-card" data-value="Quality" onclick="rankCard(this)">
+              <span class="rank-badge" id="rank-Quality">—</span>
+              <span class="rank-icon">⭐</span>
+              <span class="rank-label">Calidad</span>
+            </div>
+            <div class="rank-card" data-value="Price" onclick="rankCard(this)">
+              <span class="rank-badge" id="rank-Price">—</span>
+              <span class="rank-icon">💰</span>
+              <span class="rank-label">Precio</span>
+            </div>
+            <!-- CHANGE 3: "Comodidad" → "Facilidad de uso" — already done ✓ -->
+            <div class="rank-card" data-value="Convenience" onclick="rankCard(this)">
+              <span class="rank-badge" id="rank-Convenience">—</span>
+              <span class="rank-icon">⚡</span>
+              <span class="rank-label">Facilidad de uso</span>
+            </div>
+            <div class="rank-card" data-value="Nutrition" onclick="rankCard(this)">
+              <span class="rank-badge" id="rank-Nutrition">—</span>
+              <span class="rank-icon">💚</span>
+              <span class="rank-label">Nutrición</span>
+            </div>
           </div>
         </div>
       </div>
@@ -1009,8 +1038,9 @@
       <!-- PASO 8: Datos de contacto -->
       <div class="step-screen" id="step-8">
         <p class="q-label">¡Ya casi terminamos! Tu plan de alimentación personalizado está listo 🎉</p>
-        <p style="font-size:14px; color:var(--muted); margin-bottom:24px; line-height:1.6;">Ingresa tus datos para desbloquear el <strong style="color:var(--terracotta);">plan nutricional personalizado de tu mascota</strong> — te lo enviamos directamente.</p>
-
+        <p style="font-size:14px; color:var(--muted); margin-bottom:24px; line-height:1.6;">
+          Ingresa tus datos para desbloquear el <strong style="color:var(--terracotta);">plan nutricional personalizado de tu mascota</strong> — te lo enviamos directamente.
+        </p>
         <div style="display:flex; flex-direction:column; gap:14px;">
           <div>
             <label style="font-size:13px; font-weight:600; color:var(--bark-mid); display:block; margin-bottom:6px;">Tu nombre <span class="req-star">*</span></label>
@@ -1034,13 +1064,12 @@
         </div>
       </div>
 
-      <!-- PANTALLA DE RECOMENDACIÓN (paso 9, pre-envío) -->
+      <!-- PANTALLA DE RECOMENDACIÓN -->
       <div class="step-screen" id="step-9">
         <div class="rec-screen">
           <div class="rec-badge">✨ Tu Plan Personalizado</div>
           <h2 class="rec-title">¡Creamos el plan de <span class="pet-name-display" id="recPetName">tu mascota</span>!</h2>
           <p class="rec-sub" id="recSub">Basado en tus respuestas, esto es lo que recomendamos para una mascota más sana y feliz.</p>
-
           <div class="rec-card">
             <div class="rec-card-title">🥗 Recomendado para <span id="recPetNameCard">tu mascota</span></div>
             <ul class="rec-items" id="recItems">
@@ -1049,7 +1078,6 @@
               <li>Ingredientes naturales, sin conservantes</li>
             </ul>
           </div>
-
           <p style="font-size:13px; color:var(--muted); margin-bottom: 8px;">¿Listo para comenzar? ¡Haz clic en Enviar para recibir tu plan!</p>
         </div>
       </div>
@@ -1066,7 +1094,7 @@
         </div>
       </div>
 
-    </div>
+    </div><!-- /.card-body -->
 
     <div class="card-footer" id="cardFooter">
       <button class="btn-back" id="btnBack" style="display:none" onclick="goBack()">← Atrás</button>
@@ -1078,6 +1106,9 @@
 </div>
 
 <script>
+  // ===== STATE =====
+  // CHANGE 2: concerns and interest are now arrays (joined for Zoho)
+  // CHANGE 5: matters is an object {Quality:0, Price:0, ...} serialized as "Quality:1, Price:2"
   const state = {
     currentStep: 1,
     totalSteps: 8,
@@ -1090,8 +1121,8 @@
     petActivity: '',
     feedingStyle: '',
     allergies: '',
-    concerns: '',
-    interest: '',
+    concerns: [],     // CHANGE 2: array
+    interest: [],     // CHANGE 2: array
     matters: '',
     ownerName: '',
     phone: '',
@@ -1110,6 +1141,47 @@
     { label: 'Tus datos' },
   ];
 
+  // ===== CHANGE 5: Ranking state =====
+  const mattersRanks = { Quality: 0, Price: 0, Convenience: 0, Nutrition: 0 };
+  const MAX_RANK = 4;
+
+  function rankCard(el) {
+    const val = el.dataset.value;
+    const currentRank = mattersRanks[val];
+    // Cycle: 0→1→2→3→4→0
+    let nextRank = currentRank === MAX_RANK ? 0 : currentRank + 1;
+
+    // If nextRank already taken by another card, clear that card first
+    if (nextRank > 0) {
+      Object.keys(mattersRanks).forEach(k => {
+        if (k !== val && mattersRanks[k] === nextRank) {
+          mattersRanks[k] = 0;
+          updateRankBadge(k, 0);
+        }
+      });
+    }
+
+    mattersRanks[val] = nextRank;
+    updateRankBadge(val, nextRank);
+
+    // Serialize to state.matters: "Quality:1, Price:2, ..."
+    const ranked = Object.entries(mattersRanks)
+      .filter(([, v]) => v > 0)
+      .sort((a, b) => a[1] - b[1]);
+    state.matters = ranked.map(([k, v]) => `${k}:${v}`).join(', ');
+  }
+
+  function updateRankBadge(val, rank) {
+    const badge = document.getElementById('rank-' + val);
+    const card = badge.closest('.rank-card');
+    // Reset classes
+    badge.className = 'rank-badge' + (rank > 0 ? ' r' + rank : '');
+    badge.textContent = rank > 0 ? rank : '—';
+    // Card border class
+    card.className = 'rank-card' + (rank > 0 ? ' ranked ranked-' + rank : '');
+  }
+
+  // ===== PROGRESS =====
   function buildProgress() {
     const track = document.getElementById('stepsTrack');
     const labels = document.getElementById('stepLabels');
@@ -1126,12 +1198,13 @@
       }
       const lbl = document.createElement('div');
       lbl.className = 'step-label' + (i < state.currentStep ? ' done' : i === state.currentStep ? ' active' : '');
-      lbl.textContent = stepMeta[i-1].label;
+      lbl.textContent = stepMeta[i - 1].label;
       labels.appendChild(lbl);
     }
     document.getElementById('stepCounter').textContent = state.currentStep + ' / ' + state.totalSteps;
   }
 
+  // ===== SELECTION HANDLERS =====
   function selectImgChoice(el) {
     const group = el.dataset.group;
     document.querySelectorAll(`.img-choice[data-group="${group}"]`).forEach(e => e.classList.remove('selected'));
@@ -1140,48 +1213,53 @@
     hideErr('petTypeErr');
   }
 
+  // CHANGE 2: Multi-select for 'concerns' and 'interest'; single-select for everything else
   function selectOpt(el) {
     const group = el.dataset.group;
-    document.querySelectorAll(`.opt-btn[data-group="${group}"]`).forEach(e => e.classList.remove('selected'));
-    el.classList.add('selected');
-    const val = el.dataset.value;
-    if (group === 'petAge') { state.petAge = val; hideErr('petAgeErr'); }
-    if (group === 'petSize') { state.petSize = val; hideErr('petSizeErr'); }
-    if (group === 'petActivity') { state.petActivity = val; hideErr('petActivityErr'); }
-    if (group === 'feedingStyle') { state.feedingStyle = val; hideErr('feedingErr'); }
-    if (group === 'allergies') state.allergies = val;
-    if (group === 'concerns') state.concerns = val;
-    if (group === 'interest') state.interest = val;
-    if (group === 'matters') state.matters = val;
+    const multiGroups = ['concerns', 'interest'];
+
+    if (multiGroups.includes(group)) {
+      // Toggle this button on/off
+      el.classList.toggle('selected');
+      // Rebuild array from currently selected buttons
+      const selected = [...document.querySelectorAll(`.opt-btn[data-group="${group}"].selected`)]
+        .map(e => e.dataset.value);
+      if (group === 'concerns') state.concerns = selected;
+      if (group === 'interest') state.interest = selected;
+    } else {
+      // Single-select: deselect all others, select this one
+      document.querySelectorAll(`.opt-btn[data-group="${group}"]`).forEach(e => e.classList.remove('selected'));
+      el.classList.add('selected');
+      const val = el.dataset.value;
+      if (group === 'petAge')       { state.petAge = val; hideErr('petAgeErr'); }
+      if (group === 'petSize')      { state.petSize = val; hideErr('petSizeErr'); }
+      if (group === 'petActivity')  { state.petActivity = val; hideErr('petActivityErr'); }
+      if (group === 'feedingStyle') { state.feedingStyle = val; hideErr('feedingErr'); }
+      if (group === 'allergies')    { state.allergies = val; }
+    }
   }
 
-  function hideErr(id) {
-    const el = document.getElementById(id);
-    if (el) el.classList.remove('show');
-  }
-  function showErr(id) {
-    const el = document.getElementById(id);
-    if (el) el.classList.add('show');
-  }
+  function hideErr(id) { const el = document.getElementById(id); if (el) el.classList.remove('show'); }
+  function showErr(id)  { const el = document.getElementById(id); if (el) el.classList.add('show'); }
 
-  // ===== WEIGHT SLIDER LOGIC =====
+  // ===== WEIGHT SLIDER =====
   function onWeightChange() {
-    const cur = parseInt(document.getElementById('currentWeightSlider').value);
+    const cur   = parseInt(document.getElementById('currentWeightSlider').value);
     const ideal = parseInt(document.getElementById('idealWeightSlider').value);
     state.currentWeight = cur;
-    state.idealWeight = ideal;
+    state.idealWeight   = ideal;
 
     document.getElementById('currentWeightDisplay').textContent = cur + ' kg';
-    document.getElementById('idealWeightDisplay').textContent = ideal + ' kg';
-    document.getElementById('wcbCurrentLabel').textContent = cur + ' kg';
-    document.getElementById('wcbIdealLabel').textContent = ideal + ' kg';
+    document.getElementById('idealWeightDisplay').textContent   = ideal + ' kg';
+    document.getElementById('wcbCurrentLabel').textContent      = cur + ' kg';
+    document.getElementById('wcbIdealLabel').textContent        = ideal + ' kg';
 
     const maxW = 60;
     document.getElementById('wcbCurrent').style.width = Math.round((cur / maxW) * 100) + '%';
-    document.getElementById('wcbIdeal').style.width = Math.round((ideal / maxW) * 100) + '%';
+    document.getElementById('wcbIdeal').style.width   = Math.round((ideal / maxW) * 100) + '%';
 
     const badge = document.getElementById('weightGoalBadge');
-    const diff = ideal - cur;
+    const diff  = ideal - cur;
     if (diff < -0.4) {
       badge.className = 'weight-goal-badge goal-lose';
       badge.textContent = '📉 Meta: bajar ' + Math.abs(diff) + ' kg';
@@ -1193,14 +1271,14 @@
       badge.textContent = '✅ Mantener peso ideal';
     }
 
-    // Auto-derive petSize from currentWeight for Zoho
-    if (cur <= 10) state.petSize = 'Small';
-    else if (cur <= 25) state.petSize = 'Medium';
-    else state.petSize = 'Large';
+    if (cur <= 10)       state.petSize = 'Small';
+    else if (cur <= 25)  state.petSize = 'Medium';
+    else                 state.petSize = 'Large';
 
     hideErr('petSizeErr');
   }
 
+  // ===== VALIDATION =====
   function validateStep(step) {
     if (step === 1) {
       let ok = true;
@@ -1208,19 +1286,19 @@
       if (!state.petType) { showErr('petTypeErr'); ok = false; }
       return ok;
     }
-    if (step === 2) { if (!state.petAge) { showErr('petAgeErr'); return false; } return true; }
+    if (step === 2) { if (!state.petAge)      { showErr('petAgeErr');      return false; } return true; }
     if (step === 3) { return true; }
     if (step === 4) { if (!state.petActivity) { showErr('petActivityErr'); return false; } return true; }
-    if (step === 5) { if (!state.feedingStyle) { showErr('feedingErr'); return false; } return true; }
+    if (step === 5) { if (!state.feedingStyle){ showErr('feedingErr');     return false; } return true; }
     if (step === 6) { return true; }
     if (step === 7) { return true; }
     if (step === 8) {
       let ok = true;
       const name = document.getElementById('ownerName').value.trim();
-      const ph = document.getElementById('phone').value.trim();
-      const em = document.getElementById('email').value.trim();
+      const ph   = document.getElementById('phone').value.trim();
+      const em   = document.getElementById('email').value.trim();
       if (!name) { showErr('ownerNameErr'); ok = false; }
-      if (!ph) { showErr('phoneErr'); ok = false; }
+      if (!ph)   { showErr('phoneErr');     ok = false; }
       const emailRe = /^[\w\-.+&'/]*@([a-zA-Z0-9][a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}$/;
       if (!em || !emailRe.test(em)) { showErr('emailErr'); ok = false; }
       return ok;
@@ -1236,6 +1314,7 @@
     });
   }
 
+  // ===== NAVIGATION =====
   function goNext() {
     const cur = state.currentStep;
     if (!validateStep(cur)) return;
@@ -1246,13 +1325,13 @@
     }
     if (cur === 8) {
       state.ownerName = document.getElementById('ownerName').value.trim();
-      state.phone = document.getElementById('phone').value.trim();
-      state.email = document.getElementById('email').value.trim();
-      state.city = document.getElementById('city').value.trim();
+      state.phone     = document.getElementById('phone').value.trim();
+      state.email     = document.getElementById('email').value.trim();
+      state.city      = document.getElementById('city').value.trim();
       showRecommendation();
       transitionTo('step-' + cur, 'step-9');
-      document.getElementById('btnNext').style.display = 'none';
-      document.getElementById('btnBack').style.display = 'block';
+      document.getElementById('btnNext').style.display   = 'none';
+      document.getElementById('btnBack').style.display   = 'block';
       document.getElementById('btnSubmit').style.display = 'block';
       document.getElementById('stepCounter').textContent = '';
       return;
@@ -1271,7 +1350,7 @@
       transitionTo('step-9', 'step-8', true);
       state.currentStep = 8;
       buildProgress();
-      document.getElementById('btnNext').style.display = 'block';
+      document.getElementById('btnNext').style.display   = 'block';
       document.getElementById('btnSubmit').style.display = 'none';
       return;
     }
@@ -1283,14 +1362,14 @@
   }
 
   function updateFooterButtons() {
-    document.getElementById('btnBack').style.display = state.currentStep > 1 ? 'block' : 'none';
-    document.getElementById('btnNext').style.display = 'block';
+    document.getElementById('btnBack').style.display   = state.currentStep > 1 ? 'block' : 'none';
+    document.getElementById('btnNext').style.display   = 'block';
     document.getElementById('btnSubmit').style.display = 'none';
   }
 
   function transitionTo(fromId, toId, back = false) {
     const fromEl = document.getElementById(fromId);
-    const toEl = document.getElementById(toId);
+    const toEl   = document.getElementById(toId);
     fromEl.classList.add('exit');
     setTimeout(() => {
       fromEl.classList.remove('active', 'exit');
@@ -1301,9 +1380,10 @@
     }, 300);
   }
 
+  // ===== RECOMMENDATION =====
   function showRecommendation() {
     const n = state.petName || 'tu mascota';
-    document.getElementById('recPetName').textContent = n;
+    document.getElementById('recPetName').textContent     = n;
     document.getElementById('recPetNameCard').textContent = n;
 
     const items = [];
@@ -1314,23 +1394,25 @@
     else items.push('Fórmula balanceada para adultos con vitaminas naturales');
 
     const diff = state.idealWeight - state.currentWeight;
-    if (diff < -0.4) items.push('Plan hipocalórico y rico en fibra para reducción de peso controlada');
-    else if (diff > 0.4) items.push('Plan energético con proteína adicional para alcanzar el peso ideal');
-    else items.push('Porciones balanceadas para mantener su peso saludable');
+    if (diff < -0.4)      items.push('Plan hipocalórico y rico en fibra para reducción de peso controlada');
+    else if (diff > 0.4)  items.push('Plan energético con proteína adicional para alcanzar el peso ideal');
+    else                  items.push('Porciones balanceadas para mantener su peso saludable');
 
     if (state.petActivity === 'High') items.push('Raciones altas en calorías y proteína para mascotas activas');
     else if (state.petActivity === 'Low') items.push('Comidas bajas en grasa para mantener un peso saludable');
     else items.push('Porciones diarias balanceadas en calorías moderadas');
 
+    // CHANGE 1: now checks for 'Grain' (was 'Dairy')
     if (state.allergies && state.allergies !== 'No allergies' && state.allergies !== '-Select-')
       items.push(`Sin alérgeno: cero ${state.allergies.toLowerCase()} en ningún ingrediente`);
 
-    if (state.concerns === 'Weight management') items.push('Recetas ricas en fibra con porciones controladas');
-    else if (state.concerns === 'Digestion issues') items.push('Comidas enriquecidas con probióticos para mejor salud intestinal');
-    else if (state.concerns === 'Low energy') items.push('Suplemento de hierro y vitamina B para energía sostenida');
+    // CHANGE 2: concerns is now an array
+    if (state.concerns.includes('Weight management')) items.push('Recetas ricas en fibra con porciones controladas');
+    else if (state.concerns.includes('Digestion issues')) items.push('Comidas enriquecidas con probióticos para mejor salud intestinal');
+    else if (state.concerns.includes('Low energy')) items.push('Suplemento de hierro y vitamina B para energía sostenida');
 
     const ul = document.getElementById('recItems');
-    ul.innerHTML = items.slice(0,5).map(i => `<li>${i}</li>`).join('');
+    ul.innerHTML = items.slice(0, 5).map(i => `<li>${i}</li>`).join('');
 
     document.getElementById('recSub').textContent =
       `Basado en el perfil de ${n} — ${state.petType === 'Dog' ? 'Perro' : state.petType === 'Cat' ? 'Gato' : state.petType || 'mascota'}, ${state.petAge === 'Puppy / Kitten' ? 'cachorro' : state.petAge === 'Adult' ? 'adulto' : state.petAge === 'Senior' ? 'senior' : state.petAge || 'adulto'}, ${state.currentWeight} kg — esto es lo que recomendamos.`;
@@ -1338,35 +1420,38 @@
     document.getElementById('successPetName').textContent = 'el perfil de ' + n;
   }
 
+  // ===== SUBMIT =====
   function submitForm() {
-    document.getElementById('zf_pet_name').value = state.petName;
-    document.getElementById('zf_pet_type').value = state.petType;
-    document.getElementById('zf_pet_age').value = state.petAge;
-    document.getElementById('zf_pet_size').value = state.petSize;
+    document.getElementById('zf_pet_name').value     = state.petName;
+    document.getElementById('zf_pet_type').value     = state.petType;
+    document.getElementById('zf_pet_age').value      = state.petAge;
+    document.getElementById('zf_pet_size').value     = state.petSize;
     document.getElementById('zf_pet_activity').value = state.petActivity;
-    document.getElementById('zf_feeding').value = state.feedingStyle;
-    document.getElementById('zf_allergies').value = state.allergies || '-Select-';
-    document.getElementById('zf_concerns').value = state.concerns || '-Select-';
-    document.getElementById('zf_interest').value = state.interest || '-Select-';
-    document.getElementById('zf_matters').value = state.matters || '-Select-';
-    document.getElementById('zf_owner_name').value = state.ownerName;
-    document.getElementById('zf_phone').value = state.phone;
-    document.getElementById('zf_email').value = state.email;
-    document.getElementById('zf_city').value = state.city;
+    document.getElementById('zf_feeding').value      = state.feedingStyle;
+    document.getElementById('zf_allergies').value    = state.allergies  || '-Select-';
+    // CHANGE 2: join arrays with ", " for Zoho
+    document.getElementById('zf_concerns').value     = state.concerns.length  ? state.concerns.join(', ')  : '-Select-';
+    document.getElementById('zf_interest').value     = state.interest.length  ? state.interest.join(', ')  : '-Select-';
+    // CHANGE 5: matters is already serialized as "Quality:1, Price:2, ..."
+    document.getElementById('zf_matters').value      = state.matters || '-Select-';
+    document.getElementById('zf_owner_name').value   = state.ownerName;
+    document.getElementById('zf_phone').value        = state.phone;
+    document.getElementById('zf_email').value        = state.email;
+    document.getElementById('zf_city').value         = state.city;
     document.getElementById('zf_current_weight').value = state.currentWeight + ' kg';
-    document.getElementById('zf_ideal_weight').value = state.idealWeight + ' kg';
+    document.getElementById('zf_ideal_weight').value   = state.idealWeight   + ' kg';
 
     transitionTo('step-9', 'step-success');
-    document.getElementById('btnBack').style.display = 'none';
+    document.getElementById('btnBack').style.display   = 'none';
     document.getElementById('btnSubmit').style.display = 'none';
     document.getElementById('stepCounter').textContent = '🎉';
 
-    const form = document.getElementById('zohoForm');
+    const form     = document.getElementById('zohoForm');
     const formData = new FormData(form);
     fetch(form.action, { method: 'POST', body: formData, mode: 'no-cors' }).catch(() => {});
   }
 
-  // Init weight sliders visual state
+  // Init
   onWeightChange();
   buildProgress();
   updateFooterButtons();
