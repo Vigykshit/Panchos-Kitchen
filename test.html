@@ -1,0 +1,2043 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pancho's Kitchen – Cuéntanos sobre tu mascota</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FAF7F2;
+    --warm-white: #FFFDF9;
+    --bark: #3B2F1E;
+    --bark-mid: #5C4A35;
+    --sage: #7A9E7E;
+    --sage-light: #A8C5AB;
+    --terracotta: #C9714A;
+    --terracotta-light: #E8A98A;
+    --gold: #D4A847;
+    --gold-light: #F0CC7A;
+    --muted: #9B8E82;
+    --border: #E5DDD4;
+    --step-active: #3B2F1E;
+    --step-done: #7A9E7E;
+    --step-inactive: #C8BDB5;
+    --shadow-soft: 0 4px 32px rgba(59,47,30,0.10);
+    --shadow-card: 0 8px 48px rgba(59,47,30,0.14);
+    --radius: 20px;
+    --radius-pill: 100px;
+    --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(212,168,71,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 85% 90%, rgba(122,158,126,0.08) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 40% at 50% 50%, rgba(201,113,74,0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .site-header {
+    width: 100%;
+    padding: 24px 40px 0;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .site-logo {
+    height: 90px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .funnel-wrap {
+    width: 100%;
+    max-width: 620px;
+    margin: 28px auto 40px;
+    padding: 0 20px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .card {
+    background: var(--warm-white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    border: 1px solid rgba(229,221,212,0.6);
+  }
+
+  .card-header {
+    padding: 36px 40px 24px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, #FFFDF9 0%, #FDF8F2 100%);
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--bark);
+    text-align: center;
+    margin-bottom: 4px;
+  }
+
+  .card-subtitle {
+    font-size: 14px;
+    color: var(--muted);
+    text-align: center;
+    font-weight: 400;
+  }
+
+  .progress-wrap {
+    padding: 24px 40px 0;
+  }
+
+  .steps-track {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 10px;
+  }
+
+  .step-seg {
+    flex: 1;
+    height: 4px;
+    border-radius: 10px;
+    background: var(--step-inactive);
+    transition: background var(--transition);
+    position: relative;
+    cursor: default;
+  }
+  .step-seg + .step-seg { margin-left: 4px; }
+  .step-seg.done { background: var(--step-done); }
+  .step-seg.active { background: var(--step-active); }
+  .step-seg.active::after {
+    content: '▼';
+    position: absolute;
+    bottom: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 8px;
+    color: var(--step-active);
+  }
+
+  .step-labels {
+    display: flex;
+    gap: 0;
+    margin-top: 22px;
+  }
+  .step-label {
+    flex: 1;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--step-inactive);
+    transition: color var(--transition);
+    line-height: 1.3;
+    padding: 0 2px;
+  }
+  .step-label.done { color: var(--step-done); }
+  .step-label.active { color: var(--step-active); font-weight: 600; }
+
+  .step-counter {
+    text-align: right;
+    font-size: 12px;
+    color: var(--muted);
+    padding: 10px 0 0;
+    font-weight: 500;
+  }
+
+  .card-body {
+    padding: 36px 40px 32px;
+    min-height: 300px;
+  }
+
+  .step-screen {
+    display: none;
+    animation: slideIn 0.4s cubic-bezier(0.4,0,0.2,1) forwards;
+  }
+  .step-screen.active { display: block; }
+  .step-screen.exit {
+    display: block;
+    animation: slideOut 0.3s cubic-bezier(0.4,0,0.2,1) forwards;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(32px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slideOut {
+    from { opacity: 1; transform: translateX(0); }
+    to   { opacity: 0; transform: translateX(-32px); }
+  }
+  @keyframes slideInBack {
+    from { opacity: 0; transform: translateX(-32px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  .step-screen.back-in { animation: slideInBack 0.4s cubic-bezier(0.4,0,0.2,1) forwards; }
+
+  .q-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--bark);
+    margin-bottom: 24px;
+    line-height: 1.35;
+  }
+  .q-label em {
+    color: var(--terracotta);
+    font-style: normal;
+  }
+
+  .text-input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 17px;
+    color: var(--bark);
+    background: #fff;
+    outline: none;
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+  .text-input::placeholder { color: var(--step-inactive); }
+  .text-input:focus {
+    border-color: var(--terracotta-light);
+    box-shadow: 0 0 0 4px rgba(201,113,74,0.10);
+  }
+
+  /* ===== DIET GOAL CARDS (Step 1) ===== */
+  .goal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 8px;
+  }
+  .goal-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 16px 10px;
+    border: 2.5px solid var(--border);
+    border-radius: 16px;
+    background: #fff;
+    cursor: pointer;
+    transition: all var(--transition);
+    position: relative;
+    user-select: none;
+    min-height: 80px;
+    text-align: center;
+  }
+  .goal-card:hover {
+    border-color: var(--terracotta-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(201,113,74,0.14);
+  }
+  .goal-card.selected {
+    border-color: var(--terracotta);
+    background: linear-gradient(160deg, #fff8f5 0%, #fff 100%);
+    box-shadow: 0 6px 22px rgba(201,113,74,0.18);
+  }
+  .goal-card.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    width: 22px;
+    height: 22px;
+    background: var(--terracotta);
+    color: white;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 22px;
+    text-align: center;
+  }
+  .goal-card.full-width {
+    grid-column: span 2;
+  }
+  .goal-icon { font-size: 26px; }
+  .goal-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--bark-mid);
+    line-height: 1.3;
+  }
+  .goal-card.selected .goal-label { color: var(--bark); }
+
+  /* ===== PET TYPE IMAGE CHOICES ===== */
+  .img-choices {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 8px;
+  }
+
+  .img-choice {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 20px 16px 18px;
+    border: 2.5px solid var(--border);
+    border-radius: 18px;
+    cursor: pointer;
+    transition: all var(--transition);
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+    min-height: 160px;
+    user-select: none;
+  }
+  .img-choice:hover {
+    border-color: var(--terracotta-light);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(201,113,74,0.14);
+  }
+  .img-choice.selected {
+    border-color: var(--terracotta);
+    background: linear-gradient(160deg, #fff8f5 0%, #fff 100%);
+    box-shadow: 0 8px 28px rgba(201,113,74,0.18);
+  }
+  .img-choice.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    width: 26px;
+    height: 26px;
+    background: var(--terracotta);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 26px;
+    text-align: center;
+  }
+
+  .pet-headshot {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 12px;
+    transition: transform 0.3s;
+    box-shadow: 0 4px 16px rgba(59,47,30,0.12);
+    border: 3px solid var(--border);
+  }
+  .img-choice:hover .pet-headshot { transform: scale(1.08); }
+  .img-choice.selected .pet-headshot {
+    transform: scale(1.06);
+    border-color: var(--terracotta-light);
+  }
+  .pet-headshot-fallback {
+    font-size: 68px;
+    line-height: 1;
+    margin-bottom: 12px;
+    transition: transform 0.3s;
+    display: none;
+  }
+  .img-choice:hover .pet-headshot-fallback { transform: scale(1.1); }
+  .img-choice.selected .pet-headshot-fallback { transform: scale(1.08); }
+  .img-choice-label {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--bark);
+  }
+
+  .option-grid {
+    display: grid;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .option-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .option-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .option-grid.cols-1 { grid-template-columns: 1fr; }
+
+  .opt-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 16px;
+    border: 2.5px solid var(--border);
+    border-radius: 14px;
+    background: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--bark-mid);
+    cursor: pointer;
+    transition: all var(--transition);
+    text-align: center;
+    user-select: none;
+    line-height: 1.3;
+  }
+  .opt-btn:hover {
+    border-color: var(--sage-light);
+    background: #f8fbf8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(122,158,126,0.12);
+  }
+  .opt-btn.selected {
+    border-color: var(--sage);
+    background: linear-gradient(135deg, #f2faf3 0%, #fff 100%);
+    color: var(--bark);
+    font-weight: 600;
+    box-shadow: 0 4px 20px rgba(122,158,126,0.18);
+  }
+  .opt-btn .opt-icon { font-size: 20px; }
+
+  /* ===== PUPPY SUB-STAGE ===== */
+  .sub-stage-wrap {
+    display: none;
+    margin-top: 22px;
+    padding: 18px 20px;
+    background: linear-gradient(135deg, #fffbf0 0%, #fff 100%);
+    border: 2px solid var(--gold-light);
+    border-radius: 16px;
+    animation: fadeIn 0.3s ease;
+  }
+  .sub-stage-wrap.visible { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+  .sub-stage-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--bark-mid);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .sub-stage-label::before { content: '🍼'; font-size: 16px; }
+
+  /* ===== MULTI-SELECT HINT ===== */
+  .multi-hint {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .multi-hint::before { content: '☑'; font-size: 14px; color: var(--sage); }
+
+  /* ===== RANKING CARDS ===== */
+  .rank-hint {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .rank-hint::before { content: '🏅'; font-size: 13px; }
+
+  .rank-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 20px 12px 16px;
+    border: 2.5px solid var(--border);
+    border-radius: 14px;
+    background: #fff;
+    cursor: pointer;
+    transition: all var(--transition);
+    position: relative;
+    user-select: none;
+    min-height: 88px;
+  }
+  .rank-card:hover {
+    border-color: var(--gold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(212,168,71,0.15);
+  }
+  .rank-card.ranked { background: linear-gradient(135deg, #fffbf0 0%, #fff 100%); }
+  .rank-card.ranked-1 { border-color: var(--gold); }
+  .rank-card.ranked-2 { border-color: var(--sage); }
+  .rank-card.ranked-3 { border-color: var(--terracotta-light); }
+  .rank-card.ranked-4 { border-color: var(--muted); }
+
+  .rank-badge {
+    position: absolute;
+    top: 8px; right: 10px;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--border);
+    color: var(--muted);
+    font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1;
+    transition: all 0.25s ease;
+  }
+  .rank-badge.r1 { background: var(--gold); color: var(--bark); box-shadow: 0 2px 8px rgba(212,168,71,0.4); }
+  .rank-badge.r2 { background: var(--sage); color: #fff; box-shadow: 0 2px 8px rgba(122,158,126,0.4); }
+  .rank-badge.r3 { background: var(--terracotta); color: #fff; box-shadow: 0 2px 8px rgba(201,113,74,0.35); }
+  .rank-badge.r4 { background: var(--muted); color: #fff; }
+
+  .rank-icon { font-size: 22px; }
+  .rank-label { font-size: 13px; font-weight: 500; color: var(--bark-mid); text-align: center; line-height: 1.3; }
+  .rank-card.ranked .rank-label { color: var(--bark); font-weight: 600; }
+
+  /* ===== WEIGHT SLIDER ===== */
+  .weight-sliders-wrap { display: flex; flex-direction: column; gap: 32px; margin-top: 8px; }
+
+  .weight-slider-block {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 18px;
+    padding: 24px 26px 20px;
+    transition: border-color var(--transition), box-shadow var(--transition);
+    position: relative;
+  }
+  .weight-slider-block:focus-within {
+    border-color: var(--terracotta-light);
+    box-shadow: 0 4px 20px rgba(201,113,74,0.10);
+  }
+
+  .slider-block-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+  .slider-block-title {
+    font-size: 13px; font-weight: 600; color: var(--bark-mid);
+    letter-spacing: 0.3px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .slider-block-title .s-icon { font-size: 18px; }
+
+  .slider-value-pill {
+    background: var(--bark);
+    color: #fff;
+    font-size: 18px; font-weight: 700;
+    padding: 6px 18px;
+    border-radius: 100px;
+    min-width: 80px;
+    text-align: center;
+    transition: background var(--transition);
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.2px;
+  }
+
+  .weight-range-input {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 8px;
+    border-radius: 10px;
+    background: var(--border);
+    outline: none; cursor: pointer;
+    transition: background var(--transition);
+    margin-bottom: 10px;
+  }
+  .weight-range-input::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--bark);
+    cursor: pointer;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 10px rgba(59,47,30,0.25);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .weight-range-input::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    box-shadow: 0 4px 18px rgba(59,47,30,0.32);
+  }
+  .weight-range-input::-moz-range-thumb {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--bark);
+    cursor: pointer;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 10px rgba(59,47,30,0.25);
+  }
+
+  .slider-ticks {
+    display: flex; justify-content: space-between; margin-top: 4px;
+  }
+  .slider-tick { font-size: 11px; color: var(--muted); font-weight: 500; }
+
+  /* lbs tag under slider */
+  .lbs-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    padding: 4px 12px;
+    margin-top: 10px;
+  }
+  .lbs-tag span { color: var(--bark-mid); font-size: 13px; }
+
+  .weight-goal-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px; font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 100px;
+    margin-top: 20px;
+    transition: all 0.4s;
+  }
+  .goal-lose { background: rgba(201,113,74,0.12); color: var(--terracotta); border: 1.5px solid rgba(201,113,74,0.3); }
+  .goal-gain { background: rgba(122,158,126,0.12); color: #4a8a50; border: 1.5px solid rgba(122,158,126,0.35); }
+  .goal-maintain { background: rgba(212,168,71,0.12); color: #8a6b10; border: 1.5px solid rgba(212,168,71,0.3); }
+
+  .weight-comparison-bar {
+    margin-top: 22px;
+    background: var(--cream);
+    border-radius: 12px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+  }
+  .wcb-label { font-size: 12px; color: var(--muted); font-weight: 500; margin-bottom: 10px; }
+  .wcb-track { position: relative; height: 10px; background: var(--border); border-radius: 10px; overflow: visible; margin-bottom: 8px; }
+  .wcb-fill-current { position: absolute; left: 0; top: 0; height: 100%; background: var(--terracotta-light); border-radius: 10px; transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
+  .wcb-fill-ideal { position: absolute; left: 0; top: 0; height: 100%; background: var(--sage); border-radius: 10px; opacity: 0.7; transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
+
+  .card-footer {
+    padding: 0 40px 36px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .btn-back {
+    padding: 14px 32px;
+    border-radius: var(--radius-pill);
+    border: 2px solid var(--border);
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px; font-weight: 600;
+    color: var(--bark-mid);
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+  .btn-back:hover {
+    border-color: var(--bark-mid);
+    color: var(--bark);
+    background: rgba(59,47,30,0.04);
+  }
+
+  .btn-next {
+    padding: 14px 44px;
+    border-radius: var(--radius-pill);
+    border: none;
+    background: var(--bark);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px; font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: all var(--transition);
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.2px;
+  }
+  .btn-next::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(120deg, transparent 40%, rgba(255,255,255,0.12) 50%, transparent 60%);
+    transform: translateX(-100%);
+    transition: transform 0.5s;
+  }
+  .btn-next:hover::before { transform: translateX(100%); }
+  .btn-next:hover {
+    background: var(--bark-mid);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(59,47,30,0.22);
+  }
+  .btn-next:active { transform: translateY(0); }
+
+  .btn-submit {
+    padding: 14px 44px;
+    border-radius: var(--radius-pill);
+    border: none;
+    background: linear-gradient(135deg, var(--sage) 0%, #5a8c5e 100%);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px; font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: all var(--transition);
+    letter-spacing: 0.2px;
+  }
+  .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(122,158,126,0.35);
+  }
+
+  .req-note { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
+  .req-star { color: var(--terracotta); font-weight: 700; }
+  .q-sep { margin-top: 32px; }
+
+  /* ===== RECOMMENDATION SCREEN ===== */
+  .rec-screen { text-align: center; padding: 8px 0; }
+  .rec-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    color: var(--bark); font-size: 11px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 5px 16px; border-radius: 100px; margin-bottom: 20px;
+  }
+  .rec-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px; font-weight: 700; color: var(--bark);
+    margin-bottom: 10px; line-height: 1.3;
+  }
+  .rec-title .pet-name-display { color: var(--terracotta); }
+  .rec-sub { font-size: 15px; color: var(--bark-mid); margin-bottom: 28px; line-height: 1.55; }
+
+  /* PLAN HIGHLIGHT BOX */
+  .plan-box {
+    background: linear-gradient(135deg, #f2faf3 0%, #fff 100%);
+    border: 2.5px solid var(--sage);
+    border-radius: 18px;
+    padding: 24px 26px;
+    text-align: left;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .plan-box::before {
+    content: '🐾';
+    position: absolute;
+    right: 18px; top: 14px;
+    font-size: 32px;
+    opacity: 0.15;
+  }
+  .plan-box-title {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--sage);
+    margin-bottom: 12px;
+  }
+  .plan-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 700; color: var(--bark);
+    margin-bottom: 6px;
+  }
+  .plan-meta {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px;
+  }
+  .plan-chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: #fff; border: 1.5px solid var(--border);
+    border-radius: 100px; padding: 4px 12px;
+    font-size: 12px; font-weight: 600; color: var(--bark-mid);
+  }
+  .plan-chip.highlight { background: var(--bark); color: #fff; border-color: var(--bark); }
+  .plan-chip.sage { background: var(--sage); color: #fff; border-color: var(--sage); }
+
+  .plan-buy-btn {
+    display: block; width: 100%;
+    padding: 14px 20px;
+    background: var(--bark);
+    color: #fff;
+    border: none; border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px; font-weight: 700;
+    text-align: center; text-decoration: none;
+    cursor: pointer;
+    transition: all var(--transition);
+    letter-spacing: 0.2px;
+    margin-top: 6px;
+  }
+  .plan-buy-btn:hover {
+    background: var(--bark-mid);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(59,47,30,0.22);
+  }
+
+  .rec-card {
+    background: linear-gradient(135deg, #f8fdf8 0%, #fff 100%);
+    border: 2px solid var(--sage-light);
+    border-radius: 16px; padding: 22px 24px; text-align: left; margin-bottom: 20px;
+  }
+  .rec-card-title {
+    font-weight: 700; font-size: 15px; color: var(--sage);
+    margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+  }
+  .rec-items { list-style: none; }
+  .rec-items li {
+    font-size: 14px; color: var(--bark-mid); padding: 5px 0;
+    display: flex; align-items: flex-start; gap: 10px; line-height: 1.5;
+  }
+  .rec-items li::before { content: '🐾'; font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+
+  .submit-cta-note {
+    font-size: 13px; color: var(--muted); margin-bottom: 8px;
+    text-align: center;
+  }
+
+  /* ===== SUCCESS ===== */
+  .success-screen { text-align: center; padding: 16px 0; }
+  .success-icon { font-size: 72px; margin-bottom: 16px; animation: bounce 0.6s 0.2s both; }
+  @keyframes bounce {
+    0%   { transform: scale(0.5); opacity: 0; }
+    70%  { transform: scale(1.15); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .success-title { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--bark); margin-bottom: 10px; }
+  .success-msg { font-size: 15px; color: var(--bark-mid); line-height: 1.6; max-width: 380px; margin: 0 auto; }
+
+  .field-error { display: none; font-size: 13px; color: #d93025; margin-top: 8px; font-weight: 500; }
+  .field-error.show { display: block; }
+
+  @media (max-width: 520px) {
+    .site-header { padding: 18px 20px 0; }
+    .funnel-wrap { padding: 0 12px; margin-top: 20px; }
+    .card-header { padding: 28px 24px 20px; }
+    .card-title { font-size: 23px; }
+    .progress-wrap { padding: 20px 24px 0; }
+    .step-label { font-size: 8px; }
+    .card-body { padding: 28px 24px 24px; }
+    .card-footer { padding: 0 24px 28px; }
+    .q-label { font-size: 19px; }
+    .goal-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .goal-card { min-height: 70px; padding: 12px 8px; }
+    .goal-icon { font-size: 22px; }
+    .goal-label { font-size: 12px; }
+    .img-choices { gap: 12px; }
+    .img-choice { min-height: 130px; padding: 16px 12px 14px; }
+    .pet-headshot { width: 72px; height: 72px; }
+    .option-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .opt-btn { padding: 12px 8px; font-size: 13px; }
+    .rank-card { padding: 16px 8px 12px; }
+    .rank-label { font-size: 12px; }
+    .btn-next, .btn-submit { padding: 13px 32px; font-size: 15px; }
+    .btn-back { padding: 13px 24px; font-size: 15px; }
+    .weight-slider-block { padding: 18px 16px 16px; }
+    .slider-value-pill { font-size: 16px; padding: 5px 14px; }
+    .plan-box { padding: 18px 16px; }
+    .plan-name { font-size: 18px; }
+  }
+
+  .matter-rate-card {
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.matter-rate-card label {
+  font-weight: 600;
+  color: var(--bark);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.matter-rate-card input[type="range"] {
+  width: 100%;
+}
+
+.matter-rate-card span {
+  font-weight: 700;
+  color: var(--terracotta);
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <img src="https://i.ibb.co/rfsVGpHw/Logo-PAnchos-Natural.avif"
+       alt="Pancho's Kitchen"
+       class="site-logo">
+</header>
+
+<div class="funnel-wrap">
+  <div class="card">
+
+    <div class="card-header">
+      <h1 class="card-title">Cuéntanos sobre tu mascota</h1>
+      <p class="card-subtitle">Nutrición personalizada en solo 60 segundos</p>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="steps-track" id="stepsTrack"></div>
+      <div class="step-labels" id="stepLabels"></div>
+      <div class="step-counter" id="stepCounter">1 / 9</div>
+    </div>
+
+    <!-- ZOHO HIDDEN FORM -->
+    <form
+      action="https://forms.zohopublic.com/virtualoffice7719/form/UserInfo/formperma/tCXAWjOa6AvcpfJf-Ny5xZ9Wb5thbPz6O4FWOzAyEuM/htmlRecords/submit"
+      name="form"
+      id="zohoForm"
+      method="POST"
+      accept-charset="UTF-8"
+      enctype="multipart/form-data"
+    >
+      <input type="hidden" name="zf_referrer_name" value="">
+      <input type="hidden" name="zf_redirect_url" value="">
+      <input type="hidden" name="zc_gad" value="">
+      <input type="hidden" name="SingleLine"   id="zf_pet_name">
+      <input type="hidden" name="Radio"        id="zf_pet_type">
+      <input type="hidden" name="Radio1"       id="zf_pet_age">
+      <input type="hidden" name="Radio2"       id="zf_pet_size">
+      <input type="hidden" name="Radio3"       id="zf_pet_activity">
+      <input type="hidden" name="Dropdown"     id="zf_feeding">
+      <input type="hidden" name="Dropdown1"    id="zf_allergies">
+      <input type="hidden" name="Dropdown2"    id="zf_concerns">
+      <input type="hidden" name="Dropdown3"    id="zf_interest">
+      <input type="hidden" name="Dropdown4"    id="zf_matters">
+      <input type="hidden" name="SingleLine1"  id="zf_owner_name">
+      <input type="hidden" name="PhoneNumber_countrycode" id="zf_phone">
+      <input type="hidden" name="Email"        id="zf_email">
+      <input type="hidden" name="SingleLine2"  id="zf_city">
+      <input type="hidden" name="SingleLine3"  id="zf_current_weight">
+      <input type="hidden" name="SingleLine4"  id="zf_ideal_weight">
+      <!-- NEW CRM FIELDS -->
+      <input type="hidden" name="SingleLine5"  id="zf_diet_goal">
+      <input type="hidden" name="SingleLine6"  id="zf_puppy_stage">
+      <input type="hidden" name="SingleLine7"  id="zf_recommended_plan">
+      <input type="hidden" name="SingleLine8"  id="zf_recommended_portion">
+    </form>
+
+    <div class="card-body" id="cardBody">
+
+      <!-- =====================================================
+           PASO 1: OBJETIVO DE DIETA (NEW — routes everything)
+           ===================================================== -->
+      <div class="step-screen active" id="step-1">
+        <p class="q-label">¿Cuál es el aspecto más importante que deseas mejorar en la dieta de tu mascota? <span class="req-star">*</span></p>
+        <div class="goal-grid">
+
+          <div class="goal-card" data-value="Healthier" onclick="selectGoal(this)">
+            <span class="goal-icon">🥗</span>
+            <span class="goal-label">Alimentación más saludable</span>
+          </div>
+
+          <div class="goal-card" data-value="Allergic" onclick="selectGoal(this)">
+            <span class="goal-icon">🚫</span>
+            <span class="goal-label">Tiene alergias alimentarias</span>
+          </div>
+
+          <div class="goal-card" data-value="Appetite" onclick="selectGoal(this)">
+            <span class="goal-icon">😋</span>
+            <span class="goal-label">Mejorar el apetito</span>
+          </div>
+
+          <div class="goal-card" data-value="Longevity" onclick="selectGoal(this)">
+            <span class="goal-icon">🌿</span>
+            <span class="goal-label">Más años de vida</span>
+          </div>
+
+          <div class="goal-card" data-value="Renal" onclick="selectGoal(this)">
+            <span class="goal-icon">💧</span>
+            <span class="goal-label">Dieta renal</span>
+          </div>
+
+          <div class="goal-card" data-value="GrainFree" onclick="selectGoal(this)">
+            <span class="goal-icon">🌾</span>
+            <span class="goal-label">Libre de granos</span>
+          </div>
+
+          <div class="goal-card full-width" data-value="Cat" onclick="selectGoal(this)">
+            <span class="goal-icon">🐱</span>
+            <span class="goal-label">Tengo un gato</span>
+          </div>
+
+        </div>
+        <div id="dietGoalErr" class="field-error">Por favor, selecciona un objetivo para continuar.</div>
+      </div>
+
+      <!-- =====================================================
+           PASO 2: NOMBRE + TIPO DE MASCOTA
+           ===================================================== -->
+      <div class="step-screen" id="step-2">
+        <p class="q-label">¿Cómo se llama tu mascota?</p>
+        <input type="text" class="text-input" id="petName" placeholder="Ej. Bruno, Luna…" autocomplete="off">
+        <div id="petNameErr" class="field-error">Por favor, ingresa el nombre de tu mascota.</div>
+
+        <!-- Hidden if cat was selected in step 1 -->
+        <div class="q-sep" id="petTypeWrap">
+          <p class="q-label">¿Qué tipo de mascota tienes? <span class="req-star">*</span></p>
+          <div class="img-choices">
+            <div class="img-choice" data-group="petType" data-value="Dog" onclick="selectImgChoice(this)">
+              <img src="URL_PERRO_HEADSHOT" alt="Perro" class="pet-headshot"
+                   onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+              <span class="pet-headshot-fallback">🐕</span>
+              <div class="img-choice-label">Perro</div>
+            </div>
+            <div class="img-choice" data-group="petType" data-value="Cat" onclick="selectImgChoice(this)">
+              <img src="URL_GATO_HEADSHOT" alt="Gato" class="pet-headshot"
+                   onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+              <span class="pet-headshot-fallback">🐈</span>
+              <div class="img-choice-label">Gato</div>
+            </div>
+          </div>
+          <div id="petTypeErr" class="field-error">Por favor, selecciona el tipo de mascota.</div>
+        </div>
+      </div>
+
+      <!-- =====================================================
+           PASO 3: EDAD + SUB-ETAPA CACHORRO (ENHANCED)
+           ===================================================== -->
+      <div class="step-screen" id="step-3">
+        <p class="q-label">¿Cuántos años tiene <em id="petNameAge">tu mascota</em>? <span class="req-star">*</span></p>
+        <div class="option-grid cols-3">
+          <button type="button" class="opt-btn" data-group="petAge" data-value="Puppy / Kitten" onclick="selectOpt(this); togglePuppyStage(true);">
+            <span class="opt-icon">🍼</span> Cachorro /<br>Gatito
+          </button>
+          <button type="button" class="opt-btn" data-group="petAge" data-value="Adult" onclick="selectOpt(this); togglePuppyStage(false);">
+            <span class="opt-icon">🐾</span> Adulto
+          </button>
+          <button type="button" class="opt-btn" data-group="petAge" data-value="Senior" onclick="selectOpt(this); togglePuppyStage(false);">
+            <span class="opt-icon">🌿</span> Senior
+          </button>
+        </div>
+        <div id="petAgeErr" class="field-error">Por favor, selecciona la edad de tu mascota.</div>
+
+        <!-- SUB-STAGE — only visible for Cachorro/Gatito -->
+        <div class="sub-stage-wrap" id="puppyStageWrap">
+          <div class="sub-stage-label">¿En qué etapa se encuentra?</div>
+          <div class="option-grid cols-2">
+            <button type="button" class="opt-btn" data-group="puppyStage" data-value="1-3m" onclick="selectOpt(this)">
+              <span class="opt-icon">🌱</span> 1 a 3 meses
+            </button>
+            <button type="button" class="opt-btn" data-group="puppyStage" data-value="4-12m" onclick="selectOpt(this)">
+              <span class="opt-icon">🐾</span> 4 a 12 meses
+            </button>
+          </div>
+          <div id="puppyStageErr" class="field-error">Por favor, selecciona la etapa del cachorro.</div>
+        </div>
+      </div>
+
+      <!-- =====================================================
+           PASO 4: PESO ACTUAL + IDEAL (with lbs conversion)
+           ===================================================== -->
+      <div class="step-screen" id="step-4">
+        <p class="q-label">¿Cuánto pesa <em id="petNameSize">tu mascota</em>? <span class="req-star">*</span></p>
+
+        <div class="weight-sliders-wrap">
+          <div class="weight-slider-block">
+            <div class="slider-block-header">
+              <div class="slider-block-title">
+                <span class="s-icon">⚖️</span> Peso actual
+              </div>
+              <div class="slider-value-pill" id="currentWeightDisplay">5 kg</div>
+            </div>
+            <input type="range" class="weight-range-input" id="currentWeightSlider"
+              min="1" max="60" step="1" value="5" oninput="onWeightChange()">
+            <div class="slider-ticks">
+              <span class="slider-tick">1 kg</span>
+              <span class="slider-tick">15 kg</span>
+              <span class="slider-tick">30 kg</span>
+              <span class="slider-tick">45 kg</span>
+              <span class="slider-tick">60 kg</span>
+            </div>
+            <div class="lbs-tag">≈ <span id="currentWeightLbs">11 lbs</span></div>
+          </div>
+
+          <div class="weight-slider-block">
+            <div class="slider-block-header">
+              <div class="slider-block-title">
+                <span class="s-icon">🎯</span> Peso ideal
+              </div>
+              <div class="slider-value-pill" id="idealWeightDisplay" style="background: var(--sage);">5 kg</div>
+            </div>
+            <input type="range" class="weight-range-input" id="idealWeightSlider"
+              min="1" max="60" step="1" value="5" style="accent-color: var(--sage);"
+              oninput="onWeightChange()">
+            <div class="slider-ticks">
+              <span class="slider-tick">1 kg</span>
+              <span class="slider-tick">15 kg</span>
+              <span class="slider-tick">30 kg</span>
+              <span class="slider-tick">45 kg</span>
+              <span class="slider-tick">60 kg</span>
+            </div>
+            <div class="lbs-tag">≈ <span id="idealWeightLbs">11 lbs</span></div>
+          </div>
+        </div>
+
+        <div class="weight-comparison-bar" id="weightCompBar">
+          <div class="wcb-label">Comparación de pesos</div>
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+            <span style="font-size:12px; color:var(--bark-mid); min-width:70px;">Actual</span>
+            <div class="wcb-track" style="flex:1; height:10px;">
+              <div class="wcb-fill-current" id="wcbCurrent" style="width:8%;"></div>
+            </div>
+            <span style="font-size:12px; font-weight:600; color:var(--terracotta); min-width:42px;" id="wcbCurrentLabel">5 kg</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:12px; color:var(--bark-mid); min-width:70px;">Ideal</span>
+            <div class="wcb-track" style="flex:1; height:10px;">
+              <div class="wcb-fill-ideal" id="wcbIdeal" style="width:8%;"></div>
+            </div>
+            <span style="font-size:12px; font-weight:600; color:var(--sage); min-width:42px;" id="wcbIdealLabel">5 kg</span>
+          </div>
+          <div style="margin-top:14px; text-align:center;">
+            <span class="weight-goal-badge goal-maintain" id="weightGoalBadge">✅ Mantener peso ideal</span>
+          </div>
+        </div>
+
+        <div id="petSizeErr" class="field-error" style="margin-top:12px;">Por favor, ajusta los pesos de tu mascota.</div>
+      </div>
+
+      <!-- =====================================================
+           PASO 5: NIVEL DE ACTIVIDAD
+           ===================================================== -->
+      <div class="step-screen" id="step-5">
+        <p class="q-label">¿Qué tan activa es <em id="petNameAct">tu mascota</em>? <span class="req-star">*</span></p>
+        <div class="option-grid cols-3">
+          <button type="button" class="opt-btn" data-group="petActivity" data-value="Low" onclick="selectOpt(this)">
+            <span class="opt-icon">🛋️</span> Baja
+          </button>
+          <button type="button" class="opt-btn" data-group="petActivity" data-value="Moderate" onclick="selectOpt(this)">
+            <span class="opt-icon">🚶</span> Moderada
+          </button>
+          <button type="button" class="opt-btn" data-group="petActivity" data-value="High" onclick="selectOpt(this)">
+            <span class="opt-icon">⚡</span> Alta
+          </button>
+        </div>
+        <div id="petActivityErr" class="field-error">Por favor, selecciona el nivel de actividad.</div>
+      </div>
+
+      <!-- =====================================================
+           PASO 6: ESTILO DE ALIMENTACIÓN
+           ===================================================== -->
+      <div class="step-screen" id="step-6">
+        <p class="q-label">¿Cómo alimentas actualmente a <em id="petNameFeed">tu mascota</em>? <span class="req-star">*</span></p>
+        <div class="option-grid cols-1">
+          <button type="button" class="opt-btn" data-group="feedingStyle" data-value="Homemade food" onclick="selectOpt(this)">
+            <span class="opt-icon">🍲</span> Comida casera
+          </button>
+          <button type="button" class="opt-btn" data-group="feedingStyle" data-value="Natural food" onclick="selectOpt(this)">
+            <span class="opt-icon">🌿</span> Comida Natural
+          </button>
+          <button type="button" class="opt-btn" data-group="feedingStyle" data-value="Dry food (kibble)" onclick="selectOpt(this)">
+            <span class="opt-icon">🥣</span> Concentrado / Croquetas
+          </button>
+          <button type="button" class="opt-btn" data-group="feedingStyle" data-value="Mixed" onclick="selectOpt(this)">
+            <span class="opt-icon">🍽️</span> Mixto
+          </button>
+          <button type="button" class="opt-btn" data-group="feedingStyle" data-value="Not consistent" onclick="selectOpt(this)">
+            <span class="opt-icon">🔀</span> Sin rutina fija
+          </button>
+        </div>
+        <div id="feedingErr" class="field-error">Por favor, selecciona un estilo de alimentación.</div>
+      </div>
+
+      <!-- =====================================================
+           PASO 7: ALERGIAS + PREOCUPACIONES
+           ===================================================== -->
+      <div class="step-screen" id="step-7">
+        <!-- <p class="q-label">¿Tiene <em id="petNameAllergy">tu mascota</em> alguna alergia?</p>
+        <div class="option-grid cols-2">
+          <button type="button" class="opt-btn" data-group="allergies" data-value="No allergies" onclick="selectOpt(this)">
+            <span class="opt-icon">✅</span> Sin alergias
+          </button>
+          <button type="button" class="opt-btn" data-group="allergies" data-value="Chicken" onclick="selectOpt(this)">
+            <span class="opt-icon">🍗</span> Pollo
+          </button>
+          <button type="button" class="opt-btn" data-group="allergies" data-value="Beef" onclick="selectOpt(this)">
+            <span class="opt-icon">🥩</span> Res
+          </button>
+          <button type="button" class="opt-btn" data-group="allergies" data-value="Grain" onclick="selectOpt(this)">
+            <span class="opt-icon">🌾</span> Granos
+          </button>
+          <button type="button" class="opt-btn" data-group="allergies" data-value="Other" onclick="selectOpt(this)" style="grid-column: span 2;">
+            <span class="opt-icon">❓</span> Otro
+          </button>
+        </div> -->
+        <p class="q-label">¿Tiene <em id="petNameAllergy">tu mascota</em> alguna alergia?</p>
+<p class="multi-hint">Puedes seleccionar varias opciones</p>
+
+<div class="option-grid cols-2">
+  <button type="button" class="opt-btn" data-group="allergies" data-value="No allergies" onclick="toggleMultiOpt(this)">
+    <span class="opt-icon">✅</span> Sin alergias
+  </button>
+
+  <button type="button" class="opt-btn" data-group="allergies" data-value="Chicken" onclick="toggleMultiOpt(this)">
+    <span class="opt-icon">🍗</span> Pollo
+  </button>
+
+  <button type="button" class="opt-btn" data-group="allergies" data-value="Beef" onclick="toggleMultiOpt(this)">
+    <span class="opt-icon">🥩</span> Res
+  </button>
+
+  <button type="button" class="opt-btn" data-group="allergies" data-value="Grain" onclick="toggleMultiOpt(this)">
+    <span class="opt-icon">🌾</span> Granos
+  </button>
+
+  <button type="button" class="opt-btn" data-group="allergies" data-value="Other" onclick="toggleMultiOpt(this)" style="grid-column: span 2;">
+    <span class="opt-icon">❓</span> Otro
+  </button>
+</div>
+        <div class="q-sep">
+          <p class="q-label">¿Cuáles son tus principales preocupaciones?</p>
+          <p class="multi-hint">Puedes seleccionar varias opciones</p>
+          <div class="option-grid cols-2">
+            <button type="button" class="opt-btn" data-group="concerns" data-value="Weight management" onclick="selectOpt(this)">
+              <span class="opt-icon">⚖️</span> Control de peso
+            </button>
+            <button type="button" class="opt-btn" data-group="concerns" data-value="Low energy" onclick="selectOpt(this)">
+              <span class="opt-icon">🔋</span> Poca energía
+            </button>
+            <button type="button" class="opt-btn" data-group="concerns" data-value="Digestion issues" onclick="selectOpt(this)">
+              <span class="opt-icon">🌿</span> Problemas digestivos
+            </button>
+            <button type="button" class="opt-btn" data-group="concerns" data-value="General health" onclick="selectOpt(this)">
+              <span class="opt-icon">💚</span> Salud general
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- =====================================================
+           PASO 8: INTERÉS + RANKING
+           ===================================================== -->
+      <div class="step-screen" id="step-8">
+        <p class="q-label">¿Por qué te interesa Pancho's Kitchen?</p>
+        <p class="multi-hint">Puedes seleccionar varias opciones</p>
+        <div class="option-grid cols-2">
+          <button type="button" class="opt-btn" data-group="interest" data-value="Healthier food" onclick="selectOpt(this)">
+            <span class="opt-icon">🥗</span> Alimentación más sana
+          </button>
+          <button type="button" class="opt-btn" data-group="interest" data-value="Better ingredients" onclick="selectOpt(this)">
+            <span class="opt-icon">🌱</span> Mejores ingredientes
+          </button>
+          <button type="button" class="opt-btn" data-group="interest" data-value="Vet recommendation" onclick="selectOpt(this)">
+            <span class="opt-icon">🩺</span> Recomendación del veterinario
+          </button>
+          <button type="button" class="opt-btn" data-group="interest" data-value="Convenience" onclick="selectOpt(this)">
+            <span class="opt-icon">📦</span> Practicidad
+          </button>
+        </div>
+
+        <div class="q-sep">
+          <!-- <p class="q-label">¿Qué es lo más importante para ti?</p>
+          <p class="rank-hint">Toca cada opción para asignarle un lugar (1 = más importante)</p>
+          <div class="option-grid cols-2" id="mattersRanking">
+            <div class="rank-card" data-value="Quality" onclick="rankCard(this)">
+              <span class="rank-badge" id="rank-Quality">—</span>
+              <span class="rank-icon">⭐</span>
+              <span class="rank-label">Calidad</span>
+            </div>
+            <div class="rank-card" data-value="Price" onclick="rankCard(this)">
+              <span class="rank-badge" id="rank-Price">—</span>
+              <span class="rank-icon">💰</span>
+              <span class="rank-label">Precio</span>
+            </div>
+            <div class="rank-card" data-value="Convenience" onclick="rankCard(this)">
+              <span class="rank-badge" id="rank-Convenience">—</span>
+              <span class="rank-icon">⚡</span>
+              <span class="rank-label">Facilidad de uso</span>
+            </div>
+            <div class="rank-card" data-value="Nutrition" onclick="rankCard(this)">
+              <span class="rank-badge" id="rank-Nutrition">—</span>
+              <span class="rank-icon">💚</span>
+              <span class="rank-label">Nutrición</span>
+            </div>
+          </div> -->
+          <p class="q-label">¿Qué es lo más importante para ti?</p>
+<p class="rank-hint">Selecciona opciones y califica cada una</p>
+
+<div id="mattersRatingWrap" style="display:flex; flex-direction:column; gap:14px;">
+
+  <div class="matter-rate-card">
+    <label>
+      <input type="checkbox" value="Quality" onchange="toggleMatter(this)">
+      ⭐ Calidad
+    </label>
+    <input type="range" min="1" max="5" value="3"
+           data-matter="Quality"
+           onchange="updateMatterRating(this)"
+           disabled>
+    <span id="rating-Quality">3</span>
+  </div>
+
+  <div class="matter-rate-card">
+    <label>
+      <input type="checkbox" value="Price" onchange="toggleMatter(this)">
+      💰 Precio
+    </label>
+    <input type="range" min="1" max="5" value="3"
+           data-matter="Price"
+           onchange="updateMatterRating(this)"
+           disabled>
+    <span id="rating-Price">3</span>
+  </div>
+
+  <div class="matter-rate-card">
+    <label>
+      <input type="checkbox" value="Convenience" onchange="toggleMatter(this)">
+      ⚡ Facilidad de uso
+    </label>
+    <input type="range" min="1" max="5" value="3"
+           data-matter="Convenience"
+           onchange="updateMatterRating(this)"
+           disabled>
+    <span id="rating-Convenience">3</span>
+  </div>
+
+  <div class="matter-rate-card">
+    <label>
+      <input type="checkbox" value="Nutrition" onchange="toggleMatter(this)">
+      💚 Nutrición
+    </label>
+    <input type="range" min="1" max="5" value="3"
+           data-matter="Nutrition"
+           onchange="updateMatterRating(this)"
+           disabled>
+    <span id="rating-Nutrition">3</span>
+  </div>
+
+</div>
+        </div>
+      </div>
+
+      <!-- =====================================================
+           PASO 9: DATOS DE CONTACTO
+           ===================================================== -->
+      <div class="step-screen" id="step-9">
+        <p class="q-label">¡Ya casi terminamos! Tu plan personalizado está listo 🎉</p>
+        <p style="font-size:14px; color:var(--muted); margin-bottom:24px; line-height:1.6;">
+          Ingresa tus datos para <strong style="color:var(--terracotta);">desbloquear el plan nutricional exacto</strong> — con la porción precisa y el enlace para suscribirte.
+        </p>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div>
+            <label style="font-size:13px; font-weight:600; color:var(--bark-mid); display:block; margin-bottom:6px;">Tu nombre <span class="req-star">*</span></label>
+            <input type="text" class="text-input" id="ownerName" placeholder="Tu nombre completo" autocomplete="name">
+            <div id="ownerNameErr" class="field-error">Por favor, ingresa tu nombre.</div>
+          </div>
+          <div>
+            <label style="font-size:13px; font-weight:600; color:var(--bark-mid); display:block; margin-bottom:6px;">Número de WhatsApp <span class="req-star">*</span></label>
+            <input type="tel" class="text-input" id="phone" placeholder="+52 55 1234 5678" autocomplete="tel">
+            <div id="phoneErr" class="field-error">Por favor, ingresa un número de teléfono válido.</div>
+          </div>
+          <div>
+            <label style="font-size:13px; font-weight:600; color:var(--bark-mid); display:block; margin-bottom:6px;">Correo electrónico <span class="req-star">*</span></label>
+            <input type="email" class="text-input" id="email" placeholder="tu@correo.com" autocomplete="email">
+            <div id="emailErr" class="field-error">Por favor, ingresa un correo electrónico válido.</div>
+          </div>
+          <div>
+            <label style="font-size:13px; font-weight:600; color:var(--bark-mid); display:block; margin-bottom:6px;">Ciudad</label>
+            <input type="text" class="text-input" id="city" placeholder="Ej. Ciudad de México" autocomplete="address-level2">
+          </div>
+        </div>
+      </div>
+
+      <!-- =====================================================
+           PANTALLA DE RECOMENDACIÓN — EXACT PLAN
+           ===================================================== -->
+      <div class="step-screen" id="step-10">
+        <div class="rec-screen">
+          <div class="rec-badge">✨ Tu Plan Personalizado</div>
+          <h2 class="rec-title">¡El plan exacto para <span class="pet-name-display" id="recPetName">tu mascota</span>!</h2>
+          <p class="rec-sub" id="recSub">Calculado en base al perfil completo de tu mascota.</p>
+
+          <!-- EXACT PLAN BOX -->
+          <div class="plan-box">
+            <div class="plan-box-title">📋 Plan recomendado</div>
+            <div class="plan-name" id="planName">Pancho's Kitchen — Plan Mediano</div>
+            <div class="plan-meta">
+              <span class="plan-chip highlight" id="planPortion">300g / semana</span>
+              <span class="plan-chip sage" id="planWeightRange">11–25 lbs</span>
+              <span class="plan-chip" id="planFreq">Suscripción semanal</span>
+            </div>
+            <a href="#" id="planBuyBtn" class="plan-buy-btn" target="_blank">
+              🛒 Suscribirme a este plan →
+            </a>
+          </div>
+
+          <!-- ADDITIONAL RECOMMENDATIONS -->
+          <div class="rec-card">
+            <div class="rec-card-title">🥗 Por qué este plan es ideal para <span id="recPetNameCard">tu mascota</span></div>
+            <ul class="rec-items" id="recItems">
+              <li>Ingredientes naturales y frescos, sin conservantes</li>
+            </ul>
+          </div>
+
+          <p class="submit-cta-note">¿Listo? Confirma para enviarte el plan por WhatsApp y correo.</p>
+        </div>
+      </div>
+
+      <!-- PANTALLA DE ÉXITO -->
+      <div class="step-screen" id="step-success">
+        <div class="success-screen">
+          <div class="success-icon">🎉</div>
+          <h2 class="success-title">¡Todo listo!</h2>
+          <p class="success-msg">
+            Recibimos el perfil de <strong id="successPetName">tu mascota</strong>.<br><br>
+            Te enviamos el plan de alimentación personalizado por <strong>WhatsApp</strong> y <strong>correo electrónico</strong> en breve.<br><br>
+            <strong style="color:var(--terracotta);">Pancho's Kitchen</strong> está preparando algo especial 🐾
+          </p>
+        </div>
+      </div>
+
+    </div><!-- /.card-body -->
+
+    <div class="card-footer" id="cardFooter">
+      <button class="btn-back" id="btnBack" style="display:none" onclick="goBack()">← Atrás</button>
+      <button class="btn-next" id="btnNext" onclick="goNext()">Siguiente →</button>
+      <button class="btn-submit" id="btnSubmit" style="display:none" onclick="submitForm()">Obtener mi plan 🐾</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // =====================================================
+  // STATE
+  // =====================================================
+  const state = {
+    currentStep: 1,
+    totalSteps: 9,
+    dietGoal: '',        // NEW — first question
+    petName: '',
+    petType: '',
+    petAge: '',
+    puppyStage: '',      // NEW — '1-3m' or '4-12m'
+    petSize: '',
+    currentWeight: 5,
+    idealWeight: 5,
+    petActivity: '',
+    feedingStyle: '',
+    allergies: [],
+    concerns: [],
+    interest: [],
+    matters: '',
+    ownerName: '',
+    phone: '',
+    email: '',
+    city: '',
+    // Plan result
+    recommendedPlan: '',
+    recommendedPortion: ''
+  };
+
+  const stepMeta = [
+    { label: 'Objetivo' },
+    { label: 'Mascota' },
+    { label: 'Edad' },
+    { label: 'Peso' },
+    { label: 'Actividad' },
+    { label: 'Alimento' },
+    { label: 'Salud' },
+    { label: 'Interés' },
+    { label: 'Tus datos' },
+  ];
+
+  // =====================================================
+  // SUBSCRIPTION PLAN LOOKUP (kg → lbs → plan)
+  // =====================================================
+  function kgToLbs(kg) { return Math.round(kg * 2.205); }
+
+  function getSubscriptionPlan(weightKg, petType, petAge, puppyStage, activity, dietGoal) {
+    const lbs = kgToLbs(weightKg);
+
+    // CAT
+    if (petType === 'Cat' || dietGoal === 'Cat') {
+      return {
+        name: "Pancho's Kitchen — Fórmula Felina Premium",
+        portion: '150g / semana',
+        range: 'Para gatos de todas las tallas',
+        link: 'https://pachoskitchen.com/suscripcion-gatos',
+        freq: 'Suscripción semanal'
+      };
+    }
+
+    // PUPPIES 1–3 months
+    if (petAge === 'Puppy / Kitten' && puppyStage === '1-3m') {
+      if (lbs <= 20) return {
+        name: "Pancho's Kitchen — Starter Cachorro",
+        portion: '175g / semana',
+        range: '3–20 lbs (1.4–9 kg)',
+        link: 'https://pachoskitchen.com/starter-cachorro',
+        freq: 'Suscripción semanal'
+      };
+      return {
+        name: "Pancho's Kitchen — Starter Cachorro Grande",
+        portion: '350g / semana',
+        range: '21–38 lbs (9.5–17 kg)',
+        link: 'https://pachoskitchen.com/starter-cachorro-grande',
+        freq: 'Suscripción semanal'
+      };
+    }
+
+    // PUPPIES 4–12 months
+    if (petAge === 'Puppy / Kitten' && puppyStage === '4-12m') {
+      if (lbs <= 20) return {
+        name: "Pancho's Kitchen — Puppy Pack",
+        portion: '250g / semana',
+        range: '5–20 lbs (2.3–9 kg)',
+        link: 'https://pachoskitchen.com/puppy-pack',
+        freq: 'Suscripción semanal'
+      };
+      return {
+        name: "Pancho's Kitchen — Junior Pack",
+        portion: '450g / semana',
+        range: '21–37 lbs (9.5–17 kg)',
+        link: 'https://pachoskitchen.com/junior-pack',
+        freq: 'Suscripción semanal'
+      };
+    }
+
+    // ADULT / SENIOR — base portions by weight
+    const actMultiplier = activity === 'High' ? 1.3 : activity === 'Low' ? 0.85 : 1.0;
+    let base, planName, rangeLabel;
+
+    if (lbs <= 10)       { base = 175; planName = 'Plan Pequeño';  rangeLabel = 'hasta 10 lbs / 4.5 kg'; }
+    else if (lbs <= 25)  { base = 300; planName = 'Plan Mediano';  rangeLabel = '11–25 lbs / 5–11 kg'; }
+    else if (lbs <= 50)  { base = 500; planName = 'Plan Grande';   rangeLabel = '26–50 lbs / 12–23 kg'; }
+    else if (lbs <= 80)  { base = 750; planName = 'Plan XL';       rangeLabel = '51–80 lbs / 23–36 kg'; }
+    else                 { base = 1000; planName = 'Plan XXL';     rangeLabel = '80+ lbs / 36+ kg'; }
+
+    // Special diet goal overrides
+    let suffix = '';
+    if (dietGoal === 'Renal') suffix = ' — Fórmula Renal';
+    else if (dietGoal === 'GrainFree') suffix = ' — Libre de Granos';
+    else if (dietGoal === 'Allergic' || state.allergies === 'Chicken') suffix = ' — Sin Pollo';
+    else if (state.allergies === 'Beef') suffix = ' — Sin Res';
+    else if (state.allergies === 'Grain') suffix = ' — Sin Granos';
+
+    const portion = Math.round(base * actMultiplier);
+    const planLink = {
+      'Plan Pequeño':  'https://pachoskitchen.com/plan-pequeno',
+      'Plan Mediano':  'https://pachoskitchen.com/plan-mediano',
+      'Plan Grande':   'https://pachoskitchen.com/plan-grande',
+      'Plan XL':       'https://pachoskitchen.com/plan-xl',
+      'Plan XXL':      'https://pachoskitchen.com/plan-xxl',
+    };
+
+    return {
+      name: "Pancho's Kitchen — " + planName + suffix,
+      portion: portion + 'g / semana',
+      range: rangeLabel,
+      link: planLink[planName] || 'https://pachoskitchen.com/suscripcion',
+      freq: activity === 'High' ? 'Alta actividad (+30% energía)' : activity === 'Low' ? 'Actividad baja (−15% calorías)' : 'Actividad moderada'
+    };
+  }
+
+  // =====================================================
+  // DIET GOAL SELECTION (Step 1)
+  // =====================================================
+  function selectGoal(el) {
+    document.querySelectorAll('.goal-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    state.dietGoal = el.dataset.value;
+    hideErr('dietGoalErr');
+
+    // If "Tengo un gato" → pre-select cat type and hide type question
+    if (state.dietGoal === 'Cat') {
+      state.petType = 'Cat';
+    } else {
+      // Reset petType if they changed from cat to something else
+      if (state.petType === 'Cat') state.petType = '';
+    }
+  }
+
+  // =====================================================
+  // PUPPY SUB-STAGE toggle
+  // =====================================================
+  function togglePuppyStage(show) {
+    const wrap = document.getElementById('puppyStageWrap');
+    if (show) {
+      wrap.classList.add('visible');
+    } else {
+      wrap.classList.remove('visible');
+      state.puppyStage = '';
+      document.querySelectorAll('.opt-btn[data-group="puppyStage"]').forEach(b => b.classList.remove('selected'));
+    }
+  }
+
+  // =====================================================
+  // RANKING (Step 8)
+  // =====================================================
+//   const mattersRanks = { Quality: 0, Price: 0, Convenience: 0, Nutrition: 0 };
+//   const MAX_RANK = 4;
+
+//   function rankCard(el) {
+//     const val = el.dataset.value;
+//     const currentRank = mattersRanks[val];
+//     let nextRank = currentRank === MAX_RANK ? 0 : currentRank + 1;
+
+//     if (nextRank > 0) {
+//       Object.keys(mattersRanks).forEach(k => {
+//         if (k !== val && mattersRanks[k] === nextRank) {
+//           mattersRanks[k] = 0;
+//           updateRankBadge(k, 0);
+//         }
+//       });
+//     }
+
+//     mattersRanks[val] = nextRank;
+//     updateRankBadge(val, nextRank);
+
+//     const ranked = Object.entries(mattersRanks)
+//       .filter(([, v]) => v > 0)
+//       .sort((a, b) => a[1] - b[1]);
+//     state.matters = ranked.map(([k, v]) => `${k}:${v}`).join(', ');
+//   }
+
+//   function updateRankBadge(val, rank) {
+//     const badge = document.getElementById('rank-' + val);
+//     const card = badge.closest('.rank-card');
+//     badge.className = 'rank-badge' + (rank > 0 ? ' r' + rank : '');
+//     badge.textContent = rank > 0 ? rank : '—';
+//     card.className = 'rank-card' + (rank > 0 ? ' ranked ranked-' + rank : '');
+//   }
+state.matters = {};
+
+function toggleMatter(checkbox) {
+  const value = checkbox.value;
+  const slider = document.querySelector(`[data-matter="${value}"]`);
+
+  slider.disabled = !checkbox.checked;
+
+  if (checkbox.checked) {
+    state.matters[value] = parseInt(slider.value);
+  } else {
+    delete state.matters[value];
+  }
+}
+
+function updateMatterRating(slider) {
+  const value = slider.dataset.matter;
+  const rating = parseInt(slider.value);
+
+  document.getElementById(`rating-${value}`).textContent = rating;
+
+  if (state.matters[value] !== undefined) {
+    state.matters[value] = rating;
+  }
+}
+  // =====================================================
+  // PROGRESS BAR
+  // =====================================================
+  function buildProgress() {
+    const track = document.getElementById('stepsTrack');
+    const labels = document.getElementById('stepLabels');
+    track.innerHTML = '';
+    labels.innerHTML = '';
+    for (let i = 1; i <= state.totalSteps; i++) {
+      const seg = document.createElement('div');
+      seg.className = 'step-seg' + (i < state.currentStep ? ' done' : i === state.currentStep ? ' active' : '');
+      track.appendChild(seg);
+      if (i < state.totalSteps) {
+        const sp = document.createElement('div');
+        sp.style.width = '4px';
+        track.appendChild(sp);
+      }
+      const lbl = document.createElement('div');
+      lbl.className = 'step-label' + (i < state.currentStep ? ' done' : i === state.currentStep ? ' active' : '');
+      lbl.textContent = stepMeta[i - 1].label;
+      labels.appendChild(lbl);
+    }
+    document.getElementById('stepCounter').textContent = state.currentStep + ' / ' + state.totalSteps;
+  }
+
+  // =====================================================
+  // SELECTION HANDLERS
+  // =====================================================
+  function selectImgChoice(el) {
+    const group = el.dataset.group;
+    document.querySelectorAll(`.img-choice[data-group="${group}"]`).forEach(e => e.classList.remove('selected'));
+    el.classList.add('selected');
+    if (group === 'petType') state.petType = el.dataset.value;
+    hideErr('petTypeErr');
+  }
+
+  function selectOpt(el) {
+    const group = el.dataset.group;
+    const multiGroups = ['concerns', 'interest'];
+
+    if (multiGroups.includes(group)) {
+      el.classList.toggle('selected');
+      const selected = [...document.querySelectorAll(`.opt-btn[data-group="${group}"].selected`)]
+        .map(e => e.dataset.value);
+      if (group === 'concerns') state.concerns = selected;
+      if (group === 'interest') state.interest = selected;
+    } else {
+      document.querySelectorAll(`.opt-btn[data-group="${group}"]`).forEach(e => e.classList.remove('selected'));
+      el.classList.add('selected');
+      const val = el.dataset.value;
+      if (group === 'petAge')       { state.petAge = val;       hideErr('petAgeErr'); }
+      if (group === 'puppyStage')   { state.puppyStage = val;   hideErr('puppyStageErr'); }
+      if (group === 'petSize')      { state.petSize = val; }
+      if (group === 'petActivity')  { state.petActivity = val;  hideErr('petActivityErr'); }
+      if (group === 'feedingStyle') { state.feedingStyle = val; hideErr('feedingErr'); }
+      if (group === 'allergies')    { state.allergies = val; }
+    }
+  }
+
+  function hideErr(id) { const el = document.getElementById(id); if (el) el.classList.remove('show'); }
+  function showErr(id)  { const el = document.getElementById(id); if (el) el.classList.add('show'); }
+
+  // =====================================================
+  // WEIGHT SLIDER
+  // =====================================================
+  function onWeightChange() {
+    const cur   = parseInt(document.getElementById('currentWeightSlider').value);
+    const ideal = parseInt(document.getElementById('idealWeightSlider').value);
+    state.currentWeight = cur;
+    state.idealWeight   = ideal;
+
+    const curLbs  = kgToLbs(cur);
+    const idealLbs = kgToLbs(ideal);
+
+    document.getElementById('currentWeightDisplay').textContent = cur + ' kg';
+    document.getElementById('idealWeightDisplay').textContent   = ideal + ' kg';
+    document.getElementById('currentWeightLbs').textContent     = curLbs + ' lbs';
+    document.getElementById('idealWeightLbs').textContent       = idealLbs + ' lbs';
+    document.getElementById('wcbCurrentLabel').textContent      = cur + ' kg';
+    document.getElementById('wcbIdealLabel').textContent        = ideal + ' kg';
+
+    const maxW = 60;
+    document.getElementById('wcbCurrent').style.width = Math.round((cur / maxW) * 100) + '%';
+    document.getElementById('wcbIdeal').style.width   = Math.round((ideal / maxW) * 100) + '%';
+
+    const badge = document.getElementById('weightGoalBadge');
+    const diff  = ideal - cur;
+    if (diff < -0.4) {
+      badge.className = 'weight-goal-badge goal-lose';
+      badge.textContent = '📉 Meta: bajar ' + Math.abs(diff) + ' kg';
+    } else if (diff > 0.4) {
+      badge.className = 'weight-goal-badge goal-gain';
+      badge.textContent = '📈 Meta: subir ' + diff + ' kg';
+    } else {
+      badge.className = 'weight-goal-badge goal-maintain';
+      badge.textContent = '✅ Mantener peso ideal';
+    }
+
+    if (cur <= 4.5)       state.petSize = 'Small';
+    else if (cur <= 11.3) state.petSize = 'Medium';
+    else if (cur <= 22.7) state.petSize = 'Large';
+    else if (cur <= 36.3) state.petSize = 'XL';
+    else                  state.petSize = 'XXL';
+
+    hideErr('petSizeErr');
+  }
+
+  // =====================================================
+  // VALIDATION
+  // =====================================================
+  function validateStep(step) {
+    if (step === 1) {
+      if (!state.dietGoal) { showErr('dietGoalErr'); return false; }
+      return true;
+    }
+    if (step === 2) {
+      let ok = true;
+      // petName is optional — remove error check for name
+      // petType required UNLESS cat was pre-selected via dietGoal
+      if (state.dietGoal !== 'Cat' && !state.petType) { showErr('petTypeErr'); ok = false; }
+      return ok;
+    }
+    if (step === 3) {
+      if (!state.petAge) { showErr('petAgeErr'); return false; }
+      if (state.petAge === 'Puppy / Kitten' && !state.puppyStage) { showErr('puppyStageErr'); return false; }
+      return true;
+    }
+    if (step === 4) { return true; }
+    if (step === 5) { if (!state.petActivity) { showErr('petActivityErr'); return false; } return true; }
+    if (step === 6) { if (!state.feedingStyle){ showErr('feedingErr');     return false; } return true; }
+    if (step === 7) { return true; }
+    if (step === 8) { return true; }
+    if (step === 9) {
+      let ok = true;
+      const name = document.getElementById('ownerName').value.trim();
+      const ph   = document.getElementById('phone').value.trim();
+      const em   = document.getElementById('email').value.trim();
+      if (!name) { showErr('ownerNameErr'); ok = false; }
+      if (!ph)   { showErr('phoneErr');     ok = false; }
+      const emailRe = /^[\w\-.+&'/]*@([a-zA-Z0-9][a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}$/;
+      if (!em || !emailRe.test(em)) { showErr('emailErr'); ok = false; }
+      return ok;
+    }
+    return true;
+  }
+
+  function updatePetNameRefs() {
+    const n = state.petName || 'tu mascota';
+    ['petNameAge','petNameSize','petNameAct','petNameFeed','petNameAllergy'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = n;
+    });
+  }
+
+  // =====================================================
+  // STEP 2 — show/hide petType based on dietGoal
+  // =====================================================
+  function updateStep2UI() {
+    const petTypeWrap = document.getElementById('petTypeWrap');
+    if (state.dietGoal === 'Cat') {
+      petTypeWrap.style.display = 'none';
+      // Auto-select cat visually
+      document.querySelectorAll('.img-choice[data-group="petType"]').forEach(e => e.classList.remove('selected'));
+      const catChoice = document.querySelector('.img-choice[data-value="Cat"]');
+      if (catChoice) catChoice.classList.add('selected');
+    } else {
+      petTypeWrap.style.display = 'block';
+    }
+  }
+
+  // =====================================================
+  // RECOMMENDATION SCREEN
+  // =====================================================
+  function showRecommendation() {
+    const n = state.petName || 'tu mascota';
+    document.getElementById('recPetName').textContent     = n;
+    document.getElementById('recPetNameCard').textContent = n;
+
+    // Get exact plan
+    const plan = getSubscriptionPlan(
+      state.currentWeight,
+      state.petType,
+      state.petAge,
+      state.puppyStage,
+      state.petActivity,
+      state.dietGoal
+    );
+
+    state.recommendedPlan    = plan.name;
+    state.recommendedPortion = plan.portion;
+
+    document.getElementById('planName').textContent    = plan.name;
+    document.getElementById('planPortion').textContent = plan.portion;
+    document.getElementById('planWeightRange').textContent = plan.range;
+    document.getElementById('planFreq').textContent    = plan.freq;
+    document.getElementById('planBuyBtn').href         = plan.link;
+
+    // Why this plan
+    const items = [];
+    const petLabel = state.petType === 'Dog' ? 'perros' : state.petType === 'Cat' ? 'gatos' : 'mascotas';
+    items.push('Receta fresca 100% natural, sin conservantes ni rellenos artificiales');
+
+    if (state.dietGoal === 'Renal')    items.push('Fórmula baja en fósforo y sodio para soporte renal');
+    if (state.dietGoal === 'GrainFree') items.push('Completamente libre de granos — ideal para sensibilidades digestivas');
+    if (state.dietGoal === 'Allergic' || (state.allergies && state.allergies !== 'No allergies'))
+      items.push('Sin el alérgeno detectado — ingredientes cuidadosamente seleccionados');
+    if (state.dietGoal === 'Longevity') items.push('Rico en antioxidantes y omega-3 para apoyar la longevidad');
+    if (state.dietGoal === 'Appetite')  items.push('Fórmula apetitosa con proteína de alta calidad para estimular el apetito');
+
+    if (state.petAge === 'Puppy / Kitten') {
+      if (state.puppyStage === '1-3m')  items.push('Porción especial para cachorros de 1–3 meses, con DHA para desarrollo cerebral');
+      else                              items.push('Porción especial para cachorros de 4–12 meses, alta en proteína para crecimiento');
+    } else if (state.petAge === 'Senior') {
+      items.push('Fórmula senior enriquecida con glucosamina y omega-3 para articulaciones');
+    }
+
+    if (state.petActivity === 'High') items.push('Alta densidad calórica para mascotas muy activas');
+    else if (state.petActivity === 'Low') items.push('Menor densidad calórica para mantener peso en mascotas sedentarias');
+
+    if (state.concerns.includes('Digestion issues')) items.push('Probióticos naturales incluidos para salud intestinal óptima');
+    if (state.concerns.includes('Low energy'))       items.push('Hierro y vitaminas del complejo B para energía sostenida');
+    if (state.concerns.includes('Weight management')) items.push('Alto en fibra y controlado en calorías para control de peso');
+
+    const ul = document.getElementById('recItems');
+    ul.innerHTML = items.slice(0, 5).map(i => `<li>${i}</li>`).join('');
+
+    const ageLabel = state.petAge === 'Puppy / Kitten' ? 'cachorro' : state.petAge === 'Adult' ? 'adulto' : state.petAge === 'Senior' ? 'senior' : 'adulto';
+    const typeLabel = state.petType === 'Dog' ? 'Perro' : state.petType === 'Cat' ? 'Gato' : 'Mascota';
+    document.getElementById('recSub').textContent =
+      `${typeLabel} ${ageLabel} · ${state.currentWeight} kg (${kgToLbs(state.currentWeight)} lbs) · ${plan.portion}`;
+
+    document.getElementById('successPetName').textContent = n;
+  }
+
+  // =====================================================
+  // NAVIGATION
+  // =====================================================
+  function goNext() {
+    const cur = state.currentStep;
+    if (!validateStep(cur)) return;
+
+    if (cur === 1) {
+      // Nothing extra needed; goal already in state
+    }
+    if (cur === 2) {
+      state.petName = document.getElementById('petName').value.trim();
+      updatePetNameRefs();
+    }
+    if (cur === 9) {
+      state.ownerName = document.getElementById('ownerName').value.trim();
+      state.phone     = document.getElementById('phone').value.trim();
+      state.email     = document.getElementById('email').value.trim();
+      state.city      = document.getElementById('city').value.trim();
+      showRecommendation();
+      transitionTo('step-' + cur, 'step-10');
+      document.getElementById('btnNext').style.display   = 'none';
+      document.getElementById('btnBack').style.display   = 'block';
+      document.getElementById('btnSubmit').style.display = 'block';
+      document.getElementById('stepCounter').textContent = '';
+      return;
+    }
+
+    state.currentStep = cur + 1;
+
+    // When entering step 2, update petType UI based on dietGoal
+    if (state.currentStep === 2) updateStep2UI();
+
+    transitionTo('step-' + cur, 'step-' + state.currentStep);
+    buildProgress();
+    updateFooterButtons();
+  }
+
+  function goBack() {
+    if (state.currentStep === 1) return;
+
+    const recScreen = document.getElementById('step-10');
+    if (recScreen.classList.contains('active')) {
+      transitionTo('step-10', 'step-9', true);
+      state.currentStep = 9;
+      buildProgress();
+      document.getElementById('btnNext').style.display   = 'block';
+      document.getElementById('btnSubmit').style.display = 'none';
+      return;
+    }
+
+    const prev = state.currentStep - 1;
+    transitionTo('step-' + state.currentStep, 'step-' + prev, true);
+    state.currentStep = prev;
+    buildProgress();
+    updateFooterButtons();
+  }
+
+  function updateFooterButtons() {
+    document.getElementById('btnBack').style.display   = state.currentStep > 1 ? 'block' : 'none';
+    document.getElementById('btnNext').style.display   = 'block';
+    document.getElementById('btnSubmit').style.display = 'none';
+  }
+
+  function transitionTo(fromId, toId, back = false) {
+    const fromEl = document.getElementById(fromId);
+    const toEl   = document.getElementById(toId);
+    fromEl.classList.add('exit');
+    setTimeout(() => {
+      fromEl.classList.remove('active', 'exit');
+      toEl.classList.add('active');
+      if (back) toEl.classList.add('back-in');
+      else toEl.classList.remove('back-in');
+      setTimeout(() => toEl.classList.remove('back-in'), 400);
+    }, 300);
+  }
+
+  // =====================================================
+  // SUBMIT — Zoho CRM
+  // =====================================================
+  function submitForm() {
+    document.getElementById('zf_pet_name').value       = state.petName;
+    document.getElementById('zf_pet_type').value       = state.petType;
+    document.getElementById('zf_pet_age').value        = state.petAge;
+    document.getElementById('zf_pet_size').value       = state.petSize;
+    document.getElementById('zf_pet_activity').value   = state.petActivity;
+    document.getElementById('zf_feeding').value        = state.feedingStyle;
+    document.getElementById('zf_allergies').value      = state.allergies  || '-Select-';
+    document.getElementById('zf_concerns').value       = state.concerns.length  ? state.concerns.join(', ')  : '-Select-';
+    document.getElementById('zf_interest').value       = state.interest.length  ? state.interest.join(', ')  : '-Select-';
+    document.getElementById('zf_matters').value        = state.matters || '-Select-';
+    document.getElementById('zf_owner_name').value     = state.ownerName;
+    document.getElementById('zf_phone').value          = state.phone;
+    document.getElementById('zf_email').value          = state.email;
+    document.getElementById('zf_city').value           = state.city;
+    document.getElementById('zf_current_weight').value = state.currentWeight + ' kg (' + kgToLbs(state.currentWeight) + ' lbs)';
+    document.getElementById('zf_ideal_weight').value   = state.idealWeight   + ' kg (' + kgToLbs(state.idealWeight)   + ' lbs)';
+    // NEW CRM FIELDS
+    document.getElementById('zf_diet_goal').value         = state.dietGoal;
+    document.getElementById('zf_puppy_stage').value       = state.puppyStage || '-';
+    document.getElementById('zf_recommended_plan').value  = state.recommendedPlan;
+    document.getElementById('zf_recommended_portion').value = state.recommendedPortion;
+
+    transitionTo('step-10', 'step-success');
+    document.getElementById('btnBack').style.display   = 'none';
+    document.getElementById('btnSubmit').style.display = 'none';
+    document.getElementById('stepCounter').textContent = '🎉';
+
+    const form     = document.getElementById('zohoForm');
+    const formData = new FormData(form);
+    fetch(form.action, { method: 'POST', body: formData, mode: 'no-cors' }).catch(() => {});
+  }
+   //---//
+   function toggleMultiOpt(el) {
+  const group = el.dataset.group;
+  const value = el.dataset.value;
+
+  if (!Array.isArray(state[group])) {
+    state[group] = [];
+  }
+
+  // Special handling for "No allergies"
+  if (group === 'allergies' && value === 'No allergies') {
+    if (state.allergies.includes('No allergies')) {
+      state.allergies = [];
+      el.classList.remove('selected');
+      return;
+    }
+
+    state.allergies = ['No allergies'];
+
+    document.querySelectorAll(`.opt-btn[data-group="${group}"]`).forEach(btn => {
+      btn.classList.remove('selected');
+    });
+
+    el.classList.add('selected');
+    return;
+  }
+
+  // Remove "No allergies" if another allergy selected
+  if (group === 'allergies') {
+    state.allergies = state.allergies.filter(v => v !== 'No allergies');
+
+    document.querySelectorAll(`.opt-btn[data-group="${group}"]`).forEach(btn => {
+      if (btn.dataset.value === 'No allergies') {
+        btn.classList.remove('selected');
+      }
+    });
+  }
+
+  if (state[group].includes(value)) {
+    state[group] = state[group].filter(v => v !== value);
+    el.classList.remove('selected');
+  } else {
+    state[group].push(value);
+    el.classList.add('selected');
+  }
+}
+
+
+
+  // Init
+  onWeightChange();
+  buildProgress();
+  updateFooterButtons();
+</script>
+</body>
+</html>
