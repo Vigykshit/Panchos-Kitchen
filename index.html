@@ -22,7 +22,6 @@
     --step-active: #3B2F1E;
     --step-done: #7A9E7E;
     --step-inactive: #C8BDB5;
-    --shadow-soft: 0 4px 32px rgba(59,47,30,0.10);
     --shadow-card: 0 8px 48px rgba(59,47,30,0.14);
     --radius: 20px;
     --radius-pill: 100px;
@@ -38,7 +37,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
     padding: 0;
     overflow-x: hidden;
   }
@@ -49,8 +47,7 @@
     inset: 0;
     background:
       radial-gradient(ellipse 80% 60% at 20% 10%, rgba(212,168,71,0.07) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 80% at 85% 90%, rgba(122,158,126,0.08) 0%, transparent 55%),
-      radial-gradient(ellipse 50% 40% at 50% 50%, rgba(201,113,74,0.04) 0%, transparent 70%);
+      radial-gradient(ellipse 60% 80% at 85% 90%, rgba(122,158,126,0.08) 0%, transparent 55%);
     pointer-events: none;
     z-index: 0;
   }
@@ -63,12 +60,7 @@
     position: relative;
     z-index: 2;
   }
-
-  .site-logo {
-    height: 90px;
-    width: auto;
-    object-fit: contain;
-  }
+  .site-logo { height: 90px; width: auto; object-fit: contain; }
 
   .funnel-wrap {
     width: 100%;
@@ -92,134 +84,62 @@
     border-bottom: 1px solid var(--border);
     background: linear-gradient(135deg, #FFFDF9 0%, #FDF8F2 100%);
   }
-
   .card-title {
     font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--bark);
-    text-align: center;
-    margin-bottom: 4px;
+    font-size: 28px; font-weight: 700; color: var(--bark);
+    text-align: center; margin-bottom: 4px;
   }
+  .card-subtitle { font-size: 14px; color: var(--muted); text-align: center; }
 
-  .card-subtitle {
-    font-size: 14px;
-    color: var(--muted);
-    text-align: center;
-    font-weight: 400;
-  }
-
-  .progress-wrap {
-    padding: 24px 40px 0;
-  }
-
-  .steps-track {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    margin-bottom: 10px;
-  }
-
+  .progress-wrap { padding: 24px 40px 0; }
+  .steps-track { display: flex; align-items: center; margin-bottom: 10px; }
   .step-seg {
-    flex: 1;
-    height: 4px;
-    border-radius: 10px;
+    flex: 1; height: 4px; border-radius: 10px;
     background: var(--step-inactive);
     transition: background var(--transition);
     position: relative;
-    cursor: default;
   }
   .step-seg + .step-seg { margin-left: 4px; }
   .step-seg.done { background: var(--step-done); }
   .step-seg.active { background: var(--step-active); }
   .step-seg.active::after {
     content: '▼';
-    position: absolute;
-    bottom: -16px;
-    left: 50%;
+    position: absolute; bottom: -16px; left: 50%;
     transform: translateX(-50%);
-    font-size: 8px;
-    color: var(--step-active);
+    font-size: 8px; color: var(--step-active);
   }
-
-  .step-labels {
-    display: flex;
-    gap: 0;
-    margin-top: 22px;
-  }
+  .step-labels { display: flex; margin-top: 22px; }
   .step-label {
-    flex: 1;
-    text-align: center;
-    font-size: 10px;
-    font-weight: 500;
-    color: var(--step-inactive);
-    transition: color var(--transition);
-    line-height: 1.3;
-    padding: 0 2px;
+    flex: 1; text-align: center; font-size: 10px; font-weight: 500;
+    color: var(--step-inactive); transition: color var(--transition);
+    line-height: 1.3; padding: 0 2px;
   }
   .step-label.done { color: var(--step-done); }
   .step-label.active { color: var(--step-active); font-weight: 600; }
+  .step-counter { text-align: right; font-size: 12px; color: var(--muted); padding: 10px 0 0; font-weight: 500; }
 
-  .step-counter {
-    text-align: right;
-    font-size: 12px;
-    color: var(--muted);
-    padding: 10px 0 0;
-    font-weight: 500;
-  }
+  .card-body { padding: 36px 40px 32px; min-height: 300px; }
 
-  .card-body {
-    padding: 36px 40px 32px;
-    min-height: 300px;
-  }
-
-  .step-screen {
-    display: none;
-    animation: slideIn 0.4s cubic-bezier(0.4,0,0.2,1) forwards;
-  }
+  .step-screen { display: none; animation: slideIn 0.4s cubic-bezier(0.4,0,0.2,1) forwards; }
   .step-screen.active { display: block; }
-  .step-screen.exit {
-    display: block;
-    animation: slideOut 0.3s cubic-bezier(0.4,0,0.2,1) forwards;
-  }
-
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateX(32px); }
-    to   { opacity: 1; transform: translateX(0); }
-  }
-  @keyframes slideOut {
-    from { opacity: 1; transform: translateX(0); }
-    to   { opacity: 0; transform: translateX(-32px); }
-  }
-  @keyframes slideInBack {
-    from { opacity: 0; transform: translateX(-32px); }
-    to   { opacity: 1; transform: translateX(0); }
-  }
+  .step-screen.exit { display: block; animation: slideOut 0.3s cubic-bezier(0.4,0,0.2,1) forwards; }
+  @keyframes slideIn { from { opacity:0; transform:translateX(32px); } to { opacity:1; transform:translateX(0); } }
+  @keyframes slideOut { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(-32px); } }
+  @keyframes slideInBack { from { opacity:0; transform:translateX(-32px); } to { opacity:1; transform:translateX(0); } }
   .step-screen.back-in { animation: slideInBack 0.4s cubic-bezier(0.4,0,0.2,1) forwards; }
 
   .q-label {
     font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    font-weight: 500;
-    color: var(--bark);
-    margin-bottom: 24px;
-    line-height: 1.35;
+    font-size: 22px; font-weight: 500; color: var(--bark);
+    margin-bottom: 24px; line-height: 1.35;
   }
-  .q-label em {
-    color: var(--terracotta);
-    font-style: normal;
-  }
+  .q-label em { color: var(--terracotta); font-style: normal; }
 
   .text-input {
-    width: 100%;
-    padding: 14px 18px;
-    border: 2px solid var(--border);
-    border-radius: 12px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 17px;
-    color: var(--bark);
-    background: #fff;
-    outline: none;
+    width: 100%; padding: 14px 18px;
+    border: 2px solid var(--border); border-radius: 12px;
+    font-family: 'DM Sans', sans-serif; font-size: 17px; color: var(--bark);
+    background: #fff; outline: none;
     transition: border-color var(--transition), box-shadow var(--transition);
   }
   .text-input::placeholder { color: var(--step-inactive); }
@@ -228,29 +148,56 @@
     box-shadow: 0 0 0 4px rgba(201,113,74,0.10);
   }
 
-  /* ===== PET TYPE IMAGE CHOICES ===== */
-  .img-choices {
+  /* ===== DIET GOAL CARDS ===== */
+  .goal-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-top: 8px;
+    gap: 10px; margin-top: 8px;
   }
-
-  .img-choice {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 20px 16px 18px;
-    border: 2.5px solid var(--border);
-    border-radius: 18px;
-    cursor: pointer;
+  .goal-card {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 6px; padding: 16px 10px;
+    border: 2.5px solid var(--border); border-radius: 16px;
+    background: #fff; cursor: pointer;
     transition: all var(--transition);
-    background: #fff;
-    position: relative;
-    overflow: hidden;
-    min-height: 160px;
-    user-select: none;
+    position: relative; user-select: none;
+    min-height: 80px; text-align: center;
+  }
+  .goal-card:hover {
+    border-color: var(--terracotta-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(201,113,74,0.14);
+  }
+  .goal-card.selected {
+    border-color: var(--terracotta);
+    background: linear-gradient(160deg, #fff8f5 0%, #fff 100%);
+    box-shadow: 0 6px 22px rgba(201,113,74,0.18);
+  }
+  .goal-card.selected::after {
+    content: '✓'; position: absolute; top: 8px; right: 10px;
+    width: 22px; height: 22px; background: var(--terracotta);
+    color: white; border-radius: 50%; font-size: 11px;
+    font-weight: 700; line-height: 22px; text-align: center;
+  }
+  .goal-card.full-width { grid-column: span 2; }
+  .goal-icon { font-size: 26px; }
+  .goal-label { font-size: 13px; font-weight: 600; color: var(--bark-mid); line-height: 1.3; }
+  .goal-card.selected .goal-label { color: var(--bark); }
+
+  /* ===== PET TYPE HEADSHOT CARDS ===== */
+  .img-choices {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px; margin-top: 8px;
+  }
+  .img-choice {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: flex-end;
+    padding: 20px 16px 18px;
+    border: 2.5px solid var(--border); border-radius: 18px;
+    cursor: pointer; transition: all var(--transition);
+    background: #fff; position: relative; overflow: hidden;
+    min-height: 170px; user-select: none;
   }
   .img-choice:hover {
     border-color: var(--terracotta-light);
@@ -263,1198 +210,1350 @@
     box-shadow: 0 8px 28px rgba(201,113,74,0.18);
   }
   .img-choice.selected::after {
-    content: '✓';
-    position: absolute;
-    top: 12px;
-    right: 14px;
-    width: 26px;
-    height: 26px;
-    background: var(--terracotta);
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    font-weight: 700;
-    line-height: 26px;
-    text-align: center;
+    content: '✓'; position: absolute; top: 12px; right: 14px;
+    width: 26px; height: 26px; background: var(--terracotta);
+    color: white; border-radius: 50%; font-size: 13px;
+    font-weight: 700; line-height: 26px; text-align: center;
   }
 
-  /* Pet headshot image inside img-choice */
+  /* ===== HEADSHOT IMAGE ===== */
   .pet-headshot {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    object-fit: cover;
+    width: 100px; height: 100px;
+    border-radius: 50%; object-fit: cover;
     margin-bottom: 12px;
     transition: transform 0.3s;
-    box-shadow: 0 4px 16px rgba(59,47,30,0.12);
+    box-shadow: 0 4px 20px rgba(59,47,30,0.15);
     border: 3px solid var(--border);
+    display: block;
   }
   .img-choice:hover .pet-headshot { transform: scale(1.08); }
   .img-choice.selected .pet-headshot {
     transform: scale(1.06);
     border-color: var(--terracotta-light);
+    box-shadow: 0 6px 24px rgba(201,113,74,0.2);
   }
   .pet-headshot-fallback {
-    font-size: 68px;
-    line-height: 1;
-    margin-bottom: 12px;
-    transition: transform 0.3s;
-    display: none; /* shown via onerror */
+    font-size: 68px; line-height: 1;
+    margin-bottom: 12px; transition: transform 0.3s;
   }
   .img-choice:hover .pet-headshot-fallback { transform: scale(1.1); }
   .img-choice.selected .pet-headshot-fallback { transform: scale(1.08); }
+  .img-choice-label { font-size: 17px; font-weight: 600; color: var(--bark); }
 
-  .img-choice-label {
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--bark);
-  }
-
-  .option-grid {
-    display: grid;
-    gap: 12px;
-    margin-top: 8px;
-  }
+  .option-grid { display: grid; gap: 12px; margin-top: 8px; }
   .option-grid.cols-2 { grid-template-columns: 1fr 1fr; }
   .option-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
   .option-grid.cols-1 { grid-template-columns: 1fr; }
 
   .opt-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 14px 16px;
-    border: 2.5px solid var(--border);
-    border-radius: 14px;
-    background: #fff;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--bark-mid);
-    cursor: pointer;
-    transition: all var(--transition);
-    text-align: center;
-    user-select: none;
-    line-height: 1.3;
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px; padding: 14px 16px;
+    border: 2.5px solid var(--border); border-radius: 14px;
+    background: #fff; font-family: 'DM Sans', sans-serif;
+    font-size: 15px; font-weight: 500; color: var(--bark-mid);
+    cursor: pointer; transition: all var(--transition);
+    text-align: center; user-select: none; line-height: 1.3;
   }
   .opt-btn:hover {
-    border-color: var(--sage-light);
-    background: #f8fbf8;
+    border-color: var(--sage-light); background: #f8fbf8;
     transform: translateY(-2px);
     box-shadow: 0 4px 16px rgba(122,158,126,0.12);
   }
   .opt-btn.selected {
     border-color: var(--sage);
     background: linear-gradient(135deg, #f2faf3 0%, #fff 100%);
-    color: var(--bark);
-    font-weight: 600;
+    color: var(--bark); font-weight: 600;
     box-shadow: 0 4px 20px rgba(122,158,126,0.18);
   }
   .opt-btn .opt-icon { font-size: 20px; }
 
+  /* ===== PUPPY SUB-STAGE ===== */
+  .sub-stage-wrap {
+    display: none; margin-top: 22px; padding: 18px 20px;
+    background: linear-gradient(135deg, #fffbf0 0%, #fff 100%);
+    border: 2px solid var(--gold-light); border-radius: 16px;
+    animation: fadeIn 0.3s ease;
+  }
+  .sub-stage-wrap.visible { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+  .sub-stage-label {
+    font-size: 14px; font-weight: 600; color: var(--bark-mid);
+    margin-bottom: 12px; display: flex; align-items: center; gap: 7px;
+  }
+  .sub-stage-label::before { content: '🍼'; font-size: 16px; }
+
   /* ===== MULTI-SELECT HINT ===== */
   .multi-hint {
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+    font-size: 12px; color: var(--muted);
+    margin-bottom: 10px; display: flex; align-items: center; gap: 5px;
   }
   .multi-hint::before { content: '☑'; font-size: 14px; color: var(--sage); }
 
-  /* ===== RANKING CARDS ===== */
-  .rank-hint {
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+  /* ===== RATE CARDS (Step 7 — "Lo más importante") ===== */
+  .rate-hint {
+    font-size: 12px; color: var(--muted);
+    margin-bottom: 14px; display: flex; align-items: center; gap: 5px;
   }
-  .rank-hint::before { content: '🏅'; font-size: 13px; }
+  .rate-hint::before { content: '⭐'; font-size: 13px; }
 
-  .rank-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 20px 12px 16px;
-    border: 2.5px solid var(--border);
-    border-radius: 14px;
+  .rate-cards-wrap { display: flex; flex-direction: column; gap: 12px; }
+
+  .rate-card {
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 16px 20px;
     background: #fff;
-    cursor: pointer;
     transition: all var(--transition);
-    position: relative;
-    user-select: none;
-    min-height: 88px;
   }
-  .rank-card:hover {
-    border-color: var(--gold-light);
-    transform: translateY(-2px);
+  .rate-card.active {
+    border-color: var(--gold);
+    background: linear-gradient(135deg, #fffbf0 0%, #fff 100%);
     box-shadow: 0 4px 16px rgba(212,168,71,0.15);
   }
-  .rank-card.ranked {
-    background: linear-gradient(135deg, #fffbf0 0%, #fff 100%);
-  }
-  .rank-card.ranked-1 { border-color: var(--gold); }
-  .rank-card.ranked-2 { border-color: var(--sage); }
-  .rank-card.ranked-3 { border-color: var(--terracotta-light); }
-  .rank-card.ranked-4 { border-color: var(--muted); }
 
-  .rank-badge {
-    position: absolute;
-    top: 8px;
-    right: 10px;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: var(--border);
-    color: var(--muted);
-    font-size: 12px;
-    font-weight: 700;
+  .rate-card-top {
     display: flex;
     align-items: center;
-    justify-content: center;
-    line-height: 1;
-    transition: all 0.25s ease;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
   }
-  .rank-badge.r1 { background: var(--gold); color: var(--bark); box-shadow: 0 2px 8px rgba(212,168,71,0.4); }
-  .rank-badge.r2 { background: var(--sage); color: #fff; box-shadow: 0 2px 8px rgba(122,158,126,0.4); }
-  .rank-badge.r3 { background: var(--terracotta); color: #fff; box-shadow: 0 2px 8px rgba(201,113,74,0.35); }
-  .rank-badge.r4 { background: var(--muted); color: #fff; }
-
-  .rank-icon { font-size: 22px; }
-  .rank-label {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--bark-mid);
-    text-align: center;
-    line-height: 1.3;
-  }
-  .rank-card.ranked .rank-label { color: var(--bark); font-weight: 600; }
-
-  /* ===== WEIGHT SLIDER SECTION ===== */
-  .weight-sliders-wrap {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-    margin-top: 8px;
-  }
-
-  .weight-slider-block {
-    background: #fff;
+  .rate-checkbox {
+    width: 20px; height: 20px;
     border: 2px solid var(--border);
-    border-radius: 18px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all 0.2s;
+    background: #fff;
+  }
+  .rate-card.active .rate-checkbox {
+    background: var(--sage);
+    border-color: var(--sage);
+  }
+  .rate-checkbox::after {
+    content: ''; display: none;
+    width: 5px; height: 9px;
+    border: 2px solid #fff;
+    border-top: none; border-left: none;
+    transform: rotate(45deg) translateY(-1px);
+  }
+  .rate-card.active .rate-checkbox::after { display: block; }
+
+  .rate-card-icon { font-size: 22px; }
+  .rate-card-label {
+    font-size: 15px; font-weight: 600; color: var(--bark-mid);
+    flex: 1;
+  }
+  .rate-card.active .rate-card-label { color: var(--bark); }
+
+  .rate-score-badge {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 800;
+    color: var(--muted);
+    transition: all 0.25s;
+    flex-shrink: 0;
+  }
+  .rate-card.active .rate-score-badge {
+    background: var(--gold);
+    color: var(--bark);
+    box-shadow: 0 2px 10px rgba(212,168,71,0.4);
+  }
+
+  /* Slider shown only when card is active */
+  .rate-slider-wrap {
+    display: none;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .rate-card.active .rate-slider-wrap { display: block; }
+
+  .rate-slider-labels {
+    display: flex; justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .rate-slider-labels span {
+    font-size: 11px; color: var(--muted); font-weight: 500;
+  }
+
+  .rate-slider {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 6px;
+    border-radius: 10px; background: var(--border);
+    outline: none; cursor: pointer;
+  }
+  .rate-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 24px; height: 24px;
+    border-radius: 50%; background: var(--gold);
+    cursor: pointer; border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(212,168,71,0.4);
+    transition: transform 0.2s;
+  }
+  .rate-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  .rate-slider::-moz-range-thumb {
+    width: 24px; height: 24px;
+    border-radius: 50%; background: var(--gold);
+    cursor: pointer; border: 3px solid #fff;
+  }
+
+  .rate-dots {
+    display: flex; justify-content: space-between;
+    margin-top: 6px; padding: 0 2px;
+  }
+  .rate-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--border); transition: background 0.2s;
+  }
+  .rate-dot.filled { background: var(--gold); }
+
+  /* ===== WEIGHT SLIDER ===== */
+  .weight-sliders-wrap { display: flex; flex-direction: column; gap: 32px; margin-top: 8px; }
+  .weight-slider-block {
+    background: #fff; border: 2px solid var(--border); border-radius: 18px;
     padding: 24px 26px 20px;
     transition: border-color var(--transition), box-shadow var(--transition);
-    position: relative;
   }
   .weight-slider-block:focus-within {
     border-color: var(--terracotta-light);
     box-shadow: 0 4px 20px rgba(201,113,74,0.10);
   }
-
   .slider-block-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 18px;
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;
   }
   .slider-block-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--bark-mid);
-    letter-spacing: 0.3px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    font-size: 13px; font-weight: 600; color: var(--bark-mid);
+    display: flex; align-items: center; gap: 8px;
   }
-  .slider-block-title .s-icon { font-size: 18px; }
-
   .slider-value-pill {
-    background: var(--bark);
-    color: #fff;
-    font-size: 18px;
-    font-weight: 700;
-    padding: 6px 18px;
-    border-radius: 100px;
-    min-width: 80px;
-    text-align: center;
-    transition: background var(--transition);
+    background: var(--bark); color: #fff;
+    font-size: 18px; font-weight: 700;
+    padding: 6px 18px; border-radius: 100px;
+    min-width: 80px; text-align: center;
     font-family: 'DM Sans', sans-serif;
-    letter-spacing: 0.2px;
   }
-
   .weight-range-input {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 8px;
-    border-radius: 10px;
-    background: var(--border);
-    outline: none;
-    cursor: pointer;
-    transition: background var(--transition);
-    margin-bottom: 10px;
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 8px; border-radius: 10px;
+    background: var(--border); outline: none; cursor: pointer; margin-bottom: 10px;
   }
   .weight-range-input::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: var(--bark);
-    cursor: pointer;
-    border: 3px solid #fff;
-    box-shadow: 0 2px 10px rgba(59,47,30,0.25);
-    transition: transform 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none; appearance: none;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--bark); cursor: pointer;
+    border: 3px solid #fff; box-shadow: 0 2px 10px rgba(59,47,30,0.25);
+    transition: transform 0.2s;
   }
-  .weight-range-input::-webkit-slider-thumb:hover {
-    transform: scale(1.15);
-    box-shadow: 0 4px 18px rgba(59,47,30,0.32);
-  }
+  .weight-range-input::-webkit-slider-thumb:hover { transform: scale(1.15); }
   .weight-range-input::-moz-range-thumb {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: var(--bark);
-    cursor: pointer;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--bark); cursor: pointer;
     border: 3px solid #fff;
-    box-shadow: 0 2px 10px rgba(59,47,30,0.25);
   }
-
-  .slider-ticks {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 4px;
+  .slider-ticks { display: flex; justify-content: space-between; margin-top: 4px; }
+  .slider-tick { font-size: 11px; color: var(--muted); font-weight: 500; }
+  .lbs-tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 12px; font-weight: 600; color: var(--muted);
+    background: var(--cream); border: 1.5px solid var(--border);
+    border-radius: 100px; padding: 4px 12px; margin-top: 10px;
   }
-  .slider-tick {
-    font-size: 11px;
-    color: var(--muted);
-    font-weight: 500;
-  }
-
+  .lbs-tag span { color: var(--bark-mid); font-size: 13px; }
   .weight-goal-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    font-weight: 600;
-    padding: 6px 14px;
-    border-radius: 100px;
-    margin-top: 20px;
-    transition: all 0.4s;
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 600; padding: 6px 14px;
+    border-radius: 100px; margin-top: 20px; transition: all 0.4s;
   }
   .goal-lose { background: rgba(201,113,74,0.12); color: var(--terracotta); border: 1.5px solid rgba(201,113,74,0.3); }
   .goal-gain { background: rgba(122,158,126,0.12); color: #4a8a50; border: 1.5px solid rgba(122,158,126,0.35); }
   .goal-maintain { background: rgba(212,168,71,0.12); color: #8a6b10; border: 1.5px solid rgba(212,168,71,0.3); }
-
   .weight-comparison-bar {
-    margin-top: 22px;
-    background: var(--cream);
-    border-radius: 12px;
-    padding: 14px 16px;
-    border: 1px solid var(--border);
+    margin-top: 22px; background: var(--cream); border-radius: 12px;
+    padding: 14px 16px; border: 1px solid var(--border);
   }
   .wcb-label { font-size: 12px; color: var(--muted); font-weight: 500; margin-bottom: 10px; }
-  .wcb-track {
-    position: relative; height: 10px; background: var(--border);
-    border-radius: 10px; overflow: visible; margin-bottom: 8px;
-  }
-  .wcb-fill-current {
-    position: absolute; left: 0; top: 0; height: 100%;
-    background: var(--terracotta-light); border-radius: 10px;
-    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
-  }
-  .wcb-fill-ideal {
-    position: absolute; left: 0; top: 0; height: 100%;
-    background: var(--sage); border-radius: 10px; opacity: 0.7;
-    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
-  }
+  .wcb-track { position: relative; height: 10px; background: var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 8px; }
+  .wcb-fill-current { position: absolute; left:0; top:0; height:100%; background: var(--terracotta-light); border-radius: 10px; transition: width 0.5s; }
+  .wcb-fill-ideal   { position: absolute; left:0; top:0; height:100%; background: var(--sage); border-radius: 10px; opacity:0.7; transition: width 0.5s; }
 
-  .zoho-hidden { display: none !important; }
-
-  .card-footer {
-    padding: 0 40px 36px;
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-  }
-
+  /* ===== FOOTER BUTTONS ===== */
+  .card-footer { padding: 0 40px 36px; display: flex; gap: 12px; justify-content: center; }
   .btn-back {
-    padding: 14px 32px;
-    border-radius: var(--radius-pill);
-    border: 2px solid var(--border);
-    background: transparent;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--bark-mid);
-    cursor: pointer;
-    transition: all var(--transition);
+    padding: 14px 32px; border-radius: var(--radius-pill);
+    border: 2px solid var(--border); background: transparent;
+    font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600;
+    color: var(--bark-mid); cursor: pointer; transition: all var(--transition);
   }
-  .btn-back:hover {
-    border-color: var(--bark-mid);
-    color: var(--bark);
-    background: rgba(59,47,30,0.04);
-  }
-
+  .btn-back:hover { border-color: var(--bark-mid); color: var(--bark); background: rgba(59,47,30,0.04); }
   .btn-next {
-    padding: 14px 44px;
-    border-radius: var(--radius-pill);
-    border: none;
-    background: var(--bark);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    color: #fff;
-    cursor: pointer;
-    transition: all var(--transition);
-    position: relative;
-    overflow: hidden;
-    letter-spacing: 0.2px;
+    padding: 14px 44px; border-radius: var(--radius-pill);
+    border: none; background: var(--bark);
+    font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600;
+    color: #fff; cursor: pointer; transition: all var(--transition);
+    position: relative; overflow: hidden; letter-spacing: 0.2px;
   }
   .btn-next::before {
-    content: '';
-    position: absolute; inset: 0;
+    content: ''; position: absolute; inset: 0;
     background: linear-gradient(120deg, transparent 40%, rgba(255,255,255,0.12) 50%, transparent 60%);
-    transform: translateX(-100%);
-    transition: transform 0.5s;
+    transform: translateX(-100%); transition: transform 0.5s;
   }
   .btn-next:hover::before { transform: translateX(100%); }
-  .btn-next:hover {
-    background: var(--bark-mid);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(59,47,30,0.22);
-  }
-  .btn-next:active { transform: translateY(0); }
-
+  .btn-next:hover { background: var(--bark-mid); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(59,47,30,0.22); }
   .btn-submit {
-    padding: 14px 44px;
-    border-radius: var(--radius-pill);
-    border: none;
+    padding: 14px 44px; border-radius: var(--radius-pill); border: none;
     background: linear-gradient(135deg, var(--sage) 0%, #5a8c5e 100%);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    color: #fff;
-    cursor: pointer;
-    transition: all var(--transition);
-    letter-spacing: 0.2px;
+    font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600;
+    color: #fff; cursor: pointer; transition: all var(--transition);
   }
-  .btn-submit:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(122,158,126,0.35);
-  }
+  .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(122,158,126,0.35); }
 
-  .req-note { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
   .req-star { color: var(--terracotta); font-weight: 700; }
   .q-sep { margin-top: 32px; }
 
-  .rec-screen { text-align: center; padding: 8px 0; }
+  /* ===== PLAN BOX ===== */
+  .plan-box {
+    background: linear-gradient(135deg, #f2faf3 0%, #fff 100%);
+    border: 2.5px solid var(--sage); border-radius: 18px;
+    padding: 24px 26px; text-align: left; margin-bottom: 20px;
+    position: relative; overflow: hidden;
+  }
+  .plan-box::before { content:'🐾'; position:absolute; right:18px; top:14px; font-size:32px; opacity:0.12; }
+  .plan-box-title { font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--sage); margin-bottom:12px; }
+  .plan-name { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:var(--bark); margin-bottom:6px; }
+  .plan-meta { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px; }
+  .plan-chip {
+    display:inline-flex; align-items:center; gap:5px;
+    background:#fff; border:1.5px solid var(--border); border-radius:100px;
+    padding:4px 12px; font-size:12px; font-weight:600; color:var(--bark-mid);
+  }
+  .plan-chip.highlight { background:var(--bark); color:#fff; border-color:var(--bark); }
+  .plan-chip.sage { background:var(--sage); color:#fff; border-color:var(--sage); }
+  .plan-buy-btn {
+    display:block; width:100%; padding:14px 20px;
+    background:var(--bark); color:#fff;
+    border:none; border-radius:12px;
+    font-family:'DM Sans',sans-serif; font-size:16px; font-weight:700;
+    text-align:center; text-decoration:none; cursor:pointer;
+    transition: all var(--transition);
+  }
+  .plan-buy-btn:hover { background:var(--bark-mid); transform:translateY(-2px); box-shadow:0 8px 24px rgba(59,47,30,0.22); }
+
+  .rec-screen { text-align:center; padding:8px 0; }
   .rec-badge {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--gold-light), var(--gold));
-    color: var(--bark); font-size: 11px; font-weight: 700;
-    letter-spacing: 1.5px; text-transform: uppercase;
-    padding: 5px 16px; border-radius: 100px; margin-bottom: 20px;
+    display:inline-block;
+    background:linear-gradient(135deg,var(--gold-light),var(--gold));
+    color:var(--bark); font-size:11px; font-weight:700;
+    letter-spacing:1.5px; text-transform:uppercase;
+    padding:5px 16px; border-radius:100px; margin-bottom:20px;
   }
-  .rec-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 26px; font-weight: 700; color: var(--bark);
-    margin-bottom: 10px; line-height: 1.3;
-  }
-  .rec-title .pet-name-display { color: var(--terracotta); }
-  .rec-sub { font-size: 15px; color: var(--bark-mid); margin-bottom: 28px; line-height: 1.55; }
+  .rec-title { font-family:'Playfair Display',serif; font-size:26px; font-weight:700; color:var(--bark); margin-bottom:10px; line-height:1.3; }
+  .rec-title .pet-name-display { color:var(--terracotta); }
+  .rec-sub { font-size:15px; color:var(--bark-mid); margin-bottom:28px; line-height:1.55; }
   .rec-card {
-    background: linear-gradient(135deg, #f8fdf8 0%, #fff 100%);
-    border: 2px solid var(--sage-light);
-    border-radius: 16px; padding: 22px 24px; text-align: left; margin-bottom: 28px;
+    background:linear-gradient(135deg,#f8fdf8 0%,#fff 100%);
+    border:2px solid var(--sage-light); border-radius:16px;
+    padding:22px 24px; text-align:left; margin-bottom:20px;
   }
-  .rec-card-title {
-    font-weight: 700; font-size: 15px; color: var(--sage);
-    margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
-  }
-  .rec-items { list-style: none; }
-  .rec-items li {
-    font-size: 14px; color: var(--bark-mid); padding: 5px 0;
-    display: flex; align-items: flex-start; gap: 10px; line-height: 1.5;
-  }
-  .rec-items li::before { content: '🐾'; font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+  .rec-card-title { font-weight:700; font-size:15px; color:var(--sage); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+  .rec-items { list-style:none; }
+  .rec-items li { font-size:14px; color:var(--bark-mid); padding:5px 0; display:flex; align-items:flex-start; gap:10px; line-height:1.5; }
+  .rec-items li::before { content:'🐾'; font-size:13px; flex-shrink:0; margin-top:1px; }
 
-  .success-screen { text-align: center; padding: 16px 0; }
-  .success-icon { font-size: 72px; margin-bottom: 16px; animation: bounce 0.6s 0.2s both; }
+  .success-screen { text-align:center; padding:16px 0; }
+  .success-icon { font-size:72px; margin-bottom:16px; animation:bounce 0.6s 0.2s both; }
   @keyframes bounce {
-    0%   { transform: scale(0.5); opacity: 0; }
-    70%  { transform: scale(1.15); }
-    100% { transform: scale(1); opacity: 1; }
+    0%   { transform:scale(0.5); opacity:0; }
+    70%  { transform:scale(1.15); }
+    100% { transform:scale(1); opacity:1; }
   }
-  .success-title { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--bark); margin-bottom: 10px; }
-  .success-msg { font-size: 15px; color: var(--bark-mid); line-height: 1.6; max-width: 380px; margin: 0 auto; }
+  .success-title { font-family:'Playfair Display',serif; font-size:26px; color:var(--bark); margin-bottom:10px; }
+  .success-msg { font-size:15px; color:var(--bark-mid); line-height:1.6; max-width:380px; margin:0 auto; }
 
-  .field-error { display: none; font-size: 13px; color: #d93025; margin-top: 8px; font-weight: 500; }
-  .field-error.show { display: block; }
+  .field-error { display:none; font-size:13px; color:#d93025; margin-top:8px; font-weight:500; }
+  .field-error.show { display:block; }
 
-  @media (max-width: 520px) {
-    .site-header { padding: 18px 20px 0; }
-    .funnel-wrap { padding: 0 12px; margin-top: 20px; }
-    .card-header { padding: 28px 24px 20px; }
-    .card-title { font-size: 23px; }
-    .progress-wrap { padding: 20px 24px 0; }
-    .step-label { font-size: 8.5px; }
-    .card-body { padding: 28px 24px 24px; }
-    .card-footer { padding: 0 24px 28px; }
-    .q-label { font-size: 19px; }
-    .img-choices { gap: 12px; }
-    .img-choice { min-height: 130px; padding: 16px 12px 14px; }
-    .pet-headshot { width: 72px; height: 72px; }
-    .option-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
-    .opt-btn { padding: 12px 8px; font-size: 13px; }
-    .rank-card { padding: 16px 8px 12px; }
-    .rank-label { font-size: 12px; }
-    .btn-next, .btn-submit { padding: 13px 32px; font-size: 15px; }
-    .btn-back { padding: 13px 24px; font-size: 15px; }
-    .weight-slider-block { padding: 18px 16px 16px; }
-    .slider-value-pill { font-size: 16px; padding: 5px 14px; }
+  @media (max-width:520px) {
+    .site-header { padding:18px 20px 0; }
+    .funnel-wrap { padding:0 12px; margin-top:20px; }
+    .card-header { padding:28px 24px 20px; }
+    .card-title { font-size:23px; }
+    .progress-wrap { padding:20px 24px 0; }
+    .step-label { font-size:8px; }
+    .card-body { padding:28px 24px 24px; }
+    .card-footer { padding:0 24px 28px; }
+    .q-label { font-size:19px; }
+    .img-choice { min-height:140px; padding:16px 12px 14px; }
+    .pet-headshot { width:80px; height:80px; }
+    .opt-btn { padding:12px 8px; font-size:13px; }
+    .btn-next,.btn-submit { padding:13px 32px; font-size:15px; }
+    .btn-back { padding:13px 24px; font-size:15px; }
+    .weight-slider-block { padding:18px 16px 16px; }
+    .slider-value-pill { font-size:16px; padding:5px 14px; }
+    .plan-box { padding:18px 16px; }
+    .plan-name { font-size:18px; }
   }
 </style>
 </head>
 <body>
 
 <header class="site-header">
-  <img src="https://i.ibb.co/rfsVGpHw/Logo-PAnchos-Natural.avif"
-       alt="Pancho's Kitchen"
-       class="site-logo">
+  <img src="https://i.ibb.co/rfsVGpHw/Logo-PAnchos-Natural.avif" alt="Pancho's Kitchen" class="site-logo">
 </header>
 
 <div class="funnel-wrap">
-  <div class="card">
+<div class="card">
 
-    <div class="card-header">
-      <h1 class="card-title">Cuéntanos sobre tu mascota</h1>
-      <p class="card-subtitle">Nutrición personalizada en solo 60 segundos</p>
+  <div class="card-header">
+    <h1 class="card-title">Cuéntanos sobre tu mascota</h1>
+    <p class="card-subtitle">Nutrición personalizada en solo 60 segundos</p>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="steps-track" id="stepsTrack"></div>
+    <div class="step-labels" id="stepLabels"></div>
+    <div class="step-counter" id="stepCounter"></div>
+  </div>
+
+  <!-- ZOHO FORM -->
+  <form action="https://forms.zohopublic.com/virtualoffice7719/form/UserInfo/formperma/tCXAWjOa6AvcpfJf-Ny5xZ9Wb5thbPz6O4FWOzAyEuM/htmlRecords/submit"
+    name="form" id="zohoForm" method="POST" accept-charset="UTF-8" enctype="multipart/form-data">
+    <input type="hidden" name="zf_referrer_name" value="">
+    <input type="hidden" name="zf_redirect_url" value="">
+    <input type="hidden" name="zc_gad" value="">
+    <input type="hidden" name="SingleLine"   id="zf_pet_name">
+    <input type="hidden" name="Radio"        id="zf_pet_type">
+    <input type="hidden" name="Radio1"       id="zf_pet_age">
+    <input type="hidden" name="Radio2"       id="zf_pet_size">
+    <input type="hidden" name="Radio3"       id="zf_pet_activity">
+    <input type="hidden" name="Dropdown"     id="zf_feeding">
+    <input type="hidden" name="Dropdown1"    id="zf_allergies">
+    <input type="hidden" name="Dropdown2"    id="zf_concerns">
+    <input type="hidden" name="Dropdown3"    id="zf_interest">
+    <input type="hidden" name="Dropdown4"    id="zf_matters">
+    <input type="hidden" name="SingleLine1"  id="zf_owner_name">
+    <input type="hidden" name="PhoneNumber_countrycode" id="zf_phone">
+    <input type="hidden" name="Email"        id="zf_email">
+    <input type="hidden" name="SingleLine2"  id="zf_city">
+    <input type="hidden" name="SingleLine3"  id="zf_current_weight">
+    <input type="hidden" name="SingleLine4"  id="zf_ideal_weight">
+    <input type="hidden" name="SingleLine5"  id="zf_diet_goal">
+    <input type="hidden" name="SingleLine6"  id="zf_puppy_stage">
+    <input type="hidden" name="SingleLine7"  id="zf_recommended_plan">
+    <input type="hidden" name="SingleLine8"  id="zf_recommended_portion">
+  </form>
+
+  <div class="card-body" id="cardBody">
+
+    <!-- ===== STEP 1: DIET GOAL ===== -->
+    <div class="step-screen active" id="step-1">
+      <p class="q-label">¿Cuál es el objetivo principal de la dieta de tu mascota? <span class="req-star">*</span></p>
+      <div class="goal-grid">
+        <div class="goal-card" data-value="Healthier" onclick="selectGoal(this)">
+          <span class="goal-icon">🥗</span>
+          <span class="goal-label">Alimentación más saludable</span>
+        </div>
+        <div class="goal-card" data-value="Allergic" onclick="selectGoal(this)">
+          <span class="goal-icon">🚫</span>
+          <span class="goal-label">Tiene alergias alimentarias</span>
+        </div>
+        <div class="goal-card" data-value="Appetite" onclick="selectGoal(this)">
+          <span class="goal-icon">😋</span>
+          <span class="goal-label">Mejorar el apetito</span>
+        </div>
+        <div class="goal-card" data-value="Longevity" onclick="selectGoal(this)">
+          <span class="goal-icon">🌿</span>
+          <span class="goal-label">Más años de vida</span>
+        </div>
+        <div class="goal-card" data-value="Renal" onclick="selectGoal(this)">
+          <span class="goal-icon">💧</span>
+          <span class="goal-label">Dieta renal</span>
+        </div>
+        <div class="goal-card" data-value="GrainFree" onclick="selectGoal(this)">
+          <span class="goal-icon">🌾</span>
+          <span class="goal-label">Libre de granos</span>
+        </div>
+        <div class="goal-card full-width" data-value="Cat" onclick="selectGoal(this)">
+          <span class="goal-icon">🐱</span>
+          <span class="goal-label">¡Tengo un gato!</span>
+        </div>
+      </div>
+      <div id="dietGoalErr" class="field-error">Por favor, selecciona un objetivo para continuar.</div>
     </div>
 
-    <div class="progress-wrap">
-      <div class="steps-track" id="stepsTrack"></div>
-      <div class="step-labels" id="stepLabels"></div>
-      <div class="step-counter" id="stepCounter">1 / 7</div>
+    <!-- ===== STEP 2: NAME + PET TYPE ===== -->
+    <div class="step-screen" id="step-2">
+      <p class="q-label">¿Cómo se llama tu mascota?</p>
+      <input type="text" class="text-input" id="petName" placeholder="Ej. Bruno, Luna…" autocomplete="off">
+      <div id="petNameErr" class="field-error">Por favor, ingresa el nombre de tu mascota.</div>
+
+      <div class="q-sep" id="petTypeWrap">
+        <p class="q-label">¿Qué tipo de mascota tienes? <span class="req-star">*</span></p>
+        <div class="img-choices">
+
+          <!-- DOG HEADSHOT — replace URL below with your real dog photo URL -->
+          <div class="img-choice" data-group="petType" data-value="Dog" onclick="selectImgChoice(this)">
+            <img
+              src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=200&h=200&fit=crop&crop=face"
+              alt="Perro"
+              class="pet-headshot"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='block';"
+            >
+            <span class="pet-headshot-fallback" style="display:none;">🐕</span>
+            <div class="img-choice-label">Perro</div>
+          </div>
+
+          <!-- CAT HEADSHOT — replace URL below with your real cat photo URL -->
+          <div class="img-choice" data-group="petType" data-value="Cat" onclick="selectImgChoice(this)">
+            <img
+              src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=200&h=200&fit=crop&crop=face"
+              alt="Gato"
+              class="pet-headshot"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='block';"
+            >
+            <span class="pet-headshot-fallback" style="display:none;">🐈</span>
+            <div class="img-choice-label">Gato</div>
+          </div>
+
+        </div>
+        <div id="petTypeErr" class="field-error">Por favor, selecciona el tipo de mascota.</div>
+      </div>
     </div>
 
-    <form
-      action="https://forms.zohopublic.com/virtualoffice7719/form/UserInfo/formperma/tCXAWjOa6AvcpfJf-Ny5xZ9Wb5thbPz6O4FWOzAyEuM/htmlRecords/submit"
-      name="form"
-      id="zohoForm"
-      method="POST"
-      accept-charset="UTF-8"
-      enctype="multipart/form-data"
-    >
-      <input type="hidden" name="zf_referrer_name" value="">
-      <input type="hidden" name="zf_redirect_url" value="">
-      <input type="hidden" name="zc_gad" value="">
-      <input type="hidden" name="SingleLine"  id="zf_pet_name">
-      <input type="hidden" name="Radio"       id="zf_pet_type">
-      <input type="hidden" name="Radio1"      id="zf_pet_age">
-      <input type="hidden" name="Radio2"      id="zf_pet_size">
-      <input type="hidden" name="Radio3"      id="zf_pet_activity">
-      <input type="hidden" name="Dropdown"    id="zf_feeding">
-      <input type="hidden" name="Dropdown1"   id="zf_allergies">
-      <input type="hidden" name="Dropdown2"   id="zf_concerns">
-      <input type="hidden" name="Dropdown3"   id="zf_interest">
-      <input type="hidden" name="Dropdown4"   id="zf_matters">
-      <input type="hidden" name="SingleLine1" id="zf_owner_name">
-      <input type="hidden" name="PhoneNumber_countrycode" id="zf_phone">
-      <input type="hidden" name="Email"       id="zf_email">
-      <input type="hidden" name="SingleLine2" id="zf_city">
-      <input type="hidden" name="SingleLine3" id="zf_current_weight">
-      <input type="hidden" name="SingleLine4" id="zf_ideal_weight">
-    </form>
-
-    <div class="card-body" id="cardBody">
-
-      <!-- PASO 1: Nombre + Tipo de mascota -->
-      <div class="step-screen active" id="step-1">
-        <p class="q-label">¿Cómo se llama tu mascota?</p>
-        <input type="text" class="text-input" id="petName" placeholder="Ej. Bruno, Luna…" autocomplete="off">
-        <div id="petNameErr" class="field-error">Por favor, ingresa el nombre de tu mascota.</div>
-
-        <div class="q-sep">
-          <p class="q-label">¿Qué tipo de mascota tienes? <span class="req-star">*</span></p>
-          <div class="img-choices">
-
-            <!-- CHANGE 6: Pet headshot with emoji fallback — replace URL_PERRO_HEADSHOT with real URL -->
-            <div class="img-choice" data-group="petType" data-value="Dog" onclick="selectImgChoice(this)">
-              <img
-                src="URL_PERRO_HEADSHOT"
-                alt="Perro"
-                class="pet-headshot"
-                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
-              >
-              <span class="pet-headshot-fallback">🐕</span>
-              <div class="img-choice-label">Perro</div>
-            </div>
-
-            <!-- CHANGE 6: Pet headshot with emoji fallback — replace URL_GATO_HEADSHOT with real URL -->
-            <div class="img-choice" data-group="petType" data-value="Cat" onclick="selectImgChoice(this)">
-              <img
-                src="URL_GATO_HEADSHOT"
-                alt="Gato"
-                class="pet-headshot"
-                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
-              >
-              <span class="pet-headshot-fallback">🐈</span>
-              <div class="img-choice-label">Gato</div>
-            </div>
-
-          </div>
-          <div id="petTypeErr" class="field-error">Por favor, selecciona el tipo de mascota.</div>
-        </div>
+    <!-- ===== STEP 3: AGE + PUPPY STAGE ===== -->
+    <div class="step-screen" id="step-3">
+      <p class="q-label">¿Cuántos años tiene <em id="petNameAge">tu mascota</em>? <span class="req-star">*</span></p>
+      <div class="option-grid cols-3">
+        <button type="button" class="opt-btn" data-group="petAge" data-value="Puppy / Kitten"
+          onclick="selectOpt(this); togglePuppyStage(true);">
+          <span class="opt-icon">🍼</span> Cachorro /<br>Gatito
+        </button>
+        <button type="button" class="opt-btn" data-group="petAge" data-value="Adult"
+          onclick="selectOpt(this); togglePuppyStage(false);">
+          <span class="opt-icon">🐾</span> Adulto
+        </button>
+        <button type="button" class="opt-btn" data-group="petAge" data-value="Senior"
+          onclick="selectOpt(this); togglePuppyStage(false);">
+          <span class="opt-icon">🌿</span> Senior
+        </button>
       </div>
+      <div id="petAgeErr" class="field-error">Por favor, selecciona la edad de tu mascota.</div>
 
-      <!-- PASO 2: Edad de la mascota -->
-      <div class="step-screen" id="step-2">
-        <p class="q-label">¿Cuántos años tiene <em id="petNameAge">tu mascota</em>? <span class="req-star">*</span></p>
-        <div class="option-grid cols-3">
-          <button type="button" class="opt-btn" data-group="petAge" data-value="Puppy / Kitten" onclick="selectOpt(this)">
-            <span class="opt-icon">🍼</span> Cachorro /<br>Gatito
-          </button>
-          <button type="button" class="opt-btn" data-group="petAge" data-value="Adult" onclick="selectOpt(this)">
-            <span class="opt-icon">🐾</span> Adulto
-          </button>
-          <button type="button" class="opt-btn" data-group="petAge" data-value="Senior" onclick="selectOpt(this)">
-            <span class="opt-icon">🌿</span> Senior
-          </button>
-        </div>
-        <div id="petAgeErr" class="field-error">Por favor, selecciona la edad de tu mascota.</div>
-      </div>
-
-      <!-- PASO 3: Peso actual e ideal (sliders) -->
-      <div class="step-screen" id="step-3">
-        <p class="q-label">¿Cuánto pesa <em id="petNameSize">tu mascota</em>? <span class="req-star">*</span></p>
-
-        <div class="weight-sliders-wrap">
-          <div class="weight-slider-block">
-            <div class="slider-block-header">
-              <div class="slider-block-title">
-                <span class="s-icon">⚖️</span> Peso actual
-              </div>
-              <div class="slider-value-pill" id="currentWeightDisplay">5 kg</div>
-            </div>
-            <input type="range" class="weight-range-input" id="currentWeightSlider"
-              min="1" max="60" step="1" value="5" oninput="onWeightChange()">
-            <div class="slider-ticks">
-              <span class="slider-tick">1 kg</span>
-              <span class="slider-tick">15 kg</span>
-              <span class="slider-tick">30 kg</span>
-              <span class="slider-tick">45 kg</span>
-              <span class="slider-tick">60 kg</span>
-            </div>
-          </div>
-
-          <div class="weight-slider-block">
-            <div class="slider-block-header">
-              <div class="slider-block-title">
-                <span class="s-icon">🎯</span> Peso ideal
-              </div>
-              <div class="slider-value-pill" id="idealWeightDisplay" style="background: var(--sage);">5 kg</div>
-            </div>
-            <input type="range" class="weight-range-input" id="idealWeightSlider"
-              min="1" max="60" step="1" value="5" style="accent-color: var(--sage);"
-              oninput="onWeightChange()">
-            <div class="slider-ticks">
-              <span class="slider-tick">1 kg</span>
-              <span class="slider-tick">15 kg</span>
-              <span class="slider-tick">30 kg</span>
-              <span class="slider-tick">45 kg</span>
-              <span class="slider-tick">60 kg</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="weight-comparison-bar" id="weightCompBar">
-          <div class="wcb-label">Comparación de pesos</div>
-          <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
-            <span style="font-size:12px; color:var(--bark-mid); min-width:70px;">Actual</span>
-            <div class="wcb-track" style="flex:1; height:10px;">
-              <div class="wcb-fill-current" id="wcbCurrent" style="width:8%;"></div>
-            </div>
-            <span style="font-size:12px; font-weight:600; color:var(--terracotta); min-width:42px;" id="wcbCurrentLabel">5 kg</span>
-          </div>
-          <div style="display:flex; align-items:center; gap:10px;">
-            <span style="font-size:12px; color:var(--bark-mid); min-width:70px;">Ideal</span>
-            <div class="wcb-track" style="flex:1; height:10px;">
-              <div class="wcb-fill-ideal" id="wcbIdeal" style="width:8%;"></div>
-            </div>
-            <span style="font-size:12px; font-weight:600; color:var(--sage); min-width:42px;" id="wcbIdealLabel">5 kg</span>
-          </div>
-          <div style="margin-top:14px; text-align:center;">
-            <span class="weight-goal-badge goal-maintain" id="weightGoalBadge">✅ Mantener peso ideal</span>
-          </div>
-        </div>
-
-        <div id="petSizeErr" class="field-error" style="margin-top:12px;">Por favor, ajusta los pesos de tu mascota.</div>
-      </div>
-
-      <!-- PASO 4: Nivel de actividad -->
-      <div class="step-screen" id="step-4">
-        <p class="q-label">¿Qué tan activa es <em id="petNameAct">tu mascota</em>? <span class="req-star">*</span></p>
-        <div class="option-grid cols-3">
-          <button type="button" class="opt-btn" data-group="petActivity" data-value="Low" onclick="selectOpt(this)">
-            <span class="opt-icon">🛋️</span> Baja
-          </button>
-          <button type="button" class="opt-btn" data-group="petActivity" data-value="Moderate" onclick="selectOpt(this)">
-            <span class="opt-icon">🚶</span> Moderada
-          </button>
-          <button type="button" class="opt-btn" data-group="petActivity" data-value="High" onclick="selectOpt(this)">
-            <span class="opt-icon">⚡</span> Alta
-          </button>
-        </div>
-        <div id="petActivityErr" class="field-error">Por favor, selecciona el nivel de actividad.</div>
-      </div>
-
-      <!-- PASO 5: Estilo de alimentación -->
-      <div class="step-screen" id="step-5">
-        <p class="q-label">¿Cómo alimentas actualmente a <em id="petNameFeed">tu mascota</em>? <span class="req-star">*</span></p>
-        <div class="option-grid cols-1">
-          <button type="button" class="opt-btn" data-group="feedingStyle" data-value="Homemade food" onclick="selectOpt(this)">
-            <span class="opt-icon">🍲</span> Comida casera
-          </button>
-          <button type="button" class="opt-btn" data-group="feedingStyle" data-value="Natural food" onclick="selectOpt(this)">
-            <span class="opt-icon">🌿</span> Comida Natural
-          </button>
-          <button type="button" class="opt-btn" data-group="feedingStyle" data-value="Dry food (kibble)" onclick="selectOpt(this)">
-            <span class="opt-icon">🥣</span> Concentrado / Croquetas
-          </button>
-          <button type="button" class="opt-btn" data-group="feedingStyle" data-value="Mixed" onclick="selectOpt(this)">
-            <span class="opt-icon">🍽️</span> Mixto
-          </button>
-          <button type="button" class="opt-btn" data-group="feedingStyle" data-value="Not consistent" onclick="selectOpt(this)">
-            <span class="opt-icon">🔀</span> Sin rutina fija
-          </button>
-        </div>
-        <div id="feedingErr" class="field-error">Por favor, selecciona un estilo de alimentación.</div>
-      </div>
-
-      <!-- PASO 6: Alergias + Preocupaciones -->
-      <div class="step-screen" id="step-6">
-        <p class="q-label">¿Tiene <em id="petNameAllergy">tu mascota</em> alguna alergia?</p>
+      <div class="sub-stage-wrap" id="puppyStageWrap">
+        <div class="sub-stage-label">¿En qué etapa se encuentra?</div>
         <div class="option-grid cols-2">
-          <button type="button" class="opt-btn" data-group="allergies" data-value="No allergies" onclick="selectOpt(this)">
-            <span class="opt-icon">✅</span> Sin alergias
+          <button type="button" class="opt-btn" data-group="puppyStage" data-value="1-3m" onclick="selectOpt(this)">
+            <span class="opt-icon">🌱</span> 1 a 3 meses
           </button>
-          <button type="button" class="opt-btn" data-group="allergies" data-value="Chicken" onclick="selectOpt(this)">
-            <span class="opt-icon">🍗</span> Pollo
-          </button>
-          <button type="button" class="opt-btn" data-group="allergies" data-value="Beef" onclick="selectOpt(this)">
-            <span class="opt-icon">🥩</span> Res
-          </button>
-          <!-- CHANGE 1: data-value fixed from "Dairy" → "Grain", label was already "Granos" ✓ -->
-          <button type="button" class="opt-btn" data-group="allergies" data-value="Grain" onclick="selectOpt(this)">
-            <span class="opt-icon">🌾</span> Granos
-          </button>
-          <button type="button" class="opt-btn" data-group="allergies" data-value="Other" onclick="selectOpt(this)" style="grid-column: span 2;">
-            <span class="opt-icon">❓</span> Otro
+          <button type="button" class="opt-btn" data-group="puppyStage" data-value="4-12m" onclick="selectOpt(this)">
+            <span class="opt-icon">🐾</span> 4 a 12 meses
           </button>
         </div>
+        <div id="puppyStageErr" class="field-error">Por favor, selecciona la etapa del cachorro.</div>
+      </div>
+    </div>
 
-        <!-- CHANGE 2: Preocupaciones is now multi-select -->
-        <div class="q-sep">
-          <p class="q-label">¿Cuáles son tus principales preocupaciones?</p>
-          <p class="multi-hint">Puedes seleccionar varias opciones</p>
-          <div class="option-grid cols-2">
-            <button type="button" class="opt-btn" data-group="concerns" data-value="Weight management" onclick="selectOpt(this)">
-              <span class="opt-icon">⚖️</span> Control de peso
-            </button>
-            <button type="button" class="opt-btn" data-group="concerns" data-value="Low energy" onclick="selectOpt(this)">
-              <span class="opt-icon">🔋</span> Poca energía
-            </button>
-            <button type="button" class="opt-btn" data-group="concerns" data-value="Digestion issues" onclick="selectOpt(this)">
-              <span class="opt-icon">🌿</span> Problemas digestivos
-            </button>
-            <button type="button" class="opt-btn" data-group="concerns" data-value="General health" onclick="selectOpt(this)">
-              <span class="opt-icon">💚</span> Salud general
-            </button>
+    <!-- ===== STEP 4: WEIGHT SLIDERS ===== -->
+    <div class="step-screen" id="step-4">
+      <p class="q-label">¿Cuánto pesa <em id="petNameSize">tu mascota</em>?</p>
+      <div class="weight-sliders-wrap">
+        <div class="weight-slider-block">
+          <div class="slider-block-header">
+            <div class="slider-block-title"><span>⚖️</span> Peso actual</div>
+            <div class="slider-value-pill" id="currentWeightDisplay">5 kg</div>
           </div>
+          <input type="range" class="weight-range-input" id="currentWeightSlider"
+            min="1" max="60" step="1" value="5" oninput="onWeightChange()">
+          <div class="slider-ticks">
+            <span class="slider-tick">1 kg</span><span class="slider-tick">15 kg</span>
+            <span class="slider-tick">30 kg</span><span class="slider-tick">45 kg</span>
+            <span class="slider-tick">60 kg</span>
+          </div>
+          <div class="lbs-tag">≈ <span id="currentWeightLbs">11 lbs</span></div>
+        </div>
+        <div class="weight-slider-block">
+          <div class="slider-block-header">
+            <div class="slider-block-title"><span>🎯</span> Peso ideal</div>
+            <div class="slider-value-pill" id="idealWeightDisplay" style="background:var(--sage);">5 kg</div>
+          </div>
+          <input type="range" class="weight-range-input" id="idealWeightSlider"
+            min="1" max="60" step="1" value="5" style="accent-color:var(--sage);" oninput="onWeightChange()">
+          <div class="slider-ticks">
+            <span class="slider-tick">1 kg</span><span class="slider-tick">15 kg</span>
+            <span class="slider-tick">30 kg</span><span class="slider-tick">45 kg</span>
+            <span class="slider-tick">60 kg</span>
+          </div>
+          <div class="lbs-tag">≈ <span id="idealWeightLbs">11 lbs</span></div>
         </div>
       </div>
+      <div class="weight-comparison-bar">
+        <div class="wcb-label">Comparación de pesos</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+          <span style="font-size:12px;color:var(--bark-mid);min-width:70px;">Actual</span>
+          <div class="wcb-track" style="flex:1;height:10px;"><div class="wcb-fill-current" id="wcbCurrent" style="width:8%;"></div></div>
+          <span style="font-size:12px;font-weight:600;color:var(--terracotta);min-width:42px;" id="wcbCurrentLabel">5 kg</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:12px;color:var(--bark-mid);min-width:70px;">Ideal</span>
+          <div class="wcb-track" style="flex:1;height:10px;"><div class="wcb-fill-ideal" id="wcbIdeal" style="width:8%;"></div></div>
+          <span style="font-size:12px;font-weight:600;color:var(--sage);min-width:42px;" id="wcbIdealLabel">5 kg</span>
+        </div>
+        <div style="margin-top:14px;text-align:center;">
+          <span class="weight-goal-badge goal-maintain" id="weightGoalBadge">✅ Mantener peso ideal</span>
+        </div>
+      </div>
+    </div>
 
-      <!-- PASO 7: Intención y motivación de compra -->
-      <div class="step-screen" id="step-7">
-        <!-- CHANGE 2: Interest is now multi-select -->
-        <p class="q-label">¿Por qué te interesa Pancho's Kitchen?</p>
+    <!-- ===== STEP 5: ACTIVITY ===== -->
+    <div class="step-screen" id="step-5">
+      <p class="q-label">¿Qué tan activa es <em id="petNameAct">tu mascota</em>? <span class="req-star">*</span></p>
+      <div class="option-grid cols-3">
+        <button type="button" class="opt-btn" data-group="petActivity" data-value="Low" onclick="selectOpt(this)">
+          <span class="opt-icon">🛋️</span> Baja
+        </button>
+        <button type="button" class="opt-btn" data-group="petActivity" data-value="Moderate" onclick="selectOpt(this)">
+          <span class="opt-icon">🚶</span> Moderada
+        </button>
+        <button type="button" class="opt-btn" data-group="petActivity" data-value="High" onclick="selectOpt(this)">
+          <span class="opt-icon">⚡</span> Alta
+        </button>
+      </div>
+      <div id="petActivityErr" class="field-error">Por favor, selecciona el nivel de actividad.</div>
+    </div>
+
+    <!-- ===== STEP 6: FEEDING STYLE ===== -->
+    <div class="step-screen" id="step-6">
+      <p class="q-label">¿Cómo alimentas actualmente a <em id="petNameFeed">tu mascota</em>? <span class="req-star">*</span></p>
+      <div class="option-grid cols-1">
+        <button type="button" class="opt-btn" data-group="feedingStyle" data-value="Homemade food" onclick="selectOpt(this)">
+          <span class="opt-icon">🍲</span> Comida casera
+        </button>
+        <button type="button" class="opt-btn" data-group="feedingStyle" data-value="Natural food" onclick="selectOpt(this)">
+          <span class="opt-icon">🌿</span> Comida Natural
+        </button>
+        <button type="button" class="opt-btn" data-group="feedingStyle" data-value="Concentrado" onclick="selectOpt(this)">
+          <span class="opt-icon">🥣</span> Concentrado
+        </button>
+        <button type="button" class="opt-btn" data-group="feedingStyle" data-value="Mixed" onclick="selectOpt(this)">
+          <span class="opt-icon">🍽️</span> Mixto
+        </button>
+        <button type="button" class="opt-btn" data-group="feedingStyle" data-value="Not consistent" onclick="selectOpt(this)">
+          <span class="opt-icon">🔀</span> Sin rutina fija
+        </button>
+      </div>
+      <div id="feedingErr" class="field-error">Por favor, selecciona un estilo de alimentación.</div>
+    </div>
+
+    <!-- ===== STEP 7: ALERGIAS (multi) + PREOCUPACIONES (multi) ===== -->
+    <div class="step-screen" id="step-7">
+
+      <p class="q-label">¿Tiene <em id="petNameAllergy">tu mascota</em> alguna alergia?</p>
+      <p class="multi-hint">Puedes seleccionar varias opciones</p>
+      <div class="option-grid cols-2">
+        <button type="button" class="opt-btn" data-group="allergies" data-value="No allergies" onclick="toggleMulti(this,'allergies')">
+          <span class="opt-icon">✅</span> Sin alergias
+        </button>
+        <button type="button" class="opt-btn" data-group="allergies" data-value="Chicken" onclick="toggleMulti(this,'allergies')">
+          <span class="opt-icon">🍗</span> Pollo
+        </button>
+        <button type="button" class="opt-btn" data-group="allergies" data-value="Beef" onclick="toggleMulti(this,'allergies')">
+          <span class="opt-icon">🥩</span> Res
+        </button>
+        <button type="button" class="opt-btn" data-group="allergies" data-value="Grain" onclick="toggleMulti(this,'allergies')">
+          <span class="opt-icon">🌾</span> Granos
+        </button>
+        <button type="button" class="opt-btn" data-group="allergies" data-value="Other" onclick="toggleMulti(this,'allergies')" style="grid-column:span 2;">
+          <span class="opt-icon">❓</span> Otro
+        </button>
+      </div>
+
+      <div class="q-sep">
+        <p class="q-label">¿Cuáles son tus principales preocupaciones?</p>
         <p class="multi-hint">Puedes seleccionar varias opciones</p>
         <div class="option-grid cols-2">
-          <button type="button" class="opt-btn" data-group="interest" data-value="Healthier food" onclick="selectOpt(this)">
-            <span class="opt-icon">🥗</span> Alimentación más sana
+          <button type="button" class="opt-btn" data-group="concerns" data-value="Weight management" onclick="toggleMulti(this,'concerns')">
+            <span class="opt-icon">⚖️</span> Control de peso
           </button>
-          <button type="button" class="opt-btn" data-group="interest" data-value="Better ingredients" onclick="selectOpt(this)">
-            <span class="opt-icon">🌱</span> Mejores ingredientes
+          <button type="button" class="opt-btn" data-group="concerns" data-value="Low energy" onclick="toggleMulti(this,'concerns')">
+            <span class="opt-icon">🔋</span> Poca energía
           </button>
-          <button type="button" class="opt-btn" data-group="interest" data-value="Vet recommendation" onclick="selectOpt(this)">
-            <span class="opt-icon">🩺</span> Recomendación del veterinario
+          <button type="button" class="opt-btn" data-group="concerns" data-value="Digestion issues" onclick="toggleMulti(this,'concerns')">
+            <span class="opt-icon">🌿</span> Problemas digestivos
           </button>
-          <!-- CHANGE 3: "Comodidad" → "Practicidad" — already done ✓ -->
-          <button type="button" class="opt-btn" data-group="interest" data-value="Convenience" onclick="selectOpt(this)">
-            <span class="opt-icon">📦</span> Practicidad
+          <button type="button" class="opt-btn" data-group="concerns" data-value="General health" onclick="toggleMulti(this,'concerns')">
+            <span class="opt-icon">💚</span> Salud general
           </button>
-        </div>
-
-        <!-- CHANGE 5: "Lo más importante" → 1–4 ranking cards -->
-        <div class="q-sep">
-          <p class="q-label">¿Qué es lo más importante para ti?</p>
-          <p class="rank-hint">Toca cada opción para asignarle un lugar (1 = más importante)</p>
-          <div class="option-grid cols-2" id="mattersRanking">
-            <div class="rank-card" data-value="Quality" onclick="rankCard(this)">
-              <span class="rank-badge" id="rank-Quality">—</span>
-              <span class="rank-icon">⭐</span>
-              <span class="rank-label">Calidad</span>
-            </div>
-            <div class="rank-card" data-value="Price" onclick="rankCard(this)">
-              <span class="rank-badge" id="rank-Price">—</span>
-              <span class="rank-icon">💰</span>
-              <span class="rank-label">Precio</span>
-            </div>
-            <!-- CHANGE 3: "Comodidad" → "Facilidad de uso" — already done ✓ -->
-            <div class="rank-card" data-value="Convenience" onclick="rankCard(this)">
-              <span class="rank-badge" id="rank-Convenience">—</span>
-              <span class="rank-icon">⚡</span>
-              <span class="rank-label">Facilidad de uso</span>
-            </div>
-            <div class="rank-card" data-value="Nutrition" onclick="rankCard(this)">
-              <span class="rank-badge" id="rank-Nutrition">—</span>
-              <span class="rank-icon">💚</span>
-              <span class="rank-label">Nutrición</span>
-            </div>
-          </div>
         </div>
       </div>
-
-      <!-- PASO 8: Datos de contacto -->
-      <div class="step-screen" id="step-8">
-        <p class="q-label">¡Ya casi terminamos! Tu plan de alimentación personalizado está listo 🎉</p>
-        <p style="font-size:14px; color:var(--muted); margin-bottom:24px; line-height:1.6;">
-          Ingresa tus datos para desbloquear el <strong style="color:var(--terracotta);">plan nutricional personalizado de tu mascota</strong> — te lo enviamos directamente.
-        </p>
-        <div style="display:flex; flex-direction:column; gap:14px;">
-          <div>
-            <label style="font-size:13px; font-weight:600; color:var(--bark-mid); display:block; margin-bottom:6px;">Tu nombre <span class="req-star">*</span></label>
-            <input type="text" class="text-input" id="ownerName" placeholder="Tu nombre completo" autocomplete="name">
-            <div id="ownerNameErr" class="field-error">Por favor, ingresa tu nombre.</div>
-          </div>
-          <div>
-            <label style="font-size:13px; font-weight:600; color:var(--bark-mid); display:block; margin-bottom:6px;">Número de WhatsApp <span class="req-star">*</span></label>
-            <input type="tel" class="text-input" id="phone" placeholder="+52 55 1234 5678" autocomplete="tel">
-            <div id="phoneErr" class="field-error">Por favor, ingresa un número de teléfono válido.</div>
-          </div>
-          <div>
-            <label style="font-size:13px; font-weight:600; color:var(--bark-mid); display:block; margin-bottom:6px;">Correo electrónico <span class="req-star">*</span></label>
-            <input type="email" class="text-input" id="email" placeholder="tu@correo.com" autocomplete="email">
-            <div id="emailErr" class="field-error">Por favor, ingresa un correo electrónico válido.</div>
-          </div>
-          <div>
-            <label style="font-size:13px; font-weight:600; color:var(--bark-mid); display:block; margin-bottom:6px;">Ciudad</label>
-            <input type="text" class="text-input" id="city" placeholder="Ej. Ciudad de México" autocomplete="address-level2">
-          </div>
-        </div>
-      </div>
-
-      <!-- PANTALLA DE RECOMENDACIÓN -->
-      <div class="step-screen" id="step-9">
-        <div class="rec-screen">
-          <div class="rec-badge">✨ Tu Plan Personalizado</div>
-          <h2 class="rec-title">¡Creamos el plan de <span class="pet-name-display" id="recPetName">tu mascota</span>!</h2>
-          <p class="rec-sub" id="recSub">Basado en tus respuestas, esto es lo que recomendamos para una mascota más sana y feliz.</p>
-          <div class="rec-card">
-            <div class="rec-card-title">🥗 Recomendado para <span id="recPetNameCard">tu mascota</span></div>
-            <ul class="rec-items" id="recItems">
-              <li>Comidas frescas y balanceadas, ricas en proteína</li>
-              <li>Porciones adecuadas para su edad</li>
-              <li>Ingredientes naturales, sin conservantes</li>
-            </ul>
-          </div>
-          <p style="font-size:13px; color:var(--muted); margin-bottom: 8px;">¿Listo para comenzar? ¡Haz clic en Enviar para recibir tu plan!</p>
-        </div>
-      </div>
-
-      <!-- PANTALLA DE ÉXITO -->
-      <div class="step-screen" id="step-success">
-        <div class="success-screen">
-          <div class="success-icon">🎉</div>
-          <h2 class="success-title">¡Todo listo!</h2>
-          <p class="success-msg">
-            Recibimos el perfil de <strong id="successPetName">tu mascota</strong> y te enviaremos el plan de alimentación personalizado por WhatsApp y correo electrónico en breve.<br><br>
-            <strong style="color:var(--terracotta);">Pancho's Kitchen</strong> está preparando algo especial 🐾
-          </p>
-        </div>
-      </div>
-
-    </div><!-- /.card-body -->
-
-    <div class="card-footer" id="cardFooter">
-      <button class="btn-back" id="btnBack" style="display:none" onclick="goBack()">← Atrás</button>
-      <button class="btn-next" id="btnNext" onclick="goNext()">Siguiente →</button>
-      <button class="btn-submit" id="btnSubmit" style="display:none" onclick="submitForm()">Obtener mi plan 🐾</button>
     </div>
 
+    <!-- ===== STEP 8: INTEREST (multi) + RATING CARDS ===== -->
+    <div class="step-screen" id="step-8">
+
+      <p class="q-label">¿Por qué te interesa Pancho's Kitchen?</p>
+      <p class="multi-hint">Puedes seleccionar varias opciones</p>
+      <div class="option-grid cols-2">
+        <button type="button" class="opt-btn" data-group="interest" data-value="Healthier food" onclick="toggleMulti(this,'interest')">
+          <span class="opt-icon">🥗</span> Alimentación más sana
+        </button>
+        <button type="button" class="opt-btn" data-group="interest" data-value="Better ingredients" onclick="toggleMulti(this,'interest')">
+          <span class="opt-icon">🌱</span> Mejores ingredientes
+        </button>
+        <button type="button" class="opt-btn" data-group="interest" data-value="Vet recommendation" onclick="toggleMulti(this,'interest')">
+          <span class="opt-icon">🩺</span> Recomendación del veterinario
+        </button>
+        <button type="button" class="opt-btn" data-group="interest" data-value="Practicality" onclick="toggleMulti(this,'interest')">
+          <span class="opt-icon">📦</span> Practicidad
+        </button>
+      </div>
+
+      <!-- RATE CARDS — select + rate each simultaneously -->
+      <div class="q-sep">
+        <p class="q-label">¿Qué es lo más importante para ti?</p>
+        <p class="rate-hint">Selecciona y califica cada opción del 1 al 5</p>
+        <div class="rate-cards-wrap">
+
+          <div class="rate-card" id="rcard-Quality">
+            <div class="rate-card-top" onclick="toggleRateCard('Quality')">
+              <div class="rate-checkbox"></div>
+              <span class="rate-card-icon">⭐</span>
+              <span class="rate-card-label">Calidad</span>
+              <div class="rate-score-badge" id="rbadge-Quality">—</div>
+            </div>
+            <div class="rate-slider-wrap">
+              <div class="rate-slider-labels">
+                <span>Poco importante</span>
+                <span>Muy importante</span>
+              </div>
+              <input type="range" class="rate-slider" id="rslider-Quality"
+                min="1" max="5" value="3" oninput="onRateSlider('Quality',this.value)">
+              <div class="rate-dots" id="rdots-Quality">
+                <div class="rate-dot"></div><div class="rate-dot"></div>
+                <div class="rate-dot"></div><div class="rate-dot"></div><div class="rate-dot"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="rate-card" id="rcard-Price">
+            <div class="rate-card-top" onclick="toggleRateCard('Price')">
+              <div class="rate-checkbox"></div>
+              <span class="rate-card-icon">💰</span>
+              <span class="rate-card-label">Precio</span>
+              <div class="rate-score-badge" id="rbadge-Price">—</div>
+            </div>
+            <div class="rate-slider-wrap">
+              <div class="rate-slider-labels">
+                <span>Poco importante</span>
+                <span>Muy importante</span>
+              </div>
+              <input type="range" class="rate-slider" id="rslider-Price"
+                min="1" max="5" value="3" oninput="onRateSlider('Price',this.value)">
+              <div class="rate-dots" id="rdots-Price">
+                <div class="rate-dot"></div><div class="rate-dot"></div>
+                <div class="rate-dot"></div><div class="rate-dot"></div><div class="rate-dot"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="rate-card" id="rcard-Convenience">
+            <div class="rate-card-top" onclick="toggleRateCard('Convenience')">
+              <div class="rate-checkbox"></div>
+              <span class="rate-card-icon">⚡</span>
+              <span class="rate-card-label">Facilidad de uso</span>
+              <div class="rate-score-badge" id="rbadge-Convenience">—</div>
+            </div>
+            <div class="rate-slider-wrap">
+              <div class="rate-slider-labels">
+                <span>Poco importante</span>
+                <span>Muy importante</span>
+              </div>
+              <input type="range" class="rate-slider" id="rslider-Convenience"
+                min="1" max="5" value="3" oninput="onRateSlider('Convenience',this.value)">
+              <div class="rate-dots" id="rdots-Convenience">
+                <div class="rate-dot"></div><div class="rate-dot"></div>
+                <div class="rate-dot"></div><div class="rate-dot"></div><div class="rate-dot"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="rate-card" id="rcard-Nutrition">
+            <div class="rate-card-top" onclick="toggleRateCard('Nutrition')">
+              <div class="rate-checkbox"></div>
+              <span class="rate-card-icon">💚</span>
+              <span class="rate-card-label">Nutrición</span>
+              <div class="rate-score-badge" id="rbadge-Nutrition">—</div>
+            </div>
+            <div class="rate-slider-wrap">
+              <div class="rate-slider-labels">
+                <span>Poco importante</span>
+                <span>Muy importante</span>
+              </div>
+              <input type="range" class="rate-slider" id="rslider-Nutrition"
+                min="1" max="5" value="3" oninput="onRateSlider('Nutrition',this.value)">
+              <div class="rate-dots" id="rdots-Nutrition">
+                <div class="rate-dot"></div><div class="rate-dot"></div>
+                <div class="rate-dot"></div><div class="rate-dot"></div><div class="rate-dot"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== STEP 9: CONTACT ===== -->
+    <div class="step-screen" id="step-9">
+      <p class="q-label">¡Ya casi terminamos! Tu plan personalizado está listo 🎉</p>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.6;">
+        Ingresa tus datos para <strong style="color:var(--terracotta);">desbloquear el plan nutricional exacto</strong> con la porción precisa y el enlace para suscribirte.
+      </p>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div>
+          <label style="font-size:13px;font-weight:600;color:var(--bark-mid);display:block;margin-bottom:6px;">Tu nombre <span class="req-star">*</span></label>
+          <input type="text" class="text-input" id="ownerName" placeholder="Tu nombre completo" autocomplete="name">
+          <div id="ownerNameErr" class="field-error">Por favor, ingresa tu nombre.</div>
+        </div>
+        <div>
+          <label style="font-size:13px;font-weight:600;color:var(--bark-mid);display:block;margin-bottom:6px;">Número de WhatsApp <span class="req-star">*</span></label>
+          <input type="tel" class="text-input" id="phone" placeholder="+52 55 1234 5678" autocomplete="tel">
+          <div id="phoneErr" class="field-error">Por favor, ingresa un número de teléfono válido.</div>
+        </div>
+        <div>
+          <label style="font-size:13px;font-weight:600;color:var(--bark-mid);display:block;margin-bottom:6px;">Correo electrónico <span class="req-star">*</span></label>
+          <input type="email" class="text-input" id="email" placeholder="tu@correo.com" autocomplete="email">
+          <div id="emailErr" class="field-error">Por favor, ingresa un correo electrónico válido.</div>
+        </div>
+        <div>
+          <label style="font-size:13px;font-weight:600;color:var(--bark-mid);display:block;margin-bottom:6px;">Ciudad</label>
+          <input type="text" class="text-input" id="city" placeholder="Ej. Ciudad de México" autocomplete="address-level2">
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== STEP 10: RECOMMENDATION ===== -->
+    <div class="step-screen" id="step-10">
+      <div class="rec-screen">
+        <div class="rec-badge">✨ Tu Plan Personalizado</div>
+        <h2 class="rec-title">¡El plan exacto para <span class="pet-name-display" id="recPetName">tu mascota</span>!</h2>
+        <p class="rec-sub" id="recSub">Calculado con base en el perfil completo de tu mascota.</p>
+        <div class="plan-box">
+          <div class="plan-box-title">📋 Plan recomendado</div>
+          <div class="plan-name" id="planName">Pancho's Kitchen</div>
+          <div class="plan-meta">
+            <span class="plan-chip highlight" id="planPortion">— g / semana</span>
+            <span class="plan-chip sage" id="planWeightRange">—</span>
+            <span class="plan-chip" id="planFreq">Suscripción semanal</span>
+          </div>
+          <a href="#" id="planBuyBtn" class="plan-buy-btn" target="_blank">🛒 Suscribirme a este plan →</a>
+        </div>
+        <div class="rec-card">
+          <div class="rec-card-title">🥗 Por qué este plan es ideal para <span id="recPetNameCard">tu mascota</span></div>
+          <ul class="rec-items" id="recItems"><li>Ingredientes naturales y frescos, sin conservantes</li></ul>
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:8px;">¿Listo? Confirma para enviarte el plan por WhatsApp y correo.</p>
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="step-screen" id="step-success">
+      <div class="success-screen">
+        <div class="success-icon">🎉</div>
+        <h2 class="success-title">¡Todo listo!</h2>
+        <p class="success-msg">
+          Recibimos el perfil de <strong id="successPetName">tu mascota</strong>.<br><br>
+          Te enviamos el plan de alimentación personalizado por <strong>WhatsApp</strong> y <strong>correo</strong> en breve.<br><br>
+          <strong style="color:var(--terracotta);">Pancho's Kitchen</strong> está preparando algo especial 🐾
+        </p>
+      </div>
+    </div>
+
+  </div><!-- /.card-body -->
+
+  <div class="card-footer" id="cardFooter">
+    <button class="btn-back" id="btnBack" style="display:none" onclick="goBack()">← Atrás</button>
+    <button class="btn-next" id="btnNext" onclick="goNext()">Siguiente →</button>
+    <button class="btn-submit" id="btnSubmit" style="display:none" onclick="submitForm()">Obtener mi plan 🐾</button>
   </div>
+
+</div>
 </div>
 
 <script>
-  // ===== STATE =====
-  // CHANGE 2: concerns and interest are now arrays (joined for Zoho)
-  // CHANGE 5: matters is an object {Quality:0, Price:0, ...} serialized as "Quality:1, Price:2"
-  const state = {
-    currentStep: 1,
-    totalSteps: 8,
-    petName: '',
-    petType: '',
-    petAge: '',
-    petSize: '',
-    currentWeight: 5,
-    idealWeight: 5,
-    petActivity: '',
-    feedingStyle: '',
-    allergies: '',
-    concerns: [],     // CHANGE 2: array
-    interest: [],     // CHANGE 2: array
-    matters: '',
-    ownerName: '',
-    phone: '',
-    email: '',
-    city: ''
-  };
+// =====================================================
+// STATE
+// =====================================================
+const state = {
+  currentStep: 1,
+  totalSteps: 9,
+  dietGoal: '',
+  petName: '',
+  petType: '',
+  petAge: '',
+  puppyStage: '',
+  petSize: '',
+  currentWeight: 5,
+  idealWeight: 5,
+  petActivity: '',
+  feedingStyle: '',
+  allergies: [],    // multi-select array
+  concerns: [],     // multi-select array
+  interest: [],     // multi-select array
+  matters: {},      // { Quality: 4, Price: 2, ... } — only selected ones
+  ownerName: '',
+  phone: '',
+  email: '',
+  city: '',
+  recommendedPlan: '',
+  recommendedPortion: ''
+};
 
-  const stepMeta = [
-    { label: 'Mascota' },
-    { label: 'Edad' },
-    { label: 'Peso' },
-    { label: 'Actividad' },
-    { label: 'Alimentación' },
-    { label: 'Salud' },
-    { label: 'Interés' },
-    { label: 'Tus datos' },
-  ];
+const stepMeta = [
+  { label:'Objetivo' }, { label:'Mascota' }, { label:'Edad' },
+  { label:'Peso' },     { label:'Actividad' }, { label:'Alimento' },
+  { label:'Salud' },    { label:'Interés' },   { label:'Tus datos' }
+];
 
-  // ===== CHANGE 5: Ranking state =====
-  const mattersRanks = { Quality: 0, Price: 0, Convenience: 0, Nutrition: 0 };
-  const MAX_RANK = 4;
+// =====================================================
+// RATE CARDS STATE
+// =====================================================
+// activeRateCards: which keys are toggled ON
+const rateCardState = {};
 
-  function rankCard(el) {
-    const val = el.dataset.value;
-    const currentRank = mattersRanks[val];
-    // Cycle: 0→1→2→3→4→0
-    let nextRank = currentRank === MAX_RANK ? 0 : currentRank + 1;
+function toggleRateCard(key) {
+  const card  = document.getElementById('rcard-' + key);
+  const badge = document.getElementById('rbadge-' + key);
+  const slider = document.getElementById('rslider-' + key);
 
-    // If nextRank already taken by another card, clear that card first
-    if (nextRank > 0) {
-      Object.keys(mattersRanks).forEach(k => {
-        if (k !== val && mattersRanks[k] === nextRank) {
-          mattersRanks[k] = 0;
-          updateRankBadge(k, 0);
-        }
-      });
-    }
+  if (rateCardState[key]) {
+    // Turn OFF
+    delete rateCardState[key];
+    delete state.matters[key];
+    card.classList.remove('active');
+    badge.textContent = '—';
+    syncRateDots(key, 0);
+  } else {
+    // Turn ON — set default rating 3
+    rateCardState[key] = 3;
+    state.matters[key] = 3;
+    card.classList.add('active');
+    badge.textContent = slider.value;
+    syncRateDots(key, parseInt(slider.value));
+  }
+}
 
-    mattersRanks[val] = nextRank;
-    updateRankBadge(val, nextRank);
+function onRateSlider(key, val) {
+  const v = parseInt(val);
+  rateCardState[key] = v;
+  state.matters[key] = v;
+  document.getElementById('rbadge-' + key).textContent = v;
+  syncRateDots(key, v);
+}
 
-    // Serialize to state.matters: "Quality:1, Price:2, ..."
-    const ranked = Object.entries(mattersRanks)
-      .filter(([, v]) => v > 0)
-      .sort((a, b) => a[1] - b[1]);
-    state.matters = ranked.map(([k, v]) => `${k}:${v}`).join(', ');
+function syncRateDots(key, val) {
+  const dots = document.querySelectorAll('#rdots-' + key + ' .rate-dot');
+  dots.forEach((d, i) => {
+    d.classList.toggle('filled', i < val);
+  });
+}
+
+// Serialize matters for Zoho: "Calidad:4, Precio:2"
+function serializeMatters() {
+  const labelMap = { Quality:'Calidad', Price:'Precio', Convenience:'Facilidad de uso', Nutrition:'Nutrición' };
+  return Object.entries(state.matters)
+    .map(([k, v]) => `${labelMap[k] || k}:${v}/5`)
+    .join(', ') || '-Select-';
+}
+
+// =====================================================
+// MULTI-SELECT TOGGLE (allergies, concerns, interest)
+// =====================================================
+function toggleMulti(el, group) {
+  const val = el.dataset.value;
+
+  if (group === 'allergies' && val === 'No allergies') {
+    // "Sin alergias" clears everything else and stays alone
+    const wasSelected = state.allergies.includes('No allergies');
+    state.allergies = wasSelected ? [] : ['No allergies'];
+    document.querySelectorAll(`.opt-btn[data-group="allergies"]`).forEach(b => b.classList.remove('selected'));
+    if (!wasSelected) el.classList.add('selected');
+    return;
   }
 
-  function updateRankBadge(val, rank) {
-    const badge = document.getElementById('rank-' + val);
-    const card = badge.closest('.rank-card');
-    // Reset classes
-    badge.className = 'rank-badge' + (rank > 0 ? ' r' + rank : '');
-    badge.textContent = rank > 0 ? rank : '—';
-    // Card border class
-    card.className = 'rank-card' + (rank > 0 ? ' ranked ranked-' + rank : '');
+  if (group === 'allergies') {
+    // Remove "Sin alergias" when another is picked
+    state.allergies = state.allergies.filter(v => v !== 'No allergies');
+    document.querySelector(`.opt-btn[data-group="allergies"][data-value="No allergies"]`)?.classList.remove('selected');
   }
 
-  // ===== PROGRESS =====
-  function buildProgress() {
-    const track = document.getElementById('stepsTrack');
-    const labels = document.getElementById('stepLabels');
-    track.innerHTML = '';
-    labels.innerHTML = '';
-    for (let i = 1; i <= state.totalSteps; i++) {
-      const seg = document.createElement('div');
-      seg.className = 'step-seg' + (i < state.currentStep ? ' done' : i === state.currentStep ? ' active' : '');
-      track.appendChild(seg);
-      if (i < state.totalSteps) {
-        const sp = document.createElement('div');
-        sp.style.width = '4px';
-        track.appendChild(sp);
-      }
-      const lbl = document.createElement('div');
-      lbl.className = 'step-label' + (i < state.currentStep ? ' done' : i === state.currentStep ? ' active' : '');
-      lbl.textContent = stepMeta[i - 1].label;
-      labels.appendChild(lbl);
-    }
-    document.getElementById('stepCounter').textContent = state.currentStep + ' / ' + state.totalSteps;
-  }
-
-  // ===== SELECTION HANDLERS =====
-  function selectImgChoice(el) {
-    const group = el.dataset.group;
-    document.querySelectorAll(`.img-choice[data-group="${group}"]`).forEach(e => e.classList.remove('selected'));
+  const arr = state[group];
+  const idx = arr.indexOf(val);
+  if (idx > -1) {
+    arr.splice(idx, 1);
+    el.classList.remove('selected');
+  } else {
+    arr.push(val);
     el.classList.add('selected');
-    if (group === 'petType') state.petType = el.dataset.value;
-    hideErr('petTypeErr');
+  }
+}
+
+// =====================================================
+// DIET GOAL (Step 1)
+// =====================================================
+function selectGoal(el) {
+  document.querySelectorAll('.goal-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.dietGoal = el.dataset.value;
+  if (state.dietGoal === 'Cat') state.petType = 'Cat';
+  else if (state.petType === 'Cat') state.petType = '';
+  hideErr('dietGoalErr');
+}
+
+// =====================================================
+// PUPPY SUB-STAGE
+// =====================================================
+function togglePuppyStage(show) {
+  const wrap = document.getElementById('puppyStageWrap');
+  if (show) {
+    wrap.classList.add('visible');
+  } else {
+    wrap.classList.remove('visible');
+    state.puppyStage = '';
+    document.querySelectorAll('.opt-btn[data-group="puppyStage"]').forEach(b => b.classList.remove('selected'));
+  }
+}
+
+// =====================================================
+// PROGRESS BAR
+// =====================================================
+function buildProgress() {
+  const track  = document.getElementById('stepsTrack');
+  const labels = document.getElementById('stepLabels');
+  track.innerHTML = '';
+  labels.innerHTML = '';
+  for (let i = 1; i <= state.totalSteps; i++) {
+    const seg = document.createElement('div');
+    seg.className = 'step-seg' + (i < state.currentStep ? ' done' : i === state.currentStep ? ' active' : '');
+    track.appendChild(seg);
+    if (i < state.totalSteps) { const sp = document.createElement('div'); sp.style.width = '4px'; track.appendChild(sp); }
+    const lbl = document.createElement('div');
+    lbl.className = 'step-label' + (i < state.currentStep ? ' done' : i === state.currentStep ? ' active' : '');
+    lbl.textContent = stepMeta[i - 1].label;
+    labels.appendChild(lbl);
+  }
+  document.getElementById('stepCounter').textContent = state.currentStep + ' / ' + state.totalSteps;
+}
+
+// =====================================================
+// SINGLE-SELECT HANDLER
+// =====================================================
+function selectImgChoice(el) {
+  const group = el.dataset.group;
+  document.querySelectorAll(`.img-choice[data-group="${group}"]`).forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  if (group === 'petType') { state.petType = el.dataset.value; hideErr('petTypeErr'); }
+}
+
+function selectOpt(el) {
+  const group = el.dataset.group;
+  document.querySelectorAll(`.opt-btn[data-group="${group}"]`).forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  const val = el.dataset.value;
+  if (group === 'petAge')       { state.petAge = val;       hideErr('petAgeErr'); }
+  if (group === 'puppyStage')   { state.puppyStage = val;   hideErr('puppyStageErr'); }
+  if (group === 'petActivity')  { state.petActivity = val;  hideErr('petActivityErr'); }
+  if (group === 'feedingStyle') { state.feedingStyle = val; hideErr('feedingErr'); }
+}
+
+function hideErr(id) { const e = document.getElementById(id); if (e) e.classList.remove('show'); }
+function showErr(id)  { const e = document.getElementById(id); if (e) e.classList.add('show'); }
+
+// =====================================================
+// WEIGHT SLIDER
+// =====================================================
+function kgToLbs(kg) { return Math.round(kg * 2.205); }
+
+function onWeightChange() {
+  const cur   = parseInt(document.getElementById('currentWeightSlider').value);
+  const ideal = parseInt(document.getElementById('idealWeightSlider').value);
+  state.currentWeight = cur;
+  state.idealWeight   = ideal;
+
+  document.getElementById('currentWeightDisplay').textContent = cur + ' kg';
+  document.getElementById('idealWeightDisplay').textContent   = ideal + ' kg';
+  document.getElementById('currentWeightLbs').textContent     = kgToLbs(cur) + ' lbs';
+  document.getElementById('idealWeightLbs').textContent       = kgToLbs(ideal) + ' lbs';
+  document.getElementById('wcbCurrentLabel').textContent      = cur + ' kg';
+  document.getElementById('wcbIdealLabel').textContent        = ideal + ' kg';
+
+  const maxW = 60;
+  document.getElementById('wcbCurrent').style.width = Math.round((cur / maxW) * 100) + '%';
+  document.getElementById('wcbIdeal').style.width   = Math.round((ideal / maxW) * 100) + '%';
+
+  const badge = document.getElementById('weightGoalBadge');
+  const diff  = ideal - cur;
+  if (diff < -0.4) {
+    badge.className = 'weight-goal-badge goal-lose';
+    badge.textContent = '📉 Meta: bajar ' + Math.abs(diff) + ' kg';
+  } else if (diff > 0.4) {
+    badge.className = 'weight-goal-badge goal-gain';
+    badge.textContent = '📈 Meta: subir ' + diff + ' kg';
+  } else {
+    badge.className = 'weight-goal-badge goal-maintain';
+    badge.textContent = '✅ Mantener peso ideal';
   }
 
-  // CHANGE 2: Multi-select for 'concerns' and 'interest'; single-select for everything else
-  function selectOpt(el) {
-    const group = el.dataset.group;
-    const multiGroups = ['concerns', 'interest'];
+  const lbs = kgToLbs(cur);
+  if (lbs <= 10)       state.petSize = 'Small';
+  else if (lbs <= 25)  state.petSize = 'Medium';
+  else if (lbs <= 50)  state.petSize = 'Large';
+  else if (lbs <= 80)  state.petSize = 'XL';
+  else                 state.petSize = 'XXL';
+}
 
-    if (multiGroups.includes(group)) {
-      // Toggle this button on/off
-      el.classList.toggle('selected');
-      // Rebuild array from currently selected buttons
-      const selected = [...document.querySelectorAll(`.opt-btn[data-group="${group}"].selected`)]
-        .map(e => e.dataset.value);
-      if (group === 'concerns') state.concerns = selected;
-      if (group === 'interest') state.interest = selected;
-    } else {
-      // Single-select: deselect all others, select this one
-      document.querySelectorAll(`.opt-btn[data-group="${group}"]`).forEach(e => e.classList.remove('selected'));
-      el.classList.add('selected');
-      const val = el.dataset.value;
-      if (group === 'petAge')       { state.petAge = val; hideErr('petAgeErr'); }
-      if (group === 'petSize')      { state.petSize = val; hideErr('petSizeErr'); }
-      if (group === 'petActivity')  { state.petActivity = val; hideErr('petActivityErr'); }
-      if (group === 'feedingStyle') { state.feedingStyle = val; hideErr('feedingErr'); }
-      if (group === 'allergies')    { state.allergies = val; }
-    }
+// =====================================================
+// SUBSCRIPTION PLAN LOOKUP
+// =====================================================
+function getSubscriptionPlan(weightKg, petType, petAge, puppyStage, activity, dietGoal) {
+  const lbs = kgToLbs(weightKg);
+
+  if (petType === 'Cat' || dietGoal === 'Cat') {
+    return { name:"Pancho's Kitchen — Fórmula Felina Premium", portion:'150g / semana', range:'Para gatos de todas las tallas', link:'https://panchoskitchen.com/tengo-un-gato', freq:'Suscripción semanal' };
+  }
+  if (petAge === 'Puppy / Kitten' && puppyStage === '1-3m') {
+    if (lbs <= 20) return { name:"Pancho's Kitchen — Starter Cachorro", portion:'200g / semana', range:'3–20 lbs', link:'https://panchoskitchen.com/pancho-s-puppies', freq:'Suscripción semanal' };
+    return { name:"Pancho's Kitchen — Starter Cachorro Grande", portion:'400g / semana', range:'21–38 lbs', link:'https://panchoskitchen.com/pancho-s-puppies', freq:'Suscripción semanal' };
+  }
+  if (petAge === 'Puppy / Kitten' && puppyStage === '4-12m') {
+    if (lbs <= 20) return { name:"Pancho's Kitchen — Puppy Pack Small", portion:'250g / semana', range:'5–20 lbs', link:'https://panchoskitchen.com/copy-of-pancho-s-puppies-de-4-meses-small', freq:'Suscripción semanal' };
+    return { name:"Pancho's Kitchen — Junior Pack Medium", portion:'500g / semana', range:'21–37 lbs', link:'https://panchoskitchen.com/pancho-s-puppies-de-4-meses-medium', freq:'Suscripción semanal' };
+  }
+  if (dietGoal === 'Renal') {
+    return { name:"Pancho's Kitchen — Dieta Renal", portion:'Personalizada', range:'Todas las tallas', link:'https://panchoskitchen.com/alimentacion-complementaria-a-tratamiento-renal', freq:'Según indicación veterinaria' };
+  }
+  if (dietGoal === 'GrainFree' || (state.allergies && state.allergies.includes('Grain'))) {
+    return { name:"Pancho's Kitchen — Libre de Granos (Pollo, Res)", portion:'Según peso', range:'Todas las tallas', link:'https://panchoskitchen.com/dieta-libre-de-granos', freq:'Suscripción semanal' };
+  }
+  if (dietGoal === 'Allergic' || (state.allergies && state.allergies.length && !state.allergies.includes('No allergies'))) {
+    return { name:"Pancho's Kitchen — Fórmula Sin Alérgenos (Pescado Wakame)", portion:'Según peso', range:'Todas las tallas', link:'https://panchoskitchen.com/mi-mascota-tiene-alergias', freq:'Suscripción semanal' };
   }
 
-  function hideErr(id) { const el = document.getElementById(id); if (el) el.classList.remove('show'); }
-  function showErr(id)  { const el = document.getElementById(id); if (el) el.classList.add('show'); }
+  const mult = activity === 'High' ? 1.3 : activity === 'Low' ? 0.85 : 1.0;
+  let base, planName, rangeLabel, planLink;
 
-  // ===== WEIGHT SLIDER =====
-  function onWeightChange() {
-    const cur   = parseInt(document.getElementById('currentWeightSlider').value);
-    const ideal = parseInt(document.getElementById('idealWeightSlider').value);
-    state.currentWeight = cur;
-    state.idealWeight   = ideal;
+  if (lbs <= 10)       { base=175;  planName='Plan Pequeño'; rangeLabel='hasta 10 lbs'; planLink='https://panchoskitchen.com/pancho-s-grownups-baja-actividad-small'; }
+  else if (lbs <= 25)  { base=300;  planName='Plan Mediano'; rangeLabel='11–25 lbs'; planLink='https://panchoskitchen.com/pancho-s-grownups-baja-actividad-medium'; }
+  else if (lbs <= 50)  { base=500;  planName='Plan Grande';  rangeLabel='26–50 lbs'; planLink='https://panchoskitchen.com/pancho-s-grownups-baja-actividad-large'; }
+  else if (lbs <= 80)  { base=750;  planName='Plan XL';      rangeLabel='51–80 lbs'; planLink='https://panchoskitchen.com/pancho-s-grownups-baja-actividad-xlarge'; }
+  else                 { base=1000; planName='Plan XXL';     rangeLabel='80+ lbs';   planLink='https://panchoskitchen.com/pancho-s-grownups-low-actividad-xx-large'; }
 
-    document.getElementById('currentWeightDisplay').textContent = cur + ' kg';
-    document.getElementById('idealWeightDisplay').textContent   = ideal + ' kg';
-    document.getElementById('wcbCurrentLabel').textContent      = cur + ' kg';
-    document.getElementById('wcbIdealLabel').textContent        = ideal + ' kg';
+  const portion = Math.round(base * mult);
+  const freqLabel = activity === 'High' ? 'Alta actividad (+30% energía)' : activity === 'Low' ? 'Actividad baja (−15% calorías)' : 'Actividad moderada';
 
-    const maxW = 60;
-    document.getElementById('wcbCurrent').style.width = Math.round((cur / maxW) * 100) + '%';
-    document.getElementById('wcbIdeal').style.width   = Math.round((ideal / maxW) * 100) + '%';
+  return { name:"Pancho's Kitchen — " + planName, portion:portion + 'g / semana', range:rangeLabel, link:planLink, freq:freqLabel };
+}
 
-    const badge = document.getElementById('weightGoalBadge');
-    const diff  = ideal - cur;
-    if (diff < -0.4) {
-      badge.className = 'weight-goal-badge goal-lose';
-      badge.textContent = '📉 Meta: bajar ' + Math.abs(diff) + ' kg';
-    } else if (diff > 0.4) {
-      badge.className = 'weight-goal-badge goal-gain';
-      badge.textContent = '📈 Meta: subir ' + diff + ' kg';
-    } else {
-      badge.className = 'weight-goal-badge goal-maintain';
-      badge.textContent = '✅ Mantener peso ideal';
-    }
+// =====================================================
+// RECOMMENDATION SCREEN
+// =====================================================
+function showRecommendation() {
+  const n = state.petName || 'tu mascota';
+  document.getElementById('recPetName').textContent     = n;
+  document.getElementById('recPetNameCard').textContent = n;
+  document.getElementById('successPetName').textContent = n;
 
-    if (cur <= 10)       state.petSize = 'Small';
-    else if (cur <= 25)  state.petSize = 'Medium';
-    else                 state.petSize = 'Large';
+  const plan = getSubscriptionPlan(state.currentWeight, state.petType, state.petAge, state.puppyStage, state.petActivity, state.dietGoal);
+  state.recommendedPlan    = plan.name;
+  state.recommendedPortion = plan.portion;
 
-    hideErr('petSizeErr');
+  document.getElementById('planName').textContent         = plan.name;
+  document.getElementById('planPortion').textContent      = plan.portion;
+  document.getElementById('planWeightRange').textContent  = plan.range;
+  document.getElementById('planFreq').textContent         = plan.freq;
+  document.getElementById('planBuyBtn').href              = plan.link;
+
+  const items = [];
+  items.push('Receta fresca 100% natural, sin conservantes ni rellenos artificiales');
+  if (state.dietGoal === 'Renal')     items.push('Fórmula baja en fósforo y sodio para soporte renal');
+  if (state.dietGoal === 'GrainFree' || state.allergies.includes('Grain')) items.push('Completamente libre de granos — ideal para sensibilidades digestivas');
+  if (state.dietGoal === 'Allergic')  items.push('Sin el alérgeno detectado — ingredientes cuidadosamente seleccionados');
+  if (state.dietGoal === 'Longevity') items.push('Rico en antioxidantes y omega-3 para apoyar la longevidad');
+  if (state.dietGoal === 'Appetite')  items.push('Fórmula apetitosa con proteína de alta calidad para estimular el apetito');
+  if (state.petAge === 'Puppy / Kitten') {
+    if (state.puppyStage === '1-3m') items.push('Porción especial para cachorros de 1–3 meses, con DHA para desarrollo cerebral');
+    else items.push('Porción para cachorros de 4–12 meses, alta en proteína para crecimiento');
   }
+  if (state.petAge === 'Senior')        items.push('Glucosamina y omega-3 para articulaciones saludables');
+  if (state.petActivity === 'High')     items.push('Alta densidad calórica para mascotas muy activas');
+  if (state.concerns.includes('Digestion issues')) items.push('Probióticos naturales para salud intestinal óptima');
+  if (state.concerns.includes('Low energy'))       items.push('Hierro y vitaminas B para energía sostenida');
+  if (state.concerns.includes('Weight management')) items.push('Alto en fibra y controlado en calorías para control de peso');
 
-  // ===== VALIDATION =====
-  function validateStep(step) {
-    if (step === 1) {
-      let ok = true;
-      if (!document.getElementById('petName').value.trim()) { showErr('petNameErr'); ok = false; }
-      if (!state.petType) { showErr('petTypeErr'); ok = false; }
-      return ok;
-    }
-    if (step === 2) { if (!state.petAge)      { showErr('petAgeErr');      return false; } return true; }
-    if (step === 3) { return true; }
-    if (step === 4) { if (!state.petActivity) { showErr('petActivityErr'); return false; } return true; }
-    if (step === 5) { if (!state.feedingStyle){ showErr('feedingErr');     return false; } return true; }
-    if (step === 6) { return true; }
-    if (step === 7) { return true; }
-    if (step === 8) {
-      let ok = true;
-      const name = document.getElementById('ownerName').value.trim();
-      const ph   = document.getElementById('phone').value.trim();
-      const em   = document.getElementById('email').value.trim();
-      if (!name) { showErr('ownerNameErr'); ok = false; }
-      if (!ph)   { showErr('phoneErr');     ok = false; }
-      const emailRe = /^[\w\-.+&'/]*@([a-zA-Z0-9][a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}$/;
-      if (!em || !emailRe.test(em)) { showErr('emailErr'); ok = false; }
-      return ok;
-    }
+  document.getElementById('recItems').innerHTML = items.slice(0, 5).map(i => `<li>${i}</li>`).join('');
+
+  const typeLabel = state.petType === 'Dog' ? 'Perro' : state.petType === 'Cat' ? 'Gato' : 'Mascota';
+  const ageLabel  = state.petAge === 'Puppy / Kitten' ? 'cachorro' : state.petAge === 'Senior' ? 'senior' : 'adulto';
+  document.getElementById('recSub').textContent =
+    `${typeLabel} ${ageLabel} · ${state.currentWeight} kg (${kgToLbs(state.currentWeight)} lbs) · ${plan.portion}`;
+}
+
+// =====================================================
+// VALIDATION
+// =====================================================
+function validateStep(step) {
+  if (step === 1) { if (!state.dietGoal) { showErr('dietGoalErr'); return false; } return true; }
+  if (step === 2) {
+    if (state.dietGoal !== 'Cat' && !state.petType) { showErr('petTypeErr'); return false; }
     return true;
   }
+  if (step === 3) {
+    if (!state.petAge) { showErr('petAgeErr'); return false; }
+    if (state.petAge === 'Puppy / Kitten' && !state.puppyStage) { showErr('puppyStageErr'); return false; }
+    return true;
+  }
+  if (step === 4) { return true; }
+  if (step === 5) { if (!state.petActivity) { showErr('petActivityErr'); return false; } return true; }
+  if (step === 6) { if (!state.feedingStyle) { showErr('feedingErr'); return false; } return true; }
+  if (step === 7) { return true; }
+  if (step === 8) { return true; }
+  if (step === 9) {
+    let ok = true;
+    if (!document.getElementById('ownerName').value.trim()) { showErr('ownerNameErr'); ok = false; }
+    if (!document.getElementById('phone').value.trim())     { showErr('phoneErr');     ok = false; }
+    const em = document.getElementById('email').value.trim();
+    if (!em || !/^[\w\-.+&'/]*@([a-zA-Z0-9][a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}$/.test(em)) { showErr('emailErr'); ok = false; }
+    return ok;
+  }
+  return true;
+}
 
-  function updatePetNameRefs() {
-    const n = state.petName || 'tu mascota';
-    ['petNameAge','petNameSize','petNameAct','petNameFeed','petNameAllergy'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = n;
-    });
+function updatePetNameRefs() {
+  const n = state.petName || 'tu mascota';
+  ['petNameAge','petNameSize','petNameAct','petNameFeed','petNameAllergy'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = n;
+  });
+}
+
+function updateStep2UI() {
+  const wrap = document.getElementById('petTypeWrap');
+  if (state.dietGoal === 'Cat') {
+    wrap.style.display = 'none';
+    document.querySelectorAll('.img-choice[data-group="petType"]').forEach(e => e.classList.remove('selected'));
+    const catChoice = document.querySelector('.img-choice[data-value="Cat"]');
+    if (catChoice) catChoice.classList.add('selected');
+  } else {
+    wrap.style.display = 'block';
+  }
+}
+
+// =====================================================
+// NAVIGATION
+// =====================================================
+function goNext() {
+  const cur = state.currentStep;
+  if (!validateStep(cur)) return;
+
+  if (cur === 2) {
+    state.petName = document.getElementById('petName').value.trim();
+    updatePetNameRefs();
+  }
+  if (cur === 9) {
+    state.ownerName = document.getElementById('ownerName').value.trim();
+    state.phone     = document.getElementById('phone').value.trim();
+    state.email     = document.getElementById('email').value.trim();
+    state.city      = document.getElementById('city').value.trim();
+    showRecommendation();
+    transitionTo('step-9', 'step-10');
+    document.getElementById('btnNext').style.display   = 'none';
+    document.getElementById('btnBack').style.display   = 'block';
+    document.getElementById('btnSubmit').style.display = 'block';
+    document.getElementById('stepCounter').textContent = '';
+    return;
   }
 
-  // ===== NAVIGATION =====
-  function goNext() {
-    const cur = state.currentStep;
-    if (!validateStep(cur)) return;
-
-    if (cur === 1) {
-      state.petName = document.getElementById('petName').value.trim();
-      updatePetNameRefs();
-    }
-    if (cur === 8) {
-      state.ownerName = document.getElementById('ownerName').value.trim();
-      state.phone     = document.getElementById('phone').value.trim();
-      state.email     = document.getElementById('email').value.trim();
-      state.city      = document.getElementById('city').value.trim();
-      showRecommendation();
-      transitionTo('step-' + cur, 'step-9');
-      document.getElementById('btnNext').style.display   = 'none';
-      document.getElementById('btnBack').style.display   = 'block';
-      document.getElementById('btnSubmit').style.display = 'block';
-      document.getElementById('stepCounter').textContent = '';
-      return;
-    }
-
-    state.currentStep = cur + 1;
-    transitionTo('step-' + cur, 'step-' + state.currentStep);
-    buildProgress();
-    updateFooterButtons();
-  }
-
-  function goBack() {
-    if (state.currentStep === 1) return;
-    const recScreen = document.getElementById('step-9');
-    if (recScreen.classList.contains('active')) {
-      transitionTo('step-9', 'step-8', true);
-      state.currentStep = 8;
-      buildProgress();
-      document.getElementById('btnNext').style.display   = 'block';
-      document.getElementById('btnSubmit').style.display = 'none';
-      return;
-    }
-    const prev = state.currentStep - 1;
-    transitionTo('step-' + state.currentStep, 'step-' + prev, true);
-    state.currentStep = prev;
-    buildProgress();
-    updateFooterButtons();
-  }
-
-  function updateFooterButtons() {
-    document.getElementById('btnBack').style.display   = state.currentStep > 1 ? 'block' : 'none';
-    document.getElementById('btnNext').style.display   = 'block';
-    document.getElementById('btnSubmit').style.display = 'none';
-  }
-
-  function transitionTo(fromId, toId, back = false) {
-    const fromEl = document.getElementById(fromId);
-    const toEl   = document.getElementById(toId);
-    fromEl.classList.add('exit');
-    setTimeout(() => {
-      fromEl.classList.remove('active', 'exit');
-      toEl.classList.add('active');
-      if (back) toEl.classList.add('back-in');
-      else toEl.classList.remove('back-in');
-      setTimeout(() => toEl.classList.remove('back-in'), 400);
-    }, 300);
-  }
-
-  // ===== RECOMMENDATION =====
-  function showRecommendation() {
-    const n = state.petName || 'tu mascota';
-    document.getElementById('recPetName').textContent     = n;
-    document.getElementById('recPetNameCard').textContent = n;
-
-    const items = [];
-    if (state.petType === 'Dog') items.push('Pollo fresco o cordero — alto en proteína para perros');
-    else if (state.petType === 'Cat') items.push('Mezcla de atún y pollo — perfecta para la nutrición felina');
-    if (state.petAge === 'Puppy / Kitten') items.push('Fórmula para cachorros con DHA para el desarrollo cerebral');
-    else if (state.petAge === 'Senior') items.push('Fórmula para senior con omega-3 y glucosamina para las articulaciones');
-    else items.push('Fórmula balanceada para adultos con vitaminas naturales');
-
-    const diff = state.idealWeight - state.currentWeight;
-    if (diff < -0.4)      items.push('Plan hipocalórico y rico en fibra para reducción de peso controlada');
-    else if (diff > 0.4)  items.push('Plan energético con proteína adicional para alcanzar el peso ideal');
-    else                  items.push('Porciones balanceadas para mantener su peso saludable');
-
-    if (state.petActivity === 'High') items.push('Raciones altas en calorías y proteína para mascotas activas');
-    else if (state.petActivity === 'Low') items.push('Comidas bajas en grasa para mantener un peso saludable');
-    else items.push('Porciones diarias balanceadas en calorías moderadas');
-
-    // CHANGE 1: now checks for 'Grain' (was 'Dairy')
-    if (state.allergies && state.allergies !== 'No allergies' && state.allergies !== '-Select-')
-      items.push(`Sin alérgeno: cero ${state.allergies.toLowerCase()} en ningún ingrediente`);
-
-    // CHANGE 2: concerns is now an array
-    if (state.concerns.includes('Weight management')) items.push('Recetas ricas en fibra con porciones controladas');
-    else if (state.concerns.includes('Digestion issues')) items.push('Comidas enriquecidas con probióticos para mejor salud intestinal');
-    else if (state.concerns.includes('Low energy')) items.push('Suplemento de hierro y vitamina B para energía sostenida');
-
-    const ul = document.getElementById('recItems');
-    ul.innerHTML = items.slice(0, 5).map(i => `<li>${i}</li>`).join('');
-
-    document.getElementById('recSub').textContent =
-      `Basado en el perfil de ${n} — ${state.petType === 'Dog' ? 'Perro' : state.petType === 'Cat' ? 'Gato' : state.petType || 'mascota'}, ${state.petAge === 'Puppy / Kitten' ? 'cachorro' : state.petAge === 'Adult' ? 'adulto' : state.petAge === 'Senior' ? 'senior' : state.petAge || 'adulto'}, ${state.currentWeight} kg — esto es lo que recomendamos.`;
-
-    document.getElementById('successPetName').textContent = 'el perfil de ' + n;
-  }
-
-  // ===== SUBMIT =====
-  function submitForm() {
-    document.getElementById('zf_pet_name').value     = state.petName;
-    document.getElementById('zf_pet_type').value     = state.petType;
-    document.getElementById('zf_pet_age').value      = state.petAge;
-    document.getElementById('zf_pet_size').value     = state.petSize;
-    document.getElementById('zf_pet_activity').value = state.petActivity;
-    document.getElementById('zf_feeding').value      = state.feedingStyle;
-    document.getElementById('zf_allergies').value    = state.allergies  || '-Select-';
-    // CHANGE 2: join arrays with ", " for Zoho
-    document.getElementById('zf_concerns').value     = state.concerns.length  ? state.concerns.join(', ')  : '-Select-';
-    document.getElementById('zf_interest').value     = state.interest.length  ? state.interest.join(', ')  : '-Select-';
-    // CHANGE 5: matters is already serialized as "Quality:1, Price:2, ..."
-    document.getElementById('zf_matters').value      = state.matters || '-Select-';
-    document.getElementById('zf_owner_name').value   = state.ownerName;
-    document.getElementById('zf_phone').value        = state.phone;
-    document.getElementById('zf_email').value        = state.email;
-    document.getElementById('zf_city').value         = state.city;
-    document.getElementById('zf_current_weight').value = state.currentWeight + ' kg';
-    document.getElementById('zf_ideal_weight').value   = state.idealWeight   + ' kg';
-
-    transitionTo('step-9', 'step-success');
-    document.getElementById('btnBack').style.display   = 'none';
-    document.getElementById('btnSubmit').style.display = 'none';
-    document.getElementById('stepCounter').textContent = '🎉';
-
-    const form     = document.getElementById('zohoForm');
-    const formData = new FormData(form);
-    fetch(form.action, { method: 'POST', body: formData, mode: 'no-cors' }).catch(() => {});
-  }
-
-  // Init
-  onWeightChange();
+  state.currentStep = cur + 1;
+  if (state.currentStep === 2) updateStep2UI();
+  transitionTo('step-' + cur, 'step-' + state.currentStep);
   buildProgress();
   updateFooterButtons();
+}
+
+function goBack() {
+  if (state.currentStep === 1) return;
+  const recScreen = document.getElementById('step-10');
+  if (recScreen.classList.contains('active')) {
+    transitionTo('step-10', 'step-9', true);
+    state.currentStep = 9;
+    buildProgress();
+    document.getElementById('btnNext').style.display   = 'block';
+    document.getElementById('btnSubmit').style.display = 'none';
+    return;
+  }
+  const prev = state.currentStep - 1;
+  transitionTo('step-' + state.currentStep, 'step-' + prev, true);
+  state.currentStep = prev;
+  buildProgress();
+  updateFooterButtons();
+}
+
+function updateFooterButtons() {
+  document.getElementById('btnBack').style.display   = state.currentStep > 1 ? 'block' : 'none';
+  document.getElementById('btnNext').style.display   = 'block';
+  document.getElementById('btnSubmit').style.display = 'none';
+}
+
+function transitionTo(fromId, toId, back = false) {
+  const fromEl = document.getElementById(fromId);
+  const toEl   = document.getElementById(toId);
+  fromEl.classList.add('exit');
+  setTimeout(() => {
+    fromEl.classList.remove('active','exit');
+    toEl.classList.add('active');
+    if (back) toEl.classList.add('back-in'); else toEl.classList.remove('back-in');
+    setTimeout(() => toEl.classList.remove('back-in'), 400);
+  }, 300);
+}
+
+// =====================================================
+// SUBMIT
+// =====================================================
+function submitForm() {
+  document.getElementById('zf_pet_name').value       = state.petName;
+  document.getElementById('zf_pet_type').value       = state.petType;
+  document.getElementById('zf_pet_age').value        = state.petAge;
+  document.getElementById('zf_pet_size').value       = state.petSize;
+  document.getElementById('zf_pet_activity').value   = state.petActivity;
+  document.getElementById('zf_feeding').value        = state.feedingStyle;
+  document.getElementById('zf_allergies').value      = state.allergies.length  ? state.allergies.join(', ')  : '-Select-';
+  document.getElementById('zf_concerns').value       = state.concerns.length   ? state.concerns.join(', ')   : '-Select-';
+  document.getElementById('zf_interest').value       = state.interest.length   ? state.interest.join(', ')   : '-Select-';
+  document.getElementById('zf_matters').value        = serializeMatters();
+  document.getElementById('zf_owner_name').value     = state.ownerName;
+  document.getElementById('zf_phone').value          = state.phone;
+  document.getElementById('zf_email').value          = state.email;
+  document.getElementById('zf_city').value           = state.city;
+  document.getElementById('zf_current_weight').value = state.currentWeight + ' kg (' + kgToLbs(state.currentWeight) + ' lbs)';
+  document.getElementById('zf_ideal_weight').value   = state.idealWeight + ' kg (' + kgToLbs(state.idealWeight) + ' lbs)';
+  document.getElementById('zf_diet_goal').value          = state.dietGoal;
+  document.getElementById('zf_puppy_stage').value        = state.puppyStage || '-';
+  document.getElementById('zf_recommended_plan').value   = state.recommendedPlan;
+  document.getElementById('zf_recommended_portion').value = state.recommendedPortion;
+
+  transitionTo('step-10', 'step-success');
+  document.getElementById('btnBack').style.display   = 'none';
+  document.getElementById('btnSubmit').style.display = 'none';
+  document.getElementById('stepCounter').textContent = '🎉';
+
+  const form = document.getElementById('zohoForm');
+  fetch(form.action, { method:'POST', body: new FormData(form), mode:'no-cors' }).catch(() => {});
+}
+
+// Init
+onWeightChange();
+buildProgress();
+updateFooterButtons();
 </script>
 </body>
 </html>
