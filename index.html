@@ -1,8 +1,3 @@
-El principal motivo por el cual el nuevo código dejaba de registrar los datos en Zoho Forms se debe a la forma en que los navegadores modernos gestionan el hilo de ejecución al mezclar `fetch()` con `window.open()` (las ventanas emergentes/redirecciones inmediatas interrumpen el envío asíncrono de datos antes de completarse), sumado a que la carga mediante `multipart/form-data` (generada por defecto por `FormData`) puede volverse inestable en endpoints públicos de Zoho si no se serializa de manera clásica como `application/x-www-form-urlencoded`.
-
-Aquí tienes el código completo corregido y listo para producción. Se ha optimizado la función `submitForm` para transformar los parámetros de manera limpia y asegurar el envío a Zoho antes de abrir las pestañas de compra externas:
-
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -25,13 +20,13 @@ Aquí tienes el código completo corregido y listo para producción. Se ha optim
   body{font-family:'DM Sans',sans-serif;background:var(--cream);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0;overflow-x:hidden;}
   body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 20% 10%,rgba(212,168,71,0.07) 0%,transparent 60%),radial-gradient(ellipse 60% 80% at 85% 90%,rgba(122,158,126,0.08) 0%,transparent 55%);pointer-events:none;z-index:0;}
   .site-header{width:100%;padding:24px 40px 0;display:flex;justify-content:center;position:relative;z-index:2;}
-  .site-logo{height:90px;width:auto;object-fit:contain;}
+  .site-logo{height:170px;width:auto;object-fit:contain;}
   .funnel-wrap{width:100%;max-width:620px;margin:28px auto 40px;padding:0 20px;position:relative;z-index:2;}
   .card{background:var(--warm-white);border-radius:var(--radius);box-shadow:var(--shadow-card);overflow:hidden;border:1px solid rgba(229,221,212,0.6);}
   .card-header{padding:36px 40px 24px;border-bottom:1px solid var(--border);background:linear-gradient(135deg,#FFFDF9 0%,#FDF8F2 100%);}
   .card-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--bark);text-align:center;margin-bottom:4px;}
   .card-subtitle{font-size:14px;color:var(--muted);text-align:center;}
-  .progress-wrap{padding:24px 40px 0;}
+  .progress-wrap{padding:2px 40px 0;}
   .steps-track{display:flex;align-items:center;margin-bottom:10px;}
   .step-seg{flex:1;height:4px;border-radius:10px;background:var(--step-inactive);transition:background var(--transition);position:relative;}
   .step-seg+.step-seg{margin-left:4px;}
